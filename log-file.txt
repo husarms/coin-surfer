@@ -1,0 +1,6 @@
+Current fiat balance = $999.95 (USD)
+Looking to buy BCH (current balance = 0.00)...
+Average price for 'BCH-USD' in last 24 hours = $1385.645...
+Current BCH-USD price at 5/10/2021, 4:22:54 PM = $1289.86 (buy @1316.36, sell @1454.93)
+Buy threshold hit (1289.86 <= 1316.36)
+Buying 0.7752 BCH at $1289.86, USD value = $999.899472
