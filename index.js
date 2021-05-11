@@ -11,6 +11,12 @@ const getAccountBalance = async (currency) => {
     return roundDownToTwoDecimals(parseFloat(account.balance));
 };
 
+const getLastBuyPrice = async (productId) => {
+    const fills = await CoinbaseGateway.getFills(productId);
+    const fill = fills.find(f => f.side === 'buy' && f.settled === true);
+    return fill ? fill.price : 0;
+}
+
 const get24HrAveragePrice = async (cryptoCurrency) => {
     var product24HrStats = await CoinbaseGateway.getProduct24HrStats(
         cryptoCurrency
@@ -27,8 +33,9 @@ const getBuyThreshold = (averagePrice, thresholdPercentage) => {
     );
 };
 
-const getSellThreshold = (averagePrice, thresholdPercentage) => {
-    return (averagePrice + averagePrice * (thresholdPercentage / 100)).toFixed(
+const getSellThreshold = (averagePrice, lastBuyPrice, thresholdPercentage) => {
+    const priceBasis = Math.max(averagePrice, lastBuyPrice);
+    return (priceBasis + priceBasis * (thresholdPercentage / 100)).toFixed(
         2
     );
 };
@@ -54,6 +61,7 @@ const formatDate = (dateString) => {
     const sellThresholdPercentage = 5;
     const fiatBalance = await getAccountBalance(fiatCurrency);
     const cryptoBalance = await getAccountBalance(cryptoCurrency);
+
     let lookingToSell = fiatBalance < 10;
     console.log(`Current fiat balance = $${fiatBalance} (${fiatCurrency})`);
     console.log(
@@ -67,14 +75,21 @@ const formatDate = (dateString) => {
         `Average price for '${productId}' in last 24 hours = $${averagePriceInLast24Hrs}...`
     );
 
+    const lastBuyPrice = await getLastBuyPrice(productId);
+    console.log(
+        `Last buy price for '${productId}'  = $${lastBuyPrice}...`
+    );
+
     const interval = setInterval(async function () {
         const averagePrice = await get24HrAveragePrice(productId);
+        const lastBuyPrice = await getLastBuyPrice(productId);
         const buyThreshold = getBuyThreshold(
             averagePrice,
             buyThresholdPercentage
         );
         const sellThreshold = getSellThreshold(
             averagePrice,
+            lastBuyPrice,
             sellThresholdPercentage
         );
         const ticker = await CoinbaseGateway.getProductTicker(productId);

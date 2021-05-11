@@ -39,6 +39,16 @@ module.exports = {
                 console.error(error);
             });
     },
+    getAccount: async function (account_id) {
+        return authenticatedProductionClient
+            .getAccount(account_id)
+            .then((data) => {
+                return data;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    },
     getAccounts: async function () {
         return authenticatedProductionClient
             .getAccounts()
@@ -59,9 +69,9 @@ module.exports = {
                 console.error(error);
             });
     },
-    getAccount: async function (account_id) {
+    getFills: async function (productId) {
         return authenticatedProductionClient
-            .getAccount(account_id)
+            .getFills({product_id: productId})
             .then((data) => {
                 return data;
             })
