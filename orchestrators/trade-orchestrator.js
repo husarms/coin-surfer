@@ -37,11 +37,6 @@ const getAccountBalances = async function (fiatCurrency, cryptoCurrency) {
     };
 };
 
-const getBuyOrSell = async function () {
-    const fiatBalance = await getAccountBalance(fiatCurrency);
-    return fiatBalance < 10 ? constants.sell : constants.buy;
-};
-
 const getLastBuyPrice = async function (productId) {
     const fills = await coinbaseGateway.getFills(productId);
     const fill = fills.find((f) => f.side === "buy" && f.settled === true);

@@ -17,7 +17,7 @@ const constants = require("./utils/constants");
     let lookingToSell = fiatBalance < 10;
 
     console.log(
-        `Current fiat balance = $${fiatBalance} ${fiatCurrency}, crypto balance = ${cryptoBalance} ${cryptoCurrency}`
+        `Current ${fiatCurrency} balance = $${fiatBalance}, ${cryptoCurrency} balance = ${cryptoBalance}`
     );
 
     setInterval(async function () {
@@ -29,7 +29,7 @@ const constants = require("./utils/constants");
         const { buyThreshold, sellThreshold } = thresholds;
         const price = await tradeOrchestrator.getProductPrice(productId);
         const formattedDate = formatters.formatDate(new Date());
-        const sellValue = cryptoBalance * sellThreshold;
+        const sellValue = (cryptoBalance * sellThreshold).toFixed(2);
         const message = lookingToSell
             ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} ($${sellValue})`
             : `looking to buy ${cryptoCurrency} at ${buyThreshold}`;
