@@ -1,5 +1,5 @@
 # coin-surfer
-Node.js app for buying and selling cryptocurrency
+Node.js app for automated cryptocurrency trading
 
 ## Setup
 1. Currently using the Coinbase Pro API https://docs.pro.coinbase.com/ - will require an account
