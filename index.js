@@ -6,7 +6,7 @@ const surfParameters = {
     cryptoCurrency: constants.BitcoinCash,
     buyThresholdPercentage: 5,
     sellThresholdPercentage: 5,
-    budget: 1000
+    budget: 2000
 };
 
 (async () => {

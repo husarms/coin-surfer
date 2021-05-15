@@ -26,9 +26,11 @@ exports.surf = async function(parameters) {
         const price = await tradeOrchestrator.getProductPrice(productId);
         const formattedDate = formatters.formatDate(new Date());
         const sellValue = (cryptoBalance * sellThreshold).toFixed(2);
+        const buyBudget = fiatBalance > budget ? budget : fiatBalance;
+        const buyValue = (buyBudget / buyThreshold).toFixed(2)
         const message = lookingToSell
             ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} ($${sellValue})`
-            : `looking to buy ${cryptoCurrency} at ${buyThreshold}`;
+            : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold} ($${buyValue})`;
 
         console.log(
             `${formattedDate} - ${message} - current price = $${price}`
@@ -50,6 +52,7 @@ exports.surf = async function(parameters) {
                 console.log(`Buy threshold hit (${price} <= ${buyThreshold})`);
                 await tradeOrchestrator.buyAllAtMarketValue(
                     fiatCurrency,
+                    budget,
                     price,
                     productId
                 );
