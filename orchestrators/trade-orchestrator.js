@@ -8,8 +8,8 @@ const getBuyThreshold = (averagePrice, thresholdPercentage) => {
     );
 };
 
-const getSellThreshold = (averagePrice, lastBuyPrice, thresholdPercentage) => {
-    if (lastBuyPrice > averagePrice) {
+const getSellThreshold = (averagePrice, lastBuyPrice, considerLastBuyPrice = true, thresholdPercentage) => {
+    if (lastBuyPrice > averagePrice && considerLastBuyPrice) {
         const margin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
         return (lastBuyPrice + margin).toFixed(2);
     } else {
@@ -68,28 +68,18 @@ const marketBuy = async function (price, size, productId) {
 const sellAllAtMarketValue = async function (cryptoCurrency, productId) {
     const cryptoBalance = await getAccountBalance(cryptoCurrency);
     const size = cryptoBalance;
-    console.log(
-        `Selling ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${
-            size * price
-        }`
-    );
     const sellResponse = await marketSell(
-        cryptoBalance,
+        size,
         productId
     );
-    console.log(`Sell complete. Response = ${JSON.stringify(sellResponse)}`);
+    return sellResponse;
 };
 
 const buyAllAtMarketValue = async function (fiatCurrency, budget, price, productId) {
     const fiatBalance = await getAccountBalance(fiatCurrency);
     const size = getBuySize(fiatBalance, budget, price);
-    console.log(
-        `Buying ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${
-            size * price
-        }`
-    );
     const buyResponse = await marketBuy(fiatBalance, size, productId);
-    console.log(`Buy complete. Order Id = ${buyResponse.id}`);
+    return buyResponse;
 };
 
 const getBuySellThresholds = async function (
@@ -103,6 +93,7 @@ const getBuySellThresholds = async function (
     const sellThreshold = getSellThreshold(
         averagePrice,
         lastBuyPrice,
+        false,
         sellThresholdPercentage
     );
     return {

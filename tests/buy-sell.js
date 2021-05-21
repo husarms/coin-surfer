@@ -1,9 +1,8 @@
 var fs = require("fs");
 
 /*
-Given a feed of coin prices,
-write an algorithm to buy and sell coins at a given threshold
-
+    Given a feed of coin prices,
+    write an algorithm to buy and sell coins at a given threshold
 */
 
 function buySell(numberOfCoins, thresholdPercentage, prices) {

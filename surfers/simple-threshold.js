@@ -41,21 +41,33 @@ exports.surf = async function(parameters) {
                 console.log(
                     `Sell threshold hit (${price} >= ${sellThreshold})`
                 );
-                await tradeOrchestrator.sellAllAtMarketValue(
+                console.log(
+                    `Selling ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${
+                        size * price
+                    }`
+                );
+                const sellResponse = await tradeOrchestrator.sellAllAtMarketValue(
                     cryptoCurrency,
                     productId
                 );
+                console.log(`Sell complete. Response = ${JSON.stringify(sellResponse)}`);
                 lookingToSell = false;
             }
         } else {
             if (price <= buyThreshold) {
                 console.log(`Buy threshold hit (${price} <= ${buyThreshold})`);
-                await tradeOrchestrator.buyAllAtMarketValue(
+                console.log(
+                    `Buying ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${
+                        size * price
+                    }`
+                );
+                const buyResponse = await tradeOrchestrator.buyAllAtMarketValue(
                     fiatCurrency,
                     budget,
                     price,
                     productId
                 );
+                console.log(`Buy complete. Response = ${JSON.stringify(buyResponse)}`);
                 lookingToSell = true;
             }
         }

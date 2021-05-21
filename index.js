@@ -1,4 +1,4 @@
-const simpleThresholdSurfer = require("./surfers/simple-threshold-surfer");
+const simpleThresholdSurfer = require("./surfers/simple-threshold");
 const constants = require("./utils/constants");
 
 const surfParameters = {
