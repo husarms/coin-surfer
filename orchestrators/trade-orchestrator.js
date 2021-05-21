@@ -1,6 +1,5 @@
 const coinbaseGateway = require("../gateways/coinbase-gateway");
 const formatters = require("../utils/formatters");
-const constants = require("../utils/constants");
 
 const getBuyThreshold = (averagePrice, thresholdPercentage) => {
     return (averagePrice - averagePrice * (thresholdPercentage / 100)).toFixed(

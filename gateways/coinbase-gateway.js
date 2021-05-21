@@ -2,7 +2,9 @@ const CoinbasePro = require("coinbase-pro");
 const Secrets = require("./secrets");
 
 const productionURI = "https://api.pro.coinbase.com";
+const productionWebsocketURI = "wss://ws-feed.pro.coinbase.com";
 const sandboxURI = "https://api-public.sandbox.pro.coinbase.com";
+const sandboxWebsocketURI = "wss://ws-feed-public.sandbox.pro.coinbase.com";
 
 const authenticatedProductionClient = new CoinbasePro.AuthenticatedClient(
     Secrets.CoinbaseProductionConfiguration.key,
@@ -19,6 +21,21 @@ const authenticatedSandboxClient = new CoinbasePro.AuthenticatedClient(
 );
 
 module.exports = {
+    listenToTickerFeed: function (product_id, callback) {
+        const websocket = new CoinbasePro.WebsocketClient(
+            [product_id],
+            productionWebsocketURI,
+            {
+                key: Secrets.CoinbaseProductionConfiguration.key,
+                secret: Secrets.CoinbaseProductionConfiguration.secret,
+                passphrase: Secrets.CoinbaseProductionConfiguration.passphrase,
+            },
+            { channels: ["ticker"] }
+        );
+        websocket.on("message", (data) => {
+            callback(data);
+        });
+    },
     getProductTicker: async function (product_id) {
         return authenticatedProductionClient
             .getProductTicker(product_id)
@@ -71,7 +88,7 @@ module.exports = {
     },
     getFills: async function (productId) {
         return authenticatedProductionClient
-            .getFills({product_id: productId})
+            .getFills({ product_id: productId })
             .then((data) => {
                 return data;
             })
@@ -96,7 +113,7 @@ module.exports = {
     marketBuy: async function (funds, size, product_id) {
         return authenticatedProductionClient
             .buy({
-                type: 'market',
+                type: "market",
                 funds,
                 size,
                 product_id,
@@ -125,7 +142,7 @@ module.exports = {
     marketSell: async function (size, product_id) {
         return authenticatedProductionClient
             .sell({
-                type: 'market',
+                type: "market",
                 size,
                 product_id,
             })

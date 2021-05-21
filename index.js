@@ -1,4 +1,5 @@
 const simpleThresholdSurfer = require("./surfers/simple-threshold");
+const websocketSurfer = require("./surfers/websocket");
 const constants = require("./utils/constants");
 
 const surfParameters = {
@@ -11,4 +12,5 @@ const surfParameters = {
 
 (async () => {
     await simpleThresholdSurfer.surf(surfParameters);
+    //await websocketSurfer.surf(surfParameters);
 })();
