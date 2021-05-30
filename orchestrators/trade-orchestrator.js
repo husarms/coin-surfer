@@ -7,7 +7,12 @@ const getBuyThreshold = (averagePrice, thresholdPercentage) => {
     );
 };
 
-const getSellThreshold = (averagePrice, lastBuyPrice, considerLastBuyPrice = true, thresholdPercentage) => {
+const getSellThreshold = (
+    averagePrice,
+    lastBuyPrice,
+    considerLastBuyPrice = true,
+    thresholdPercentage
+) => {
     if (lastBuyPrice > averagePrice && considerLastBuyPrice) {
         const margin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
         return (lastBuyPrice + margin).toFixed(2);
@@ -39,8 +44,11 @@ const getAccountBalances = async function (fiatCurrency, cryptoCurrency) {
 
 const getLastBuyPrice = async function (productId) {
     const fills = await coinbaseGateway.getFills(productId);
-    const fill = fills.find((f) => f.side === "buy" && f.settled === true);
-    return Number(fill ? fill.price : 0);
+    if (fills) {
+        const fill = fills.find((f) => f.side === "buy" && f.settled === true);
+        return Number(fill ? fill.price : 0);
+    }
+    return 0;
 };
 
 const get24HrAveragePrice = async function (productId) {
@@ -67,14 +75,16 @@ const marketBuy = async function (price, size, productId) {
 const sellAllAtMarketValue = async function (cryptoCurrency, productId) {
     const cryptoBalance = await getAccountBalance(cryptoCurrency);
     const size = cryptoBalance;
-    const sellResponse = await marketSell(
-        size,
-        productId
-    );
+    const sellResponse = await marketSell(size, productId);
     return sellResponse;
 };
 
-const buyAllAtMarketValue = async function (fiatCurrency, budget, price, productId) {
+const buyAllAtMarketValue = async function (
+    fiatCurrency,
+    budget,
+    price,
+    productId
+) {
     const fiatBalance = await getAccountBalance(fiatCurrency);
     const size = getBuySize(fiatBalance, budget, price);
     const buyResponse = await marketBuy(fiatBalance, size, productId);
@@ -102,6 +112,7 @@ const getBuySellThresholds = async function (
 };
 
 module.exports = {
+    getBuySize,
     getAccountBalances,
     get24HrAveragePrice,
     getLastBuyPrice,

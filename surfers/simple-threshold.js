@@ -41,9 +41,10 @@ exports.surf = async function(parameters) {
                 console.log(
                     `Sell threshold hit (${price} >= ${sellThreshold})`
                 );
+                const size = cryptoBalance;
                 console.log(
                     `Selling ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${
-                        size * price
+                        fiatBalance * price
                     }`
                 );
                 const sellResponse = await tradeOrchestrator.sellAllAtMarketValue(
@@ -56,6 +57,7 @@ exports.surf = async function(parameters) {
         } else {
             if (price <= buyThreshold) {
                 console.log(`Buy threshold hit (${price} <= ${buyThreshold})`);
+                const size = tradeOrchestrator.getBuySize(fiatBalance, budget, price);
                 console.log(
                     `Buying ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${
                         size * price
