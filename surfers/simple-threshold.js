@@ -30,7 +30,7 @@ exports.surf = async function(parameters) {
         const buyValue = (buyBudget / buyThreshold).toFixed(2)
         const message = lookingToSell
             ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} ($${sellValue})`
-            : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold} ($${buyValue})`;
+            : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold} (${buyValue})`;
 
         console.log(
             `${formattedDate} - ${message} - current price = $${price}`

@@ -1,10 +1,10 @@
 const simpleThresholdSurfer = require("./surfers/simple-threshold");
-const websocketSurfer = require("./surfers/websocket");
+//const websocketSurfer = require("./surfers/websocket");
 const constants = require("./utils/constants");
 
 const surfParameters = {
     fiatCurrency: constants.USDollar,
-    cryptoCurrency: constants.BitcoinCash,
+    cryptoCurrency: constants.Cardano,
     buyThresholdPercentage: 5,
     sellThresholdPercentage: 5,
     budget: 2000
