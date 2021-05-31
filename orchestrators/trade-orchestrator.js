@@ -30,7 +30,7 @@ const getBuySize = (fiatBalance, budget, productPrice) => {
 const getAccountBalance = async (currency) => {
     var accounts = await coinbaseGateway.getAccounts();
     var account = accounts.find((a) => a.currency === currency);
-    return formatters.roundDownToTwoDecimals(parseFloat(account.balance));
+    return formatters.roundDownToFourDecimals(parseFloat(account.balance));
 };
 
 const getAccountBalances = async function (fiatCurrency, cryptoCurrency) {

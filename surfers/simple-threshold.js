@@ -1,4 +1,5 @@
 const tradeOrchestrator = require("../orchestrators/trade-orchestrator");
+const emailOrchestrator = require("../orchestrators/email-orchestrator");
 const formatters = require("../utils/formatters");
 
 exports.surf = async function(parameters) {
@@ -53,6 +54,7 @@ exports.surf = async function(parameters) {
                     productId
                 );
                 console.log(`Sell complete. Response = ${JSON.stringify(sellResponse)}`);
+                await emailOrchestrator.sendSellNotification(size, cryptoCurrency, price, fiatCurrency);
                 lookingToSell = false;
             }
         } else {
@@ -71,6 +73,7 @@ exports.surf = async function(parameters) {
                     productId
                 );
                 console.log(`Buy complete. Response = ${JSON.stringify(buyResponse)}`);
+                await emailOrchestrator.sendBuyNotification(size, cryptoCurrency, price, fiatCurrency);
                 lookingToSell = true;
             }
         }

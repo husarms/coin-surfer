@@ -1,5 +1,5 @@
 const CoinbasePro = require("coinbase-pro");
-const Secrets = require("./secrets");
+const Secrets = require("../config/secrets");
 
 const productionURI = "https://api.pro.coinbase.com";
 const productionWebsocketURI = "wss://ws-feed.pro.coinbase.com";
