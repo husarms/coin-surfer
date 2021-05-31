@@ -1,5 +1,6 @@
-var fs = require("fs");
-var path = require("path");
+const fs = require("fs");
+const path = require("path");
+const parse = require("csv-parse/lib/sync");
 
 exports.arrayAverage = (array) => array.reduce((a, b) => a + b) / array.length;
 
@@ -39,3 +40,12 @@ exports.writeArrayToFile = function (array, filePath) {
 exports.readArrayFromFile = function (filePath) {
     return fs.readFileSync(path.resolve(__dirname, filePath)).toString().split(",").map(Number);
 };
+
+exports.readFromCsvFile = function (filePath) {
+    const input = fs.readFileSync(path.resolve(__dirname, filePath)).toString();
+    const records = parse(input, {
+        columns: true,
+        skip_empty_lines: true
+    });
+    return records;
+}
