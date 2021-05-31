@@ -46,7 +46,7 @@ exports.surf = async function(parameters) {
                 const size = cryptoBalance;
                 console.log(
                     `Selling ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${
-                        fiatBalance * price
+                        size * price
                     }`
                 );
                 const sellResponse = await tradeOrchestrator.sellAllAtMarketValue(

@@ -8,21 +8,21 @@ function getSellThreshold(averagePrice, thresholdPercentage) {
     return (averagePrice + threshold).toFixed(2);
 }
 
-exports.surf = function(budget, thresholdPercentage, data) {
-    // console.log('Peak valley trend surfer ``\'-.,_,.-\'``\'-.,_,.=\'``\'-.,_,.-\'``\'-.,_,.=\'``');
-    
+exports.surf = function(data, budget, thresholdPercentage, candleMagnitude, candleThreshold) {
     const startPrice = data[0].price;
     let cash = budget;
     let cryptoBalance = 0;
     let lastPrice = startPrice;
     let lookingToSell = false;
     let negativeDirectionalCount = 0;
+    let negativeCandleCount = 0;
     let minPrice = 0;
     let maxPrice = 0;
 
     for (let item of data) {
         const average = parseFloat(item.average);
         const price = parseFloat(item.price);
+        const timestamp = item.timestamp;
         const sellThreshold = getSellThreshold(average, thresholdPercentage);
         const buyThreshold = getBuyThreshold(average, thresholdPercentage);
         if (lookingToSell) {
@@ -33,15 +33,20 @@ exports.surf = function(budget, thresholdPercentage, data) {
                 } else {
                     negativeDirectionalCount++;
                 }
+                if(negativeDirectionalCount > candleMagnitude){
+                    negativeCandleCount++;
+                    negativeDirectionalCount = 0;
+                }
                 // Trigger sell
-                if (negativeDirectionalCount > 10) {
+                if (negativeCandleCount > candleThreshold) {
                     cash = cryptoBalance * price;
                     // console.log(
-                    //     `Sold ${cryptoBalance} coins at $${price}, cash = $${cash}`
+                    //     `Sold ${cryptoBalance} coins at $${price}, cash = $${cash} at ${timestamp}`
                     // );
                     cryptoBalance = 0;
                     maxPrice = 0;
                     negativeDirectionalCount = 0;
+                    negativeCandleCount = 0;
                     lookingToSell = false;
                 }
             }
@@ -53,13 +58,18 @@ exports.surf = function(budget, thresholdPercentage, data) {
                 } else {
                     negativeDirectionalCount++;
                 }
+                if(negativeDirectionalCount > candleMagnitude){
+                    negativeCandleCount++;
+                    negativeDirectionalCount = 0;
+                }
                 // Trigger buy
-                if (negativeDirectionalCount > 10) {
+                if (negativeCandleCount > candleThreshold) {
                     cryptoBalance = cash / price;
                     cash = cash - price * cryptoBalance;
-                    //console.log(`Bought ${cryptoBalance} coins at $${price}`);
+                    // console.log(`Bought ${cryptoBalance} coins at $${price} at ${timestamp}`);
                     minPrice = 0;
                     negativeDirectionalCount = 0;
+                    negativeCandleCount = 0;
                     lookingToSell = true;
                 }
             }

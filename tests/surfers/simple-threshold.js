@@ -8,9 +8,7 @@ function getSellThreshold(averagePrice, thresholdPercentage) {
     return (averagePrice + threshold).toFixed(2);
 }
 
-exports.surf = function(budget, thresholdPercentage, data) {
-    // console.log('Simple threshold surfer ``\'-.,_,.-\'``\'-.,_,.=\'``\'-.,_,.-\'``\'-.,_,.=\'``');
-
+exports.surf = function(data, budget, thresholdPercentage) {
     const startPrice = data[0].price;
     let cash = budget;
     let cryptoBalance = 0;
@@ -20,6 +18,7 @@ exports.surf = function(budget, thresholdPercentage, data) {
     for (let item of data) {
         const average = parseFloat(item.average);
         const price = parseFloat(item.price);
+        const timestamp = item.timestamp;
         const sellThreshold = getSellThreshold(average, thresholdPercentage);
         const buyThreshold = getBuyThreshold(average, thresholdPercentage);
 
@@ -27,7 +26,7 @@ exports.surf = function(budget, thresholdPercentage, data) {
             if (price >= sellThreshold) {
                 cash = cryptoBalance * price;
                 // console.log(
-                //     `Sold ${cryptoBalance} coins at $${price}, cash = $${cash}`
+                //     `Sold ${cryptoBalance} coins at $${price}, cash = $${cash} at ${timestamp}`
                 // );
                 cryptoBalance = 0;
                 lookingToSell = false;
@@ -36,7 +35,7 @@ exports.surf = function(budget, thresholdPercentage, data) {
             if (price <= buyThreshold) {
                 cryptoBalance = cash / price;
                 cash = cash - price * cryptoBalance;
-                //console.log(`Bought ${cryptoBalance} coins at $${price}`);
+                // console.log(`Bought ${cryptoBalance} coins at $${price} at ${timestamp}`);
                 lookingToSell = true;
             }
         }
