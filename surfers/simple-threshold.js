@@ -32,8 +32,9 @@ exports.surf = async function(parameters) {
             ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} ($${sellValue})`
             : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold} (${buyValue})`;
 
+        const averagePrice = await tradeOrchestrator.get24HrAveragePrice(productId);
         console.log(
-            `${formattedDate} - ${message} - current price = $${price}`
+            `${formattedDate}, ${averagePrice.toFixed(4)}, ${price.toFixed(4)}, - ${message} - current price = $${price.toFixed(4)}`
         );
 
         if (lookingToSell) {

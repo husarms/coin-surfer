@@ -5,7 +5,7 @@ const dataProvider = require("./data/data-provider");
 
 const budget = 1000;
 const thresholdPercentage = 4;
-const data = dataProvider.readFromCsvFile("data.csv");
+const data = dataProvider.readFromCsvFile("data-bch.csv");
 console.log(data[0]);
 
 const simpleThresholdValue = simpleThresholdSurfer.surf(budget, thresholdPercentage, data);
