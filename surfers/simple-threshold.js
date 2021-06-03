@@ -54,7 +54,7 @@ exports.surf = async function(parameters) {
                     productId
                 );
                 console.log(`Sell complete. Response = ${JSON.stringify(sellResponse)}`);
-                await emailOrchestrator.sendSellNotification(size, cryptoCurrency, price, fiatCurrency);
+                // await emailOrchestrator.sendSellNotification(size, cryptoCurrency, price, fiatCurrency);
                 lookingToSell = false;
             }
         } else {
@@ -73,7 +73,7 @@ exports.surf = async function(parameters) {
                     productId
                 );
                 console.log(`Buy complete. Response = ${JSON.stringify(buyResponse)}`);
-                await emailOrchestrator.sendBuyNotification(size, cryptoCurrency, price, fiatCurrency);
+                // await emailOrchestrator.sendBuyNotification(size, cryptoCurrency, price, fiatCurrency);
                 lookingToSell = true;
             }
         }

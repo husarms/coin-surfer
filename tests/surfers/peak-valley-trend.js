@@ -8,7 +8,7 @@ function getSellThreshold(averagePrice, thresholdPercentage) {
     return (averagePrice + threshold).toFixed(2);
 }
 
-exports.surf = function(data, budget, thresholdPercentage, candleMagnitude, candleThreshold) {
+exports.surf = function(data, budget, sellThresholdPercentage, buyThresholdPercentage, candleMagnitude, candleThreshold) {
     const startPrice = data[0].price;
     let cash = budget;
     let cryptoBalance = 0;
@@ -23,8 +23,8 @@ exports.surf = function(data, budget, thresholdPercentage, candleMagnitude, cand
         const average = parseFloat(item.average);
         const price = parseFloat(item.price);
         const timestamp = item.timestamp;
-        const sellThreshold = getSellThreshold(average, thresholdPercentage);
-        const buyThreshold = getBuyThreshold(average, thresholdPercentage);
+        const sellThreshold = getSellThreshold(average, sellThresholdPercentage);
+        const buyThreshold = getBuyThreshold(average, buyThresholdPercentage);
         if (lookingToSell) {
             if (price >= sellThreshold) {
                 if (price >= maxPrice) {
@@ -33,12 +33,12 @@ exports.surf = function(data, budget, thresholdPercentage, candleMagnitude, cand
                 } else {
                     negativeDirectionalCount++;
                 }
-                if(negativeDirectionalCount > candleMagnitude){
+                if(negativeDirectionalCount >= candleMagnitude){
                     negativeCandleCount++;
                     negativeDirectionalCount = 0;
                 }
                 // Trigger sell
-                if (negativeCandleCount > candleThreshold) {
+                if (negativeCandleCount >= candleThreshold) {
                     cash = cryptoBalance * price;
                     // console.log(
                     //     `Sold ${cryptoBalance} coins at $${price}, cash = $${cash} at ${timestamp}`
@@ -58,12 +58,12 @@ exports.surf = function(data, budget, thresholdPercentage, candleMagnitude, cand
                 } else {
                     negativeDirectionalCount++;
                 }
-                if(negativeDirectionalCount > candleMagnitude){
+                if(negativeDirectionalCount >= candleMagnitude){
                     negativeCandleCount++;
                     negativeDirectionalCount = 0;
                 }
                 // Trigger buy
-                if (negativeCandleCount > candleThreshold) {
+                if (negativeCandleCount >= candleThreshold) {
                     cryptoBalance = cash / price;
                     cash = cash - price * cryptoBalance;
                     // console.log(`Bought ${cryptoBalance} coins at $${price} at ${timestamp}`);

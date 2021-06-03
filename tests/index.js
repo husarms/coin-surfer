@@ -3,47 +3,57 @@ const peakValleyTrendSurfer = require("./surfers/peak-valley-trend");
 const dataProvider = require("./data/data-provider");
 
 const budget = 1000;
-const data = dataProvider.readFromCsvFile("data-bch.csv");
+const data = dataProvider.readFromCsvFile("data-bch-01.csv");
 
 // let bestResult = 0;
-// let bestPercentage = 0;
-// for(var i = 1; i < 6; i+=0.1){
-//     const thresholdPercentage = i;
-//     const result = parseFloat(simpleThresholdSurfer.surf(data, budget, thresholdPercentage));
-//     if(result > bestResult){
-//         bestResult = result;
-//         bestPercentage = thresholdPercentage;
-//         console.log(`New best simple threshold result = $${bestResult} (${bestPercentage})`);
-//     }
-// }
-// $1115.70 (4.6)
-
-const simpleThresholdValue = simpleThresholdSurfer.surf(data, budget, 4.6);
-console.log(`Simple threshold result = $${simpleThresholdValue}`);
-
-// let bestResult = 0;
-// let bestThresholdPercentage = 0;
-// let bestCandleMagnitude = 0;
-// let bestCandleThreshold = 0;
-// for(var i = 2; i < 6; i++){
-//     for(var j = 10; j < 120; j++){
-//         for(var k = 10; k < 120; k++){
-//             const thresholdPercentage = i;
-//             const candleMagnitude = j;
-//             const candleThreshold = k;
-//             const result = parseFloat(peakValleyTrendSurfer.surf(data, budget, thresholdPercentage, candleMagnitude, candleThreshold));
-//             if(result > bestResult){
-//                 console.log(`New best peak valley trend result = $${result} (${thresholdPercentage}, ${candleMagnitude}, ${candleThreshold})`);
-//                 bestResult = result;
-//                 bestThresholdPercentage = thresholdPercentage;
-//                 bestCandleMagnitude = candleMagnitude;
-//                 bestCandleThreshold = candleThreshold;
-//             }
+// for (var i = 1; i < 6; i += 0.1) {
+//     for (var j = 1; j < 6; j += 0.1) {
+//         const buyThresholdPercentage = i.toFixed(1);
+//         const sellThresholdPercentage = j.toFixed(1);
+//         const result = parseFloat(
+//             simpleThresholdSurfer.surf(
+//                 data,
+//                 budget,
+//                 buyThresholdPercentage,
+//                 sellThresholdPercentage
+//             )
+//         );
+//         if (result > bestResult) {
+//             console.log(
+//                 `New best simple threshold result = $${bestResult} (buy: ${buyThresholdPercentage}, sell: ${sellThresholdPercentage})`
+//             );
+//             bestResult = result;
 //         }
 //     }
 // }
-// $1193.02 (2, 47, 27)
-// $1214.60 (2, 98, 14)
+// data-bch-01 - $1263.29 (buy: 1.3, sell: 13.3)
+// data-bch-02 - $1168.55 (buy: 5.7, sell: 4.6)
+// data-ada-01 - $1149.74 (buy: 4.1, sell: 8.1)
 
-const peakValleyTrendValue = peakValleyTrendSurfer.surf(data, budget, 2, 98, 14);
-console.log(`Peak valley trend result = $${peakValleyTrendValue}`);
+// const simpleThresholdValue = simpleThresholdSurfer.surf(data, budget, 5);
+// console.log(`Simple threshold result = $${simpleThresholdValue}`);
+
+let bestResult = 0;
+for(var i = 1; i < 2; i+= 0.1){
+    for(var j = 13; j < 14; j+= 0.1){
+        for(var k = 0; k < 10; k+= 1){
+            for(var l = 0; l < 10; l+= 1){
+                const buyThresholdPercentage = i.toFixed(1);
+                const sellThresholdPercentage = j.toFixed(1);
+                const candleMagnitude = k;
+                const candleThreshold = l;
+                const result = parseFloat(peakValleyTrendSurfer.surf(data, budget, buyThresholdPercentage, sellThresholdPercentage, candleMagnitude, candleThreshold));
+                if(result > bestResult){
+                    console.log(`New best peak valley trend result = $${result} (${buyThresholdPercentage}, ${sellThresholdPercentage}, ${candleMagnitude}, ${candleThreshold})`);
+                    bestResult = result;
+                }
+            }
+        }
+    }
+}
+// data-bch-01 - $1256.19 (12.6, 12.9, 0, 9)
+// data-bch-02 - $1232.03 (1.5, 1.6, 47, 32)
+// data-ada-01 - $1141.35 (6.0, 3.0, 22, 8)
+
+// const peakValleyTrendValue = peakValleyTrendSurfer.surf(data, budget, 2, 75, 20);
+// console.log(`Peak valley trend result = $${peakValleyTrendValue}`);

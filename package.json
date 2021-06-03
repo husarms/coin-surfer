@@ -5,7 +5,8 @@
     "main": "index.js",
     "dependencies": {
         "coinbase-pro": "^0.9.0",
-        "csv-parse": "^4.15.4"
+        "csv-parse": "^4.15.4",
+        "nodemailer": "^6.6.1"
     },
     "devDependencies": {},
     "scripts": {
