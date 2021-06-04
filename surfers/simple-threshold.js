@@ -18,6 +18,11 @@ exports.surf = async function(parameters) {
     );
 
     setInterval(async function () {
+        const accountBalances = await tradeOrchestrator.getAccountBalances(
+            fiatCurrency,
+            cryptoCurrency
+        );
+        const { fiatBalance, cryptoBalance } = accountBalances;
         const thresholds = await tradeOrchestrator.getBuySellThresholds(
             productId,
             buyThresholdPercentage,

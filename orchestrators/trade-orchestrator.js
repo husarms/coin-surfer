@@ -24,13 +24,16 @@ const getSellThreshold = (
 
 const getBuySize = (fiatBalance, budget, productPrice) => {
     const amount = fiatBalance > budget ? budget : fiatBalance;
-    return Math.floor((amount / productPrice) * 10000) / 10000;
+    return formatters.roundDownToTwoDecimals(amount / productPrice);
 };
 
 const getAccountBalance = async (currency) => {
     var accounts = await coinbaseGateway.getAccounts();
-    var account = accounts.find((a) => a.currency === currency);
-    return formatters.roundDownToFourDecimals(parseFloat(account.balance));
+    if (accounts) {
+        var account = accounts.find((a) => a.currency === currency);
+        return formatters.roundDownToTwoDecimals(parseFloat(account.balance));
+    }
+    return 0;
 };
 
 const getAccountBalances = async function (fiatCurrency, cryptoCurrency) {
