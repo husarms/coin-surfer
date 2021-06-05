@@ -31,31 +31,42 @@ const data = dataProvider.readFromCsvFile("data-ada-02.csv");
 // data-ada-01 - $1149.74 (buy: 4.1, sell: 8.1)
 // data-ada-02 - $1119.90 (buy: 1.6, sell: 4.1)
 
-// const simpleThresholdValue = simpleThresholdSurfer.surf(data, budget, 5);
-// console.log(`Simple threshold result = $${simpleThresholdValue}`);
 
-let bestResult = 0;
-for(var i = 3; i < 6; i+= 0.1){
-    for(var j = 1; j < 3; j+= 0.1){
-        for(var k = 0; k < 20; k+= 2){
-            for(var l = 0; l < 20; l+= 2){
-                const buyThresholdPercentage = i.toFixed(1);
-                const sellThresholdPercentage = j.toFixed(1);
-                const candleMagnitude = k;
-                const candleThreshold = l;
-                const result = parseFloat(peakValleyTrendSurfer.surf(data, budget, buyThresholdPercentage, sellThresholdPercentage, candleMagnitude, candleThreshold));
-                if(result > bestResult){
-                    console.log(`New best peak valley trend result = $${result} (${buyThresholdPercentage}, ${sellThresholdPercentage}, ${candleMagnitude}, ${candleThreshold})`);
-                    bestResult = result;
-                }
-            }
-        }
-    }
-}
+// let bestResult = 0;
+// for(var i = 3; i < 6; i+= 0.1){
+//     for(var j = 1; j < 3; j+= 0.1){
+//         for(var k = 0; k < 20; k+= 2){
+//             for(var l = 0; l < 20; l+= 2){
+//                 const buyThresholdPercentage = i.toFixed(1);
+//                 const sellThresholdPercentage = j.toFixed(1);
+//                 const candleMagnitude = k;
+//                 const candleThreshold = l;
+//                 const result = parseFloat(peakValleyTrendSurfer.surf(data, budget, buyThresholdPercentage, sellThresholdPercentage, candleMagnitude, candleThreshold));
+//                 if(result > bestResult){
+//                     console.log(`New best peak valley trend result = $${result} (${buyThresholdPercentage}, ${sellThresholdPercentage}, ${candleMagnitude}, ${candleThreshold})`);
+//                     bestResult = result;
+//                 }
+//             }
+//         }
+//     }
+// }
 // data-bch-01 - $1256.19 (12.6, 12.9, 0, 9)
 // data-bch-02 - $1232.03 (1.5, 1.6, 47, 32)
 // data-ada-01 - $1141.35 (6.0, 3.0, 22, 8)
 // data-ada-02 - $1162.30 (3.7, 1.0, 15, 5)
 
-// const peakValleyTrendValue = peakValleyTrendSurfer.surf(data, budget, 2, 75, 20);
-// console.log(`Peak valley trend result = $${peakValleyTrendValue}`);
+// let cash = 15000;
+// let profit = 0;
+// const weeks = 52;
+// const percentIncrease = 9;
+// for(var i = 1; i <= weeks; i++){
+//     const margin = cash * (percentIncrease / 100);
+//     const splitMargin = margin / 2;
+//     if(i < 26){
+//         cash += margin;
+//     } else {
+//         cash += splitMargin;
+//         profit += splitMargin;
+//     }
+//     console.log(`Invested at week ${i} = $${cash.toFixed(2)}, profit = $${profit.toFixed(2)} (+$${splitMargin.toFixed(2)})`);
+// }

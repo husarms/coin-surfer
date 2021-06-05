@@ -22,6 +22,27 @@ const getSellThreshold = (
     }
 };
 
+const getBuySellThresholds = async function (
+    productId,
+    buyThresholdPercentage,
+    sellThresholdPercentage
+) {
+    const averagePrice = await get24HrAveragePrice(productId);
+    const lastBuyPrice = await getLastBuyPrice(productId);
+    const buyThreshold = getBuyThreshold(averagePrice, buyThresholdPercentage);
+    const sellThreshold = getSellThreshold(
+        averagePrice,
+        lastBuyPrice,
+        true,
+        sellThresholdPercentage
+    );
+    return {
+        buyThreshold,
+        sellThreshold,
+    };
+};
+
+
 const getBuySize = (fiatBalance, budget, productPrice) => {
     const amount = fiatBalance > budget ? budget : fiatBalance;
     return formatters.roundDownToTwoDecimals(amount / productPrice);
@@ -92,26 +113,6 @@ const buyAllAtMarketValue = async function (
     const size = getBuySize(fiatBalance, budget, price);
     const buyResponse = await marketBuy(fiatBalance, size, productId);
     return buyResponse;
-};
-
-const getBuySellThresholds = async function (
-    productId,
-    buyThresholdPercentage,
-    sellThresholdPercentage
-) {
-    const averagePrice = await get24HrAveragePrice(productId);
-    const lastBuyPrice = await getLastBuyPrice(productId);
-    const buyThreshold = getBuyThreshold(averagePrice, buyThresholdPercentage);
-    const sellThreshold = getSellThreshold(
-        averagePrice,
-        lastBuyPrice,
-        false,
-        sellThresholdPercentage
-    );
-    return {
-        buyThreshold,
-        sellThreshold,
-    };
 };
 
 module.exports = {

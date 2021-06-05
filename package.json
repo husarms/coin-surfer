@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
+        "@sendgrid/mail": "^7.4.4",
         "coinbase-pro": "^0.9.0",
-        "csv-parse": "^4.15.4",
-        "nodemailer": "^6.6.1"
+        "csv-parse": "^4.15.4"
     },
     "devDependencies": {},
     "scripts": {

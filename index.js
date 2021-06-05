@@ -1,7 +1,6 @@
 const simpleThresholdSurfer = require("./surfers/simple-threshold");
 //const websocketSurfer = require("./surfers/websocket");
 const constants = require("./utils/constants");
-const emailOrchestrator = require("./orchestrators/email-orchestrator");
 
 const surfParameters = {
     fiatCurrency: constants.USDollar,
@@ -12,7 +11,6 @@ const surfParameters = {
 };
 
 (async () => {
-    //emailOrchestrator.sendSellNotification(1, 'ADA', 1, 'USD');
     await simpleThresholdSurfer.surf(surfParameters);
     //await websocketSurfer.surf(surfParameters);
 })();
