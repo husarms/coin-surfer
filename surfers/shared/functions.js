@@ -1,6 +1,6 @@
-const tradeOrchestrator = require("../orchestrators/trade-orchestrator");
-const emailOrchestrator = require("../orchestrators/email-orchestrator");
-const formatters = require("../utils/formatters");
+const tradeOrchestrator = require("../../orchestrators/trade-orchestrator");
+const emailOrchestrator = require("../../orchestrators/email-orchestrator");
+const formatters = require("../../utils/formatters");
 
 const logStatusMessage = async (
     price,
