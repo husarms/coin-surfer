@@ -3,6 +3,9 @@ const emailOrchestrator = require("../../orchestrators/email-orchestrator");
 const formatters = require("../../utils/formatters");
 
 const logStatusMessage = async (
+    fiatCurrency,
+    cryptoCurrency,
+    budget,
     price,
     averagePrice,
     buyThreshold,
@@ -15,6 +18,7 @@ const logStatusMessage = async (
         );
     const buyBudget = fiatBalance > budget ? budget : fiatBalance;
     const formattedDate = formatters.formatDate(new Date());
+    const lookingToSell = fiatBalance < 10;
 
     const message = lookingToSell
         ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold}`
@@ -37,7 +41,7 @@ const getBalancesAndVerify = async (fiatCurrency, cryptoCurrency) => {
         `${fiatCurrency} balance = $${fiatBalance}, ${cryptoCurrency} balance = ${cryptoBalance}`
     );
 
-    if (fiatBalance < 10 || cryptoBalance < 1) throw "Insufficient balances";
+    if (fiatBalance < 10 && cryptoBalance < 1) throw "Insufficient balances";
 
     return { fiatBalance, cryptoBalance };
 };

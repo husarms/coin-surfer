@@ -1,4 +1,4 @@
-import {
+const {
     logStatusMessage,
     getBalancesAndVerify,
     sendBuyNotification,
@@ -7,9 +7,9 @@ import {
     sell,
     getPrices,
     getThresholds,
-} from "./shared/functions";
+} = require("./shared/functions");
 
-export async function surf(parameters) {
+exports.surf = async function(parameters) {
     console.log(`Let's go surfing...`);
     const {
         fiatCurrency,
@@ -24,6 +24,7 @@ export async function surf(parameters) {
         cryptoCurrency
     );
     let lookingToSell = fiatBalance < 10;
+    let lastBuyPrice = 0;
 
     setInterval(async function () {
         const { buyThreshold, sellThreshold } = await getThresholds(
@@ -34,6 +35,9 @@ export async function surf(parameters) {
         const { price, averagePrice } = await getPrices(productId);
 
         await logStatusMessage(
+            fiatCurrency,
+            cryptoCurrency,
+            budget,
             price,
             averagePrice,
             buyThreshold,

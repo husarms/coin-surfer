@@ -3,7 +3,7 @@ const peakValleyTrendSurfer = require("./surfers/peak-valley-trend");
 const dataProvider = require("./data/data-provider");
 
 const budget = 1000;
-const data = dataProvider.readFromCsvFile("data-ada-02.csv");
+const data = dataProvider.readFromCsvFile("data-ada-03.csv");
 
 // let bestResult = 0;
 // for (var i = 1; i < 6; i += 0.1) {
@@ -30,6 +30,7 @@ const data = dataProvider.readFromCsvFile("data-ada-02.csv");
 // data-bch-02 - $1168.55 (buy: 5.7, sell: 4.6)
 // data-ada-01 - $1149.74 (buy: 4.1, sell: 8.1)
 // data-ada-02 - $1119.90 (buy: 1.6, sell: 4.1)
+// data-ada-03
 
 
 // let bestResult = 0;
@@ -55,18 +56,18 @@ const data = dataProvider.readFromCsvFile("data-ada-02.csv");
 // data-ada-01 - $1141.35 (6.0, 3.0, 22, 8)
 // data-ada-02 - $1162.30 (3.7, 1.0, 15, 5)
 
-// let cash = 15000;
-// let profit = 0;
-// const weeks = 52;
-// const percentIncrease = 9;
-// for(var i = 1; i <= weeks; i++){
-//     const margin = cash * (percentIncrease / 100);
-//     const splitMargin = margin / 2;
-//     if(i < 26){
-//         cash += margin;
-//     } else {
-//         cash += splitMargin;
-//         profit += splitMargin;
-//     }
-//     console.log(`Invested at week ${i} = $${cash.toFixed(2)}, profit = $${profit.toFixed(2)} (+$${splitMargin.toFixed(2)})`);
-// }
+let cash = 540;
+let profit = 0;
+const weeks = 52;
+const percentIncrease = 4.6;
+for(var i = 1; i <= weeks; i++){
+    const margin = cash * (percentIncrease / 100);
+    const splitMargin = margin / 2;
+    if(i < 53){
+        cash += margin;
+    } else {
+        cash += splitMargin;
+        profit += splitMargin;
+    }
+    console.log(`Invested at week ${i} = $${cash.toFixed(2)}, profit = $${profit.toFixed(2)} (+$${splitMargin.toFixed(2)})`);
+}
