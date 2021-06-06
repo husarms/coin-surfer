@@ -7,7 +7,6 @@ const surfParameters = {
     buyThresholdPercentage: 4,
     sellThresholdPercentage: 4.5,
     budget: 2000,
-    initialIntent: Buy
 };
 
 (async () => {
@@ -17,7 +16,6 @@ const surfParameters = {
         buyThresholdPercentage: 4,
         sellThresholdPercentage: 4.5,
         budget: 300,
-        initialIntent: Buy,
     });
     await SimpleThresholdSurfer.surf({
         fiatCurrency: USDollar,
@@ -25,6 +23,5 @@ const surfParameters = {
         buyThresholdPercentage: 4,
         sellThresholdPercentage: 4.5,
         budget: 300,
-        initialIntent: Buy,
     });
 })();

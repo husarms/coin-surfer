@@ -48,7 +48,7 @@ export function getBuySize (fiatBalance: number, budget: number, productPrice: n
     return formatters.roundDownToTwoDecimals(amount / productPrice);
 };
 
-const getAccountBalance = async (currency: string) => {
+export async function getAccountBalance (currency: string) {
     var accounts = await CoinbaseGateway.getAccounts();
     if (accounts) {
         var account = accounts.find((a) => a.currency === currency);

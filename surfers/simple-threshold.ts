@@ -4,10 +4,12 @@ import {
     sendSellNotification,
     buy,
     sell,
+    getBalance,
     getPrices,
     getThresholds,
 } from "./shared/functions";
 import { Buy, Sell } from "../utils/constants";
+import { getAccountBalances } from "../orchestrators/trade-orchestrator";
 
 export async function surf(parameters) {
     const {
@@ -16,10 +18,10 @@ export async function surf(parameters) {
         buyThresholdPercentage,
         sellThresholdPercentage,
         budget,
-        initialIntent,
     } = parameters;
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
-    let intent= initialIntent;
+    const cryptoBalance = await getBalance(cryptoCurrency);
+    let intent = cryptoBalance > 0 ? Sell : Buy;
 
     console.log(`Let's go surfing with ${productId}...`);
     setInterval(async function () {

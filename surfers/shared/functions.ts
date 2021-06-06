@@ -33,6 +33,10 @@ export async function logStatusMessage (
     );
 };
 
+export async function getBalance(currency: string){
+    return await TradeOrchestrator.getAccountBalance(currency);
+}
+
 export async function getBalancesAndVerify (fiatCurrency: string, cryptoCurrency: string) {
     const { fiatBalance, cryptoBalance } =
         await TradeOrchestrator.getAccountBalances(
