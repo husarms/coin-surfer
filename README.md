@@ -7,6 +7,16 @@ Node.js app for automated cryptocurrency trading
 3. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.js
 
 ## How to run
-1. Navigate to the main directory
-2. Run 'npm install'
-3. Run  'npm run start' or 'npm run start-and-log' to save log file
+Navigate to the main directory
+Install depedencies
+```bash
+npm install
+```
+Run 
+```bash
+npm run start
+```
+Run with log file
+```bash
+npm run start-and-log
+```
