@@ -2,17 +2,20 @@
     "name": "coin-surfer",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "index.ts",
     "dependencies": {
         "@sendgrid/mail": "^7.4.4",
-        "coinbase-pro": "^0.9.0",
-        "csv-parse": "^4.15.4"
+        "coinbase-pro-node": "^3.0.4",
+        "csv-parse": "^4.15.4",
+        "ts-node": "^10.0.0"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "typescript": "^4.3.2"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node index.js",
-        "start-and-log": "node index.js > log-file.txt"
+        "start": "ts-node index.ts",
+        "start-and-log": "ts-node index.ts > log-file.txt"
     },
     "keywords": [],
     "author": "",

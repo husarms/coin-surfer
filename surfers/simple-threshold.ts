@@ -1,31 +1,27 @@
-const {
+import {
     logStatusMessage,
-    getBalancesAndVerify,
     sendBuyNotification,
     sendSellNotification,
     buy,
     sell,
     getPrices,
     getThresholds,
-} = require("./shared/functions");
+} from "./shared/functions";
+import { Buy, Sell } from "../utils/constants";
 
-exports.surf = async function(parameters) {
-    console.log(`Let's go surfing...`);
+export async function surf(parameters) {
     const {
         fiatCurrency,
         cryptoCurrency,
         buyThresholdPercentage,
         sellThresholdPercentage,
         budget,
+        initialIntent,
     } = parameters;
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
-    const { fiatBalance } = await getBalancesAndVerify(
-        fiatCurrency,
-        cryptoCurrency
-    );
-    let lookingToSell = fiatBalance < 10;
-    let lastBuyPrice = 0;
+    let intent= initialIntent;
 
+    console.log(`Let's go surfing with ${productId}...`);
     setInterval(async function () {
         const { buyThreshold, sellThreshold } = await getThresholds(
             productId,
@@ -41,24 +37,25 @@ exports.surf = async function(parameters) {
             price,
             averagePrice,
             buyThreshold,
-            sellThreshold
+            sellThreshold,
+            intent,
         );
 
-        if (lookingToSell) {
+        if (intent === Sell) {
             if (price >= sellThreshold) {
                 console.log(
                     `Sell threshold hit (${price} >= ${sellThreshold})`
                 );
                 const size = await sell(cryptoCurrency, productId);
                 sendSellNotification(size, cryptoCurrency, price, fiatCurrency);
-                lookingToSell = false;
+                intent = Buy;
             }
         } else {
             if (price <= buyThreshold) {
                 console.log(`Buy threshold hit (${price} <= ${buyThreshold})`);
                 const size = await buy(fiatCurrency, budget, price, productId);
                 sendBuyNotification(size, cryptoCurrency, price, fiatCurrency);
-                lookingToSell = true;
+                intent = Sell;
             }
         }
     }, 10000);

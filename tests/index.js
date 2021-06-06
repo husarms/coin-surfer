@@ -56,18 +56,11 @@ const data = dataProvider.readFromCsvFile("data-ada-03.csv");
 // data-ada-01 - $1141.35 (6.0, 3.0, 22, 8)
 // data-ada-02 - $1162.30 (3.7, 1.0, 15, 5)
 
-let cash = 540;
-let profit = 0;
+let cash = 10000;
 const weeks = 52;
-const percentIncrease = 4.6;
+const percentIncrease = 9;
 for(var i = 1; i <= weeks; i++){
     const margin = cash * (percentIncrease / 100);
-    const splitMargin = margin / 2;
-    if(i < 53){
-        cash += margin;
-    } else {
-        cash += splitMargin;
-        profit += splitMargin;
-    }
-    console.log(`Invested at week ${i} = $${cash.toFixed(2)}, profit = $${profit.toFixed(2)} (+$${splitMargin.toFixed(2)})`);
+    cash += margin;
+    console.log(`Invested at week ${i} = $${cash.toFixed(2)} (+$${margin.toFixed(2)})`);
 }
