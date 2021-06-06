@@ -4,7 +4,7 @@ Node.js app for automated cryptocurrency trading
 ## Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
 2. Optionally - a [SendGrid](https://sendgrid.com) account to send buy / sell notifications
-3. Configure your own "secrets.ts" file under a "config" folder in the root directory
+3. Configure your own "secrets.ts" file under the "config" directory
 ```JavaScript
 export default {
     CoinbaseConfiguration: {
