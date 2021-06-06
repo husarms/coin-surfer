@@ -1,5 +1,5 @@
 import TradeOrchestrator = require("../../orchestrators/trade-orchestrator");
-import EmailOrchestrator = require("../../orchestrators/email-orchestrator");
+import NotificationOrchestrator = require("../../orchestrators/notification-orchestrator");
 import { PendingOrder } from "coinbase-pro-node";
 import { Sell } from "../../utils/constants";
 import * as Formatters from "../../utils/formatters";
@@ -58,7 +58,7 @@ export async function sendBuyNotification (
     price: number,
     fiatCurrency: string,
 ) {
-    EmailOrchestrator.sendBuyNotification(
+    NotificationOrchestrator.sendBuyNotification(
         size,
         cryptoCurrency,
         price,
@@ -72,7 +72,7 @@ export async function sendSellNotification (
     price: number,
     fiatCurrency: string,
 ) {
-    EmailOrchestrator.sendSellNotification(
+    NotificationOrchestrator.sendSellNotification(
         size,
         cryptoCurrency,
         price,

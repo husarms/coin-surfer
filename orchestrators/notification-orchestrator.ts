@@ -1,26 +1,4 @@
-import * as SendGridMail from "@sendgrid/mail";
-import Secrets from "../config/secrets";
-
-SendGridMail.setApiKey(Secrets.SendGridConfiguration.apiKey);
-
-function sendEmail (subject: string, body: string) {
-    const email = {
-        from: Secrets.Email.fromAddress,
-        to: Secrets.Email.toAddress,
-        subject,
-        text: body,
-        // html: '<b>Hello world</b>'
-    };
-
-    SendGridMail
-        .send(email)
-        .then(() => {
-            console.log("Email sent");
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-};
+import * as SendGridGateway from "../gateways/sendgrid-gateway";
 
 export function sendBuyNotification (
     size: string,
@@ -29,7 +7,7 @@ export function sendBuyNotification (
     fiatCurrency: string,
 ) {
     const value = parseFloat(size) * price;
-    sendEmail(
+    SendGridGateway.sendEmail(
         "Coin Surfer - Buy Notification",
         `Bought ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${value}`
     );
@@ -42,7 +20,7 @@ export function sendSellNotification (
     fiatCurrency: string,
 ) {
     const value = parseFloat(size) * price;
-    sendEmail(
+    SendGridGateway.sendEmail(
         "Coin Surfer - Sell Notification",
         `Sold ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${value}`
     );

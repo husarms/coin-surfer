@@ -1,9 +1,9 @@
-const simpleThresholdSurfer = require("./surfers/simple-threshold");
-const peakValleyTrendSurfer = require("./surfers/peak-valley-trend");
-const dataProvider = require("./data/data-provider");
+import * as SimpleThresholdSurfer from "./surfers/simple-threshold";
+import * as PeakValleyTrendSurfer from "./surfers/peak-valley-trend";
+import * as DataProvider from "./data/data-provider";
 
 const budget = 1000;
-const data = dataProvider.readFromCsvFile("data-ada-03.csv");
+const data = DataProvider.readFromCsvFile("data-ada-03.csv");
 
 // let bestResult = 0;
 // for (var i = 1; i < 6; i += 0.1) {

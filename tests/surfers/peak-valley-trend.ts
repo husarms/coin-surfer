@@ -1,14 +1,16 @@
+import * as Formatters from "../../utils/formatters";
+
 function getBuyThreshold(averagePrice, thresholdPercentage) {
     const threshold = averagePrice * (thresholdPercentage / 100);
-    return (averagePrice - threshold).toFixed(2);
+    return Formatters.roundDownToTwoDecimals(averagePrice - threshold);
 }
 
 function getSellThreshold(averagePrice, thresholdPercentage) {
     const threshold = averagePrice * (thresholdPercentage / 100);
-    return (averagePrice + threshold).toFixed(2);
+    return Formatters.roundDownToTwoDecimals(averagePrice + threshold);
 }
 
-exports.surf = function(data, budget, sellThresholdPercentage, buyThresholdPercentage, candleMagnitude, candleThreshold) {
+export function ssurf(data: any[], budget: number, buyThresholdPercentage: number, sellThresholdPercentage: number, candleMagnitude: number, candleThreshold: number) {
     const startPrice = data[0].price;
     let cash = budget;
     let cryptoBalance = 0;
@@ -78,10 +80,10 @@ exports.surf = function(data, budget, sellThresholdPercentage, buyThresholdPerce
     }
     let endingValue = 0;
     if(cryptoBalance > 0){
-        endingValue = (cryptoBalance * lastPrice).toFixed(2);
+        endingValue = Formatters.roundDownToTwoDecimals(cryptoBalance * lastPrice);
         //console.log(`Ending with $${endingValue} (${cryptoBalance} coins)`);
     } else {
-        endingValue = cash.toFixed(2);
+        endingValue = Formatters.roundDownToTwoDecimals(cash);
         //console.log(`Ending with $${endingValue} cash`);
     }
     return endingValue;
