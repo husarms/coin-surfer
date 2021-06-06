@@ -11,6 +11,16 @@ Install depedencies
 ```bash
 npm install
 ```
+Set parameters in index.ts
+```JavaScript
+const surfParameters = {
+    fiatCurrency: USDollar,
+    cryptoCurrency: Cardano,
+    buyThresholdPercentage: 4,
+    sellThresholdPercentage: 4.5,
+    budget: 1000,
+};
+```
 Run 
 ```bash
 npm run start
