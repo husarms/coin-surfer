@@ -8,16 +8,17 @@ import {
     getPrices,
     getThresholds,
 } from "./shared/functions";
+import SurfParameters from "../interfaces/surf-parameters";
 import { Buy, Sell } from "../utils/constants";
-import { getAccountBalances } from "../orchestrators/trade-orchestrator";
 
-export async function surf(parameters) {
+export async function surf(parameters: SurfParameters) {
     const {
         fiatCurrency,
         cryptoCurrency,
         buyThresholdPercentage,
         sellThresholdPercentage,
         budget,
+        notificationsEnabled,
     } = parameters;
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
     const cryptoBalance = await getBalance(cryptoCurrency);
@@ -40,7 +41,7 @@ export async function surf(parameters) {
             averagePrice,
             buyThreshold,
             sellThreshold,
-            intent,
+            intent
         );
 
         if (intent === Sell) {
@@ -49,14 +50,14 @@ export async function surf(parameters) {
                     `Sell threshold hit (${price} >= ${sellThreshold})`
                 );
                 const size = await sell(cryptoCurrency, productId);
-                sendSellNotification(size, cryptoCurrency, price, fiatCurrency);
+                notificationsEnabled && sendSellNotification(size, cryptoCurrency, price, fiatCurrency);
                 intent = Buy;
             }
         } else {
             if (price <= buyThreshold) {
                 console.log(`Buy threshold hit (${price} <= ${buyThreshold})`);
                 const size = await buy(fiatCurrency, budget, price, productId);
-                sendBuyNotification(size, cryptoCurrency, price, fiatCurrency);
+                notificationsEnabled && sendBuyNotification(size, cryptoCurrency, price, fiatCurrency);
                 intent = Sell;
             }
         }

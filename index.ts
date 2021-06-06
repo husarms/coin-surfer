@@ -1,13 +1,5 @@
 import * as SimpleThresholdSurfer from "./surfers/simple-threshold";
-import { Buy, USDollar, Cardano, Litecoin } from "./utils/constants";
-
-const surfParameters = {
-    fiatCurrency: USDollar,
-    cryptoCurrency: Cardano,
-    buyThresholdPercentage: 4,
-    sellThresholdPercentage: 4.5,
-    budget: 2000,
-};
+import { USDollar, Cardano, Litecoin } from "./utils/constants";
 
 (async () => {
     await SimpleThresholdSurfer.surf({
@@ -16,6 +8,7 @@ const surfParameters = {
         buyThresholdPercentage: 4,
         sellThresholdPercentage: 4.5,
         budget: 300,
+        notificationsEnabled: true,
     });
     await SimpleThresholdSurfer.surf({
         fiatCurrency: USDollar,
@@ -23,5 +16,6 @@ const surfParameters = {
         buyThresholdPercentage: 4,
         sellThresholdPercentage: 4.5,
         budget: 300,
+        notificationsEnabled: true,
     });
 })();
