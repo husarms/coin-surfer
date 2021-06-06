@@ -1,16 +1,8 @@
+import { getBuyThreshold, getSellThreshold } from "./shared/functions";
+import { Data } from "../interfaces/data";
 import * as Formatters from "../../utils/formatters";
 
-function getBuyThreshold(averagePrice, thresholdPercentage) {
-    const threshold = averagePrice * (thresholdPercentage / 100);
-    return Formatters.roundDownToTwoDecimals(averagePrice - threshold);
-}
-
-function getSellThreshold(averagePrice, thresholdPercentage) {
-    const threshold = averagePrice * (thresholdPercentage / 100);
-    return Formatters.roundDownToTwoDecimals(averagePrice + threshold);
-}
-
-export function surf(data: any[], budget: number, buyThresholdPercentage: number, sellThresholdPercentage: number) {
+export function surf(data: Data[], budget: number, buyThresholdPercentage: number, sellThresholdPercentage: number) {
     const startPrice = data[0].price;
     let cash = budget;
     let cryptoBalance = 0;
@@ -18,9 +10,8 @@ export function surf(data: any[], budget: number, buyThresholdPercentage: number
     let lookingToSell = false;
 
     for (let item of data) {
-        const average = parseFloat(item.average);
-        const price = parseFloat(item.price);
-        const timestamp = item.timestamp;
+        const average =  item.average;
+        const price = item.price;
         const sellThreshold = getSellThreshold(average, sellThresholdPercentage);
         const buyThreshold = getBuyThreshold(average, buyThresholdPercentage);
 

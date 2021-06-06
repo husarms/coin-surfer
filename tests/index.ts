@@ -8,15 +8,13 @@ const data = DataProvider.readFromCsvFile("data-ada-03.csv");
 // let bestResult = 0;
 // for (var i = 1; i < 6; i += 0.1) {
 //     for (var j = 1; j < 6; j += 0.1) {
-//         const buyThresholdPercentage = i.toFixed(1);
-//         const sellThresholdPercentage = j.toFixed(1);
-//         const result = parseFloat(
-//             simpleThresholdSurfer.surf(
-//                 data,
-//                 budget,
-//                 buyThresholdPercentage,
-//                 sellThresholdPercentage
-//             )
+//         const buyThresholdPercentage = i;
+//         const sellThresholdPercentage = j;
+//         const result = SimpleThresholdSurfer.surf(
+//             data,
+//             budget,
+//             buyThresholdPercentage,
+//             sellThresholdPercentage
 //         );
 //         if (result > bestResult) {
 //             console.log(
@@ -32,25 +30,33 @@ const data = DataProvider.readFromCsvFile("data-ada-03.csv");
 // data-ada-02 - $1119.90 (buy: 1.6, sell: 4.1)
 // data-ada-03
 
-
-// let bestResult = 0;
-// for(var i = 3; i < 6; i+= 0.1){
-//     for(var j = 1; j < 3; j+= 0.1){
-//         for(var k = 0; k < 20; k+= 2){
-//             for(var l = 0; l < 20; l+= 2){
-//                 const buyThresholdPercentage = i.toFixed(1);
-//                 const sellThresholdPercentage = j.toFixed(1);
-//                 const candleMagnitude = k;
-//                 const candleThreshold = l;
-//                 const result = parseFloat(peakValleyTrendSurfer.surf(data, budget, buyThresholdPercentage, sellThresholdPercentage, candleMagnitude, candleThreshold));
-//                 if(result > bestResult){
-//                     console.log(`New best peak valley trend result = $${result} (${buyThresholdPercentage}, ${sellThresholdPercentage}, ${candleMagnitude}, ${candleThreshold})`);
-//                     bestResult = result;
-//                 }
-//             }
-//         }
-//     }
-// }
+let bestResult = 0;
+for (var i = 3; i < 6; i += 0.1) {
+    for (var j = 1; j < 3; j += 0.1) {
+        for (var k = 0; k < 20; k += 2) {
+            for (var l = 0; l < 20; l += 2) {
+                const buyThresholdPercentage = i;
+                const sellThresholdPercentage = j;
+                const candleMagnitude = k;
+                const candleThreshold = l;
+                const result = PeakValleyTrendSurfer.surf(
+                    data,
+                    budget,
+                    buyThresholdPercentage,
+                    sellThresholdPercentage,
+                    candleMagnitude,
+                    candleThreshold
+                );
+                if (result > bestResult) {
+                    console.log(
+                        `New best peak valley trend result = $${result} (${buyThresholdPercentage}, ${sellThresholdPercentage}, ${candleMagnitude}, ${candleThreshold})`
+                    );
+                    bestResult = result;
+                }
+            }
+        }
+    }
+}
 // data-bch-01 - $1256.19 (12.6, 12.9, 0, 9)
 // data-bch-02 - $1232.03 (1.5, 1.6, 47, 32)
 // data-ada-01 - $1141.35 (6.0, 3.0, 22, 8)
@@ -59,8 +65,10 @@ const data = DataProvider.readFromCsvFile("data-ada-03.csv");
 let cash = 10000;
 const weeks = 52;
 const percentIncrease = 9;
-for(var i = 1; i <= weeks; i++){
+for (var i = 1; i <= weeks; i++) {
     const margin = cash * (percentIncrease / 100);
     cash += margin;
-    console.log(`Invested at week ${i} = $${cash.toFixed(2)} (+$${margin.toFixed(2)})`);
+    console.log(
+        `Invested at week ${i} = $${cash.toFixed(2)} (+$${margin.toFixed(2)})`
+    );
 }
