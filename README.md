@@ -7,7 +7,6 @@ Node.js app for automated cryptocurrency trading
 3. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.js
 
 ## How to run
-Navigate to the main directory
 Install depedencies
 ```bash
 npm install
