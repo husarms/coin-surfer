@@ -9,9 +9,9 @@ import {
 import Secrets from "../config/secrets";
 
 const authorization = {
-    apiKey: Secrets.CoinbaseProductionConfiguration.key,
-    apiSecret: Secrets.CoinbaseProductionConfiguration.secret,
-    passphrase: Secrets.CoinbaseProductionConfiguration.passphrase,
+    apiKey: Secrets.CoinbaseConfiguration.key,
+    apiSecret: Secrets.CoinbaseConfiguration.secret,
+    passphrase: Secrets.CoinbaseConfiguration.passphrase,
     // The Sandbox is for testing only and offers a subset of the products/assets:
     // https://docs.pro.coinbase.com/#sandbox
     useSandbox: false,
