@@ -1,3 +1,8 @@
+export function roundDownToOneDecimal(number: number) {
+    return Math.floor(number * 10) / 10;
+}
+
+
 export function roundDownToTwoDecimals(number: number) {
     return Math.floor(number * 100) / 100;
 }

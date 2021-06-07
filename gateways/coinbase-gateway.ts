@@ -187,3 +187,16 @@ export async function marketSell(size: string, product_id: string) {
             console.error(error);
         });
 }
+
+export async function getHistoricRates(product_id: string, startDate: Date, endDate: Date) {
+    const start = startDate.toISOString();
+    const end = endDate.toISOString();
+    return coinbaseClient.rest.product
+        .getCandles(product_id, {start, end, granularity: 300})
+        .then((data) => {
+            return data;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
