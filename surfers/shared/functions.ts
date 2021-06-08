@@ -1,7 +1,7 @@
 import TradeOrchestrator = require("../../orchestrators/trade-orchestrator");
 import NotificationOrchestrator = require("../../orchestrators/notification-orchestrator");
 import { PendingOrder } from "coinbase-pro-node";
-import { Sell } from "../../utils/constants";
+import { Actions } from "../../utils/enums";
 import * as Formatters from "../../utils/formatters";
 
 export async function logStatusMessage (
@@ -12,7 +12,7 @@ export async function logStatusMessage (
     averagePrice: number,
     buyThreshold: number,
     sellThreshold: number,
-    trade: string,
+    action: Actions.Sell | Actions.Buy,
 ) {
     const { fiatBalance, cryptoBalance } =
         await TradeOrchestrator.getAccountBalances(
@@ -22,7 +22,7 @@ export async function logStatusMessage (
     const buyBudget = fiatBalance > budget ? budget : fiatBalance;
     const formattedDate = Formatters.formatDate(new Date().toString());
 
-    const message = trade === Sell
+    const message = action === Actions.Sell
         ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold}`
         : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold}`;
 

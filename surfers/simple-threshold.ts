@@ -9,7 +9,8 @@ import {
     getThresholds,
 } from "./shared/functions";
 import SurfParameters from "../interfaces/surf-parameters";
-import { Buy, Sell } from "../utils/constants";
+import { Actions } from "../utils/enums";
+
 
 export async function surf(parameters: SurfParameters) {
     const {
@@ -22,7 +23,7 @@ export async function surf(parameters: SurfParameters) {
     } = parameters;
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
     const cryptoBalance = await getBalance(cryptoCurrency);
-    let intent = cryptoBalance > 0 ? Sell : Buy;
+    let action = cryptoBalance > 0 ? Actions.Sell : Actions.Buy;
 
     console.log(`Let's go surfing with ${productId}...`);
     setInterval(async function () {
@@ -41,24 +42,24 @@ export async function surf(parameters: SurfParameters) {
             averagePrice,
             buyThreshold,
             sellThreshold,
-            intent
+            action
         );
 
-        if (intent === Sell) {
+        if (action === Actions.Sell) {
             if (price >= sellThreshold) {
                 console.log(
                     `Sell threshold hit (${price} >= ${sellThreshold})`
                 );
                 const size = await sell(cryptoCurrency, productId);
                 notificationsEnabled && sendSellNotification(size, cryptoCurrency, price, fiatCurrency);
-                intent = Buy;
+                action = Actions.Buy;
             }
         } else {
             if (price <= buyThreshold) {
                 console.log(`Buy threshold hit (${price} <= ${buyThreshold})`);
                 const size = await buy(fiatCurrency, budget, price, productId);
                 notificationsEnabled && sendBuyNotification(size, cryptoCurrency, price, fiatCurrency);
-                intent = Sell;
+                action = Actions.Sell;
             }
         }
     }, 10000);
