@@ -10,8 +10,7 @@ export function surf(data: Data[], budget: number, buyThresholdPercentage: numbe
     let lookingToSell = false;
 
     for (let item of data) {
-        const average =  item.average;
-        const price = item.price;
+        const { timestamp, average, price } = item;
         const sellThreshold = getSellThreshold(average, sellThresholdPercentage);
         const buyThreshold = getBuyThreshold(average, buyThresholdPercentage);
 

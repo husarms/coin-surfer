@@ -1,5 +1,5 @@
 import {
-    logStatusMessage,
+    getStatusMessage,
     sendBuyNotification,
     sendSellNotification,
     buy,
@@ -8,9 +8,9 @@ import {
     getPrices,
     getThresholds,
 } from "./shared/functions";
+import { Logger } from "../utils/logger";
 import SurfParameters from "../interfaces/surf-parameters";
 import { Actions } from "../utils/enums";
-
 
 export async function surf(parameters: SurfParameters) {
     const {
@@ -22,6 +22,7 @@ export async function surf(parameters: SurfParameters) {
         notificationsEnabled,
     } = parameters;
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
+    const logger = new Logger(productId);
     const cryptoBalance = await getBalance(cryptoCurrency);
     let action = cryptoBalance > 0 ? Actions.Sell : Actions.Buy;
 
@@ -33,8 +34,7 @@ export async function surf(parameters: SurfParameters) {
             sellThresholdPercentage
         );
         const { price, averagePrice } = await getPrices(productId);
-
-        await logStatusMessage(
+        const statusMessage = await getStatusMessage(
             fiatCurrency,
             cryptoCurrency,
             budget,
@@ -44,6 +44,7 @@ export async function surf(parameters: SurfParameters) {
             sellThreshold,
             action
         );
+        logger.log(statusMessage)
 
         if (action === Actions.Sell) {
             if (price >= sellThreshold) {

@@ -4,7 +4,7 @@ import { PendingOrder } from "coinbase-pro-node";
 import { Actions } from "../../utils/enums";
 import * as Formatters from "../../utils/formatters";
 
-export async function logStatusMessage (
+export async function getStatusMessage (
     fiatCurrency: string,
     cryptoCurrency: string,
     budget: number,
@@ -13,24 +13,22 @@ export async function logStatusMessage (
     buyThreshold: number,
     sellThreshold: number,
     action: Actions.Sell | Actions.Buy,
-) {
+) : Promise<string> {
     const { fiatBalance, cryptoBalance } =
         await TradeOrchestrator.getAccountBalances(
             fiatCurrency,
             cryptoCurrency
         );
     const buyBudget = fiatBalance > budget ? budget : fiatBalance;
-    const formattedDate = Formatters.formatDate(new Date().toString());
+    const formattedDate = Formatters.getDateMMddyyyyHHmmss();
 
     const message = action === Actions.Sell
         ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold}`
         : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold}`;
 
-    console.log(
-        `${formattedDate}, ${cryptoCurrency}, ${averagePrice.toFixed(4)}, ${price.toFixed(
+    return `${formattedDate}, ${cryptoCurrency}, ${averagePrice.toFixed(4)}, ${price.toFixed(
             4
-        )}, - ${message} - current price = $${price.toFixed(4)}`
-    );
+        )}, - ${message} - current price = $${price.toFixed(4)}`;
 };
 
 export async function getBalance(currency: string){

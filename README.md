@@ -40,7 +40,3 @@ Run
 ```bash
 npm run start
 ```
-Run with log file
-```bash
-npm run start-and-log
-```
