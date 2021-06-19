@@ -24,8 +24,8 @@ export default {
 5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts
 ```JavaScript
 const surfParameters = {
-    fiatCurrency: USDollar,
-    cryptoCurrency: Cardano,
+    fiatCurrency: Products.USDollar,
+    cryptoCurrency: Products.Cardano,
     buyThresholdPercentage: 4,
     sellThresholdPercentage: 4.5,
     budget: 1000,
