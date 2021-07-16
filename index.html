@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>WebSockets Example</title>
+</head>
+
+<body>
+    <p>I'm sending "hello" to server using WebSockets port 8080</p>
+    <p id="output"></p>
+    <script>
+        (function () {
+            if (!"WebSocket" in window) {
+                alert("This browser does not support WebSockets");
+                return;
+            }
+
+            var ws = new WebSocket("ws://localhost:8080/");
+
+            // ws.onopen = function () {
+            //     setInterval(() => {
+            //         ws.send("hello");
+            //     }, 2000);
+            // };
+
+            ws.onmessage = function (e) {
+                var outputElement = document.getElementById("output");
+                outputElement.innerHTML = outputElement.innerHTML + `<br /> ${e.data}`;
+            };
+
+            // ws.onclose = function () {
+            //     alert("WebSockets connection to server lost");
+            // };
+        })();
+    </script>
+</body>
+
+</html>

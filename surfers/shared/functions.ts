@@ -11,7 +11,9 @@ export async function getStatusMessage (
     price: number,
     averagePrice: number,
     buyThreshold: number,
+    buyThresholdPercentage: number,
     sellThreshold: number,
+    sellThresholdPercentage: number,
     action: Actions.Sell | Actions.Buy,
 ) : Promise<string> {
     const { fiatBalance, cryptoBalance } =
@@ -21,14 +23,16 @@ export async function getStatusMessage (
         );
     const buyBudget = fiatBalance > budget ? budget : fiatBalance;
     const formattedDate = Formatters.getDateMMddyyyyHHmmss();
+    let currentPercentage = Math.abs(Formatters.roundDownToTwoDecimals(((averagePrice - price) / averagePrice) * 100));
+    if(price < averagePrice) currentPercentage *= -1;
 
     const message = action === Actions.Sell
-        ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold}`
-        : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold}`;
+        ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} (+${sellThresholdPercentage}%)`
+        : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold} (-${buyThresholdPercentage}%)`;
 
     return `${formattedDate}, ${cryptoCurrency}, ${averagePrice.toFixed(4)}, ${price.toFixed(
             4
-        )}, - ${message} - current price = $${price.toFixed(4)}`;
+        )}, ${message}; current price = $${price.toFixed(4)} (${currentPercentage > 0 ? '+' : ''}${currentPercentage}%)`;
 };
 
 export async function getBalance(currency: string){

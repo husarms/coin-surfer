@@ -8,8 +8,8 @@ import { Products } from "../utils/enums";
 import * as Formatters from "../utils/formatters";
 
 const budget = 1000;
-//const data = DataProvider.readFromCsvFile("data-ltc-0605-0609.csv");
-const historicalData = DataProvider.readFromJsonFile("historical-ada-0525-0530.json");
+// const data = DataProvider.readFromCsvFile("data-ltc-0605-0609.csv");
+// const historicalData = DataProvider.readFromJsonFile("historical-ada-0525-0530.json");
 
 // var start = 1000;
 // for(var i = 1; i < 139; i++){
@@ -17,25 +17,25 @@ const historicalData = DataProvider.readFromJsonFile("historical-ada-0525-0530.j
 //     console.log(`Cash = $${start.toFixed(2)}`);
 // }
 
-let bestResult = 0;
-for (var i = 1; i < 10; i += 0.1) {
-    for (var j = 1; j < 35; j += 0.1) {
-        const buyThresholdPercentage = Formatters.roundDownToOneDecimal(i);
-        const sellThresholdPercentage = Formatters.roundDownToOneDecimal(j);
-        const result = TimeTravelSurfer.surf(
-            historicalData,
-            budget,
-            buyThresholdPercentage,
-            sellThresholdPercentage
-        );
-        if (result.endingValue > bestResult) {
-            console.log(
-                `New best time travel result = $${result.endingValue} (${result.transactionCount} transactions) (buy: ${buyThresholdPercentage}, sell: ${sellThresholdPercentage})`
-            );
-            bestResult = result.endingValue;
-        }
-    }
-}
+// let bestResult = 0;
+// for (var i = 1; i < 10; i += 0.1) {
+//     for (var j = 1; j < 35; j += 0.1) {
+//         const buyThresholdPercentage = Formatters.roundDownToOneDecimal(i);
+//         const sellThresholdPercentage = Formatters.roundDownToOneDecimal(j);
+//         const result = TimeTravelSurfer.surf(
+//             historicalData,
+//             budget,
+//             buyThresholdPercentage,
+//             sellThresholdPercentage
+//         );
+//         if (result.endingValue > bestResult) {
+//             console.log(
+//                 `New best time travel result = $${result.endingValue} (${result.transactionCount} transactions) (buy: ${buyThresholdPercentage}, sell: ${sellThresholdPercentage})`
+//             );
+//             bestResult = result.endingValue;
+//         }
+//     }
+// }
 
 // (async () => {
 //     const productId = `${Products.Cardano}-${Products.USDollar}`;
@@ -108,13 +108,13 @@ for (var i = 1; i < 10; i += 0.1) {
 // data-ada-01 - $1141.35 (6.0, 3.0, 22, 8)
 // data-ada-02 - $1162.30 (3.7, 1.0, 15, 5)
 
-// let cash = 540;
-// const weeks = 52 * 5;
-// const percentIncrease = 6;
-// for (var i = 1; i <= weeks; i++) {
-//     const margin = cash * (percentIncrease / 100);
-//     cash += margin;
-//     console.log(
-//         `Invested at week ${i} = $${cash.toFixed(2)} (+$${margin.toFixed(2)})`
-//     );
-// }
+let cash = 35000;
+const weeks = 24;
+const percentIncrease = 6;
+for (var i = 1; i <= weeks; i++) {
+    const margin = cash * (percentIncrease / 100);
+    cash += margin;
+    console.log(
+        `Invested at week ${i} = $${cash.toFixed(2)} (+$${margin.toFixed(2)})`
+    );
+}

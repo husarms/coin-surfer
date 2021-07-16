@@ -45,14 +45,18 @@ export async function getBuySellThresholds (
 
 export function getBuySize (fiatBalance: number, budget: number, productPrice: number) {
     const amount = fiatBalance > budget ? budget : fiatBalance;
-    return formatters.roundDownToTwoDecimals(amount / productPrice);
+    return formatters.roundDownToFourDecimals(amount / productPrice);
 };
 
 export async function getAccountBalance (currency: string) {
     var accounts = await CoinbaseGateway.getAccounts();
     if (accounts) {
         var account = accounts.find((a) => a.currency === currency);
-        return formatters.roundDownToTwoDecimals(parseFloat(account.balance));
+        var balance = formatters.roundDownToFourDecimals(parseFloat(account.balance));
+        if(balance > 1){
+            return formatters.roundDownToTwoDecimals(balance);
+        }
+        return balance;
     }
     return 0;
 };

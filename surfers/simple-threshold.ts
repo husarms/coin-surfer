@@ -41,7 +41,9 @@ export async function surf(parameters: SurfParameters) {
             price,
             averagePrice,
             buyThreshold,
+            buyThresholdPercentage,
             sellThreshold,
+            sellThresholdPercentage,
             action
         );
         logger.log(statusMessage)

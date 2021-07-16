@@ -8,15 +8,18 @@
         "axios": "^0.21.1",
         "coinbase-pro-node": "^3.0.4",
         "csv-parse": "^4.15.4",
+        "express": "^4.17.1",
         "ts-node": "^10.0.0",
-        "winston": "^3.3.3"
+        "winston": "^3.3.3",
+        "ws": "^7.5.0"
     },
     "devDependencies": {
         "typescript": "^4.3.2"
     },
     "scripts": {
         "test": "ts-node tests/index.ts",
-        "start": "ts-node index.ts"
+        "start": "ts-node index.ts",
+        "start-websocket": "ts-node websocket.ts"
     },
     "keywords": [],
     "author": "",

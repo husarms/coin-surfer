@@ -1,14 +1,17 @@
 import * as Winston from "winston";
 import * as Formatters from "../utils/formatters";
+import * as WebSocket from "ws";
 
 export class Logger {
     private logger: Winston.Logger;
+    private ws: WebSocket;
 
     private myFormat = Winston.format.printf(({ message }) => {
         return `${message}`;
     });
 
     constructor(logLabel: string) {
+        // this.ws = new WebSocket("ws://localhost:8080/");
         const timestamp = Formatters.getDateyyyyMMddHHmmss();
         this.logger = Winston.createLogger({
             transports: [
@@ -26,5 +29,6 @@ export class Logger {
             level,
             message,
         });
+        //this.ws.send(message);
     }
 }
