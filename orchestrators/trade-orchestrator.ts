@@ -2,6 +2,7 @@ import {
     Fill, PaginatedData, ProductStats, ProductTicker
 } from "coinbase-pro-node";
 import * as CoinbaseGateway from "../gateways/coinbase-gateway";
+import { sell } from "../surfers/shared/functions";
 import * as formatters from "../utils/formatters";
 
 const getBuyThreshold = (averagePrice: number, thresholdPercentage: number) => {
@@ -11,10 +12,10 @@ const getBuyThreshold = (averagePrice: number, thresholdPercentage: number) => {
 const getSellThreshold = (
     averagePrice: number,
     lastBuyPrice: number,
-    considerLastBuyPrice: boolean = true,
     thresholdPercentage: number,
+    sellAtLoss: boolean = false,
 ) => {
-    if (lastBuyPrice > averagePrice && considerLastBuyPrice) {
+    if (lastBuyPrice > averagePrice && !sellAtLoss) {
         const margin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
         return formatters.roundDownToTwoDecimals(lastBuyPrice + margin);
     } else {
@@ -27,6 +28,7 @@ export async function getBuySellThresholds (
     productId: string,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number,
+    sellAtLoss: boolean
 ) {
     const averagePrice = await get24HrAveragePrice(productId);
     const lastBuyPrice = await getLastBuyPrice(productId);
@@ -34,8 +36,8 @@ export async function getBuySellThresholds (
     const sellThreshold = getSellThreshold(
         averagePrice,
         lastBuyPrice,
-        true,
-        sellThresholdPercentage
+        sellThresholdPercentage,
+        sellAtLoss,
     );
     return {
         buyThreshold,

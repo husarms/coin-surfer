@@ -8,7 +8,7 @@ import { Products } from "../utils/enums";
 import * as Formatters from "../utils/formatters";
 
 const budget = 1000;
-// const data = DataProvider.readFromCsvFile("data-ltc-0605-0609.csv");
+const data = DataProvider.readFromCsvFile("data-btc-0629-0719.csv");
 // const historicalData = DataProvider.readFromJsonFile("historical-ada-0525-0530.json");
 
 // var start = 1000;
@@ -51,25 +51,25 @@ const budget = 1000;
 //     }
 // })();
 
-// let bestResult = 0;
-// for (var i = 1; i < 6; i += 0.1) {
-//     for (var j = 1; j < 6; j += 0.1) {
-//         const buyThresholdPercentage = i;
-//         const sellThresholdPercentage = j;
-//         const result = SimpleThresholdSurfer.surf(
-//             data,
-//             budget,
-//             buyThresholdPercentage,
-//             sellThresholdPercentage
-//         );
-//         if (result > bestResult) {
-//             console.log(
-//                 `New best simple threshold result = $${bestResult} (buy: ${buyThresholdPercentage.toFixed(2)}, sell: ${sellThresholdPercentage.toFixed(2)})`
-//             );
-//             bestResult = result;
-//         }
-//     }
-// }
+let bestResult = 0;
+for (var i = 1; i < 6; i += 1) {
+    for (var j = 1; j < 6; j += 1) {
+        const buyThresholdPercentage = i;
+        const sellThresholdPercentage = j;
+        const result = SimpleThresholdSurfer.surf(
+            data,
+            budget,
+            buyThresholdPercentage,
+            sellThresholdPercentage
+        );
+        if (result > bestResult) {
+            console.log(
+                `New best simple threshold result = $${bestResult} (buy: ${buyThresholdPercentage.toFixed(2)}, sell: ${sellThresholdPercentage.toFixed(2)})`
+            );
+            bestResult = result;
+        }
+    }
+}
 // data-bch-01 - $1263.29 (buy: 1.3, sell: 13.3)
 // data-bch-02 - $1168.55 (buy: 5.7, sell: 4.6)
 // data-ada-01 - $1149.74 (buy: 4.1, sell: 8.1)
@@ -108,13 +108,13 @@ const budget = 1000;
 // data-ada-01 - $1141.35 (6.0, 3.0, 22, 8)
 // data-ada-02 - $1162.30 (3.7, 1.0, 15, 5)
 
-let cash = 35000;
-const weeks = 24;
-const percentIncrease = 6;
-for (var i = 1; i <= weeks; i++) {
-    const margin = cash * (percentIncrease / 100);
-    cash += margin;
-    console.log(
-        `Invested at week ${i} = $${cash.toFixed(2)} (+$${margin.toFixed(2)})`
-    );
-}
+// let cash = 35000;
+// const weeks = 24;
+// const percentIncrease = 6;
+// for (var i = 1; i <= weeks; i++) {
+//     const margin = cash * (percentIncrease / 100);
+//     cash += margin;
+//     console.log(
+//         `Invested at week ${i} = $${cash.toFixed(2)} (+$${margin.toFixed(2)})`
+//     );
+// }

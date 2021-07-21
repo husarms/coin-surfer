@@ -112,10 +112,12 @@ export async function getThresholds (
     productId: string,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number,
+    sellAtLoss: boolean
 ) {
     return await TradeOrchestrator.getBuySellThresholds(
         productId,
         buyThresholdPercentage,
-        sellThresholdPercentage
+        sellThresholdPercentage,
+        sellAtLoss
     );
 };
