@@ -4,7 +4,7 @@ import * as Formatters from "../utils/formatters";
 function callback(data) {
     if(data.type === "ticker"){
         const { product_id, price, low_24h, high_24h, time } = data;
-        const formattedTimestamp = Formatters.formatDateyyyyMMddHHmmss(time);
+        const formattedTimestamp = Formatters.formatDateMMddyyyyHHmmss(time);
         console.log(`${product_id} at ${formattedTimestamp} = $${price} (low = $${low_24h}, high = $${high_24h})`);
     }
 }
