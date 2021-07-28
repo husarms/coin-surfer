@@ -23,7 +23,7 @@ export async function surf({
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
     const logger = new Logger(productId);
     const cryptoBalance = await getBalance(cryptoCurrency);
-    let action = cryptoBalance > 0.001 ? Actions.Sell : Actions.Buy;
+    let action = cryptoBalance > 0.1 ? Actions.Sell : Actions.Buy;
 
     console.log(`Let's go surfing with ${productId}...`);
     setInterval(async function () {

@@ -9,7 +9,7 @@ export function sendBuyNotification (
     const value = parseFloat(size) * price;
     SendGridGateway.sendEmail(
         "Coin Surfer - Buy Notification",
-        `Bought ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${value}`
+        `Bought ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${value.toFixed(2)}`
     );
 };
 
@@ -22,6 +22,6 @@ export function sendSellNotification (
     const value = parseFloat(size) * price;
     SendGridGateway.sendEmail(
         "Coin Surfer - Sell Notification",
-        `Sold ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${value}`
+        `Sold ${size} ${cryptoCurrency} at $${price}, ${fiatCurrency} value = $${value.toFixed(2)}`
     );
 };

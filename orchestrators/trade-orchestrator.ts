@@ -2,7 +2,6 @@ import {
     Fill, PaginatedData, ProductStats, ProductTicker
 } from "coinbase-pro-node";
 import * as CoinbaseGateway from "../gateways/coinbase-gateway";
-import { sell } from "../surfers/shared/functions";
 import * as formatters from "../utils/formatters";
 
 const getBuyThreshold = (averagePrice: number, thresholdPercentage: number) => {
