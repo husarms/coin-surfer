@@ -19,6 +19,7 @@ Optional text notifications can be sent on buy / sell
 ![notification](docs/images/text-notification.jpg)
 
 Logs for each currency are kept if you wish to do historical analysis and optimize your thresholds (or create your own algorithm)
+
 ![historical-log](docs/images/historical-log.jpg)
 
 
