@@ -3,7 +3,7 @@ Node.js app for automated cryptocurrency trading.
 
 ![log](docs/images/log.png)
 
-Text notifications on trades
+Text notifications on buy / sell
 
 ![notification](docs/images/text-notification.jpg)
 
@@ -27,7 +27,7 @@ export default {
     },
 };
 ```
-5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts
+5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts. You can surf multiple currencies by adding multiple calls.
 ```JavaScript
 (async () => {
     await SimpleThresholdSurfer.surf({
