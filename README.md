@@ -1,7 +1,7 @@
 # coin-surfer
 Node.js app for automated cryptocurrency trading.
 
-## How it Works
+## How it works
 
 The current "simple threshold" surfer works as follows -
 
@@ -22,7 +22,7 @@ Logs for each currency are kept if you wish to do historical analysis and optimi
 
 ![historical-log](docs/images/historical-log.jpg)
 
-## Future Goals
+## Future goals
 
 1. **Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends.
 2. **Know when to hold 'em** - detect abnormal trends in price and override sell threshold to increase profit margin.
