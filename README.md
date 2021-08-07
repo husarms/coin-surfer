@@ -3,10 +3,6 @@ Node.js app for automated cryptocurrency trading.
 
 ![log](docs/images/log.png)
 
-Text notifications on trades
-
-![notification](docs/images/notification.jpg)
-
 
 ## Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
