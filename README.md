@@ -1,5 +1,12 @@
 # coin-surfer
-Node.js app for automated cryptocurrency trading
+Node.js app for automated cryptocurrency trading.
+
+![log](docs/images/log.png)
+
+Text notifications on trades
+
+![notification](docs/images/notification.jpg)
+
 
 ## Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
@@ -23,13 +30,24 @@ export default {
 ```
 5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts
 ```JavaScript
-const surfParameters = {
-    fiatCurrency: Products.USDollar,
-    cryptoCurrency: Products.Cardano,
-    buyThresholdPercentage: 4,
-    sellThresholdPercentage: 4.5,
-    budget: 1000,
-};
+(async () => {
+    await SimpleThresholdSurfer.surf({
+        fiatCurrency: Products.USDollar,
+        cryptoCurrency: Products.Etherium,
+        buyThresholdPercentage: 4,
+        sellThresholdPercentage: 4,
+        budget: 1000,
+        notificationsEnabled: true,
+    });
+    await SimpleThresholdSurfer.surf({
+        fiatCurrency: Products.USDollar,
+        cryptoCurrency: Products.Bitcoin,
+        buyThresholdPercentage: 4,
+        sellThresholdPercentage: 4,
+        budget: 1000,
+        notificationsEnabled: true,
+    });
+})();
 ```
 ## How to run
 Install depedencies
