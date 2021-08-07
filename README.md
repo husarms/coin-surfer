@@ -2,7 +2,9 @@
 Node.js app for automated cryptocurrency trading.
 
 ## How it works
+
 The current "simple threshold" surfer works as follows -
+
 1. Checks your account balance and decides whether to buy or sell
     - If you have a balance of crypto - look to sell
     - Otherwise check your USD balance and budget and look to buy
@@ -15,6 +17,10 @@ The current "simple threshold" surfer works as follows -
 Optional text notifications can be sent on buy / sell
 
 ![notification](docs/images/text-notification.jpg)
+
+Logs for each currency are kept if you wish to do historical analysis and optimize your thresholds (or create your own algorithm)
+![historical-log](docs/images/historical-log.jpg)
+
 
 ## Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
