@@ -1,8 +1,20 @@
 # coin-surfer
 Node.js app for automated cryptocurrency trading.
 
+## How it works
+The current "simple threshold" surfer works as follows -
+1. Checks your account balance and decides whether to buy or sell
+    - If you have a balance of crypto - look to sell
+    - Otherwise check your USD balance and budget and look to buy
+2. Calculate buy / sell thresholds based on threshold percentages
+3. Poll the Coinbase API for the current ticker price and 24-hour average price
+4. Buy or sell when the threshold is hit (e.g. buy when current price is 4% below average price, sell when 4% above)
+
 ![log](docs/images/log.png)
 
+Optional text notifications can be sent on buy / sell
+
+![notification](docs/images/text-notification.jpg)
 
 ## Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
@@ -24,7 +36,7 @@ export default {
     },
 };
 ```
-5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts
+5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts. This example surfs both Bitcoin and Etherium.
 ```JavaScript
 (async () => {
     await SimpleThresholdSurfer.surf({
