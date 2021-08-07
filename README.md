@@ -5,9 +5,9 @@ Node.js app for automated cryptocurrency trading.
 
 The current "simple threshold" surfer works as follows -
 
-1. Checks your account balance and decides whether to buy or sell
+1. Check your account balance and decides whether to buy or sell
     - If you have a balance of crypto - look to sell
-    - Otherwise check your USD balance and budget and look to buy
+    - Otherwise check your fiat balance and budget and look to buy
 2. Calculate buy / sell thresholds based on threshold percentages
 3. Poll the Coinbase API for the current ticker price and 24-hour average price
 4. Buy or sell when the threshold is hit (e.g. buy when current price is 4% below average price, sell when 4% above)
