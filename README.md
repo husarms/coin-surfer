@@ -1,7 +1,7 @@
 # coin-surfer
 Node.js app for automated cryptocurrency trading.
 
-## How it works
+## How it Works
 
 The current "simple threshold" surfer works as follows -
 
