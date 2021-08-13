@@ -14,7 +14,7 @@ The current "simple threshold" surfer works as follows -
 
 ![log](docs/images/log.png)
 
-Optional text notifications can be sent on buy / sell
+Optional text / email notifications can be sent on buy / sell
 
 ![notification](docs/images/text-notification.jpg)
 
