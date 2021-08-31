@@ -4,6 +4,12 @@ import { PendingOrder } from "coinbase-pro-node";
 import { Actions } from "../../utils/enums";
 import * as Formatters from "../../utils/formatters";
 
+export function getCurrentPercentage(price: number, averagePrice: number): number {
+    let currentPercentage = Math.abs(Formatters.roundDownToTwoDecimals(((averagePrice - price) / averagePrice) * 100));
+    if(price < averagePrice) currentPercentage *= -1;
+    return currentPercentage;
+}
+
 export async function getStatusMessage (
     fiatCurrency: string,
     cryptoCurrency: string,
@@ -23,8 +29,7 @@ export async function getStatusMessage (
         );
     const buyBudget = fiatBalance > budget ? budget : fiatBalance;
     const formattedDate = Formatters.getDateMMddyyyyHHmmss();
-    let currentPercentage = Math.abs(Formatters.roundDownToTwoDecimals(((averagePrice - price) / averagePrice) * 100));
-    if(price < averagePrice) currentPercentage *= -1;
+    const currentPercentage = getCurrentPercentage(price, averagePrice);
 
     const message = action === Actions.Sell
         ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} (+${sellThresholdPercentage}%)`
@@ -49,7 +54,7 @@ export async function getBalancesAndVerify (fiatCurrency: string, cryptoCurrency
         `${fiatCurrency} balance = $${fiatBalance}, ${cryptoCurrency} balance = ${cryptoBalance}`
     );
 
-    if (fiatBalance < 10 && cryptoBalance < 1) throw "Insufficient balances";
+    if (fiatBalance < 10 && cryptoBalance < 0.1) throw "Insufficient balances";
 
     return { fiatBalance, cryptoBalance };
 };
@@ -110,14 +115,16 @@ export async function getPrices (productId: string) {
 
 export async function getThresholds (
     productId: string,
+    price: number,
+    averagePrice: number,
     buyThresholdPercentage: number,
-    sellThresholdPercentage: number,
-    sellAtLoss: boolean
+    sellThresholdPercentage: number
 ) {
     return await TradeOrchestrator.getBuySellThresholds(
         productId,
+        price,
+        averagePrice,
         buyThresholdPercentage,
-        sellThresholdPercentage,
-        sellAtLoss
+        sellThresholdPercentage
     );
 };

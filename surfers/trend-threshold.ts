@@ -5,11 +5,44 @@ import {
     buy,
     sell,
     getBalance,
+    getCurrentPercentage,
     getPrices,
     getThresholds,
 } from "./shared/functions";
 import { Logger } from "../utils/logger";
 import { Actions } from "../utils/enums";
+
+const intervalMs = 10000; // 10 seconds
+const longTailLength = 10000; // 166 minutes
+const shortTailLength = 500; //8.3 minutes
+const longTail = [];
+const shortTail = [];
+
+function updateTails(price: number, averagePrice: number) {
+    const currentPercentage = getCurrentPercentage(price, averagePrice);
+    longTail.push(currentPercentage);
+    shortTail.push(currentPercentage);
+    if (longTail.length > longTailLength) longTail.pop();
+    if (shortTail.length > shortTailLength) shortTail.pop();
+}
+
+function getShortTailTrend() {
+    if (shortTail.length < shortTailLength) {
+        return 0;
+    }
+    const latest = shortTail[0];
+    const oldest = shortTail[shortTail.length - 1];
+    return latest - oldest;
+}
+
+function getLongTailTrend() {
+    if (longTail.length < longTailLength) {
+        return 0;
+    }
+    const latest = longTail[0];
+    const oldest = longTail[longTail.length - 1];
+    return latest - oldest;
+}
 
 export async function surf({
     fiatCurrency,
@@ -18,6 +51,7 @@ export async function surf({
     sellThresholdPercentage,
     budget,
     notificationsEnabled,
+    sellAtLoss = false,
 }) {
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
     const logger = new Logger(productId);
@@ -26,14 +60,13 @@ export async function surf({
 
     console.log(`Let's go surfing with ${productId}...`);
     setInterval(async function () {
-        const { price, averagePrice } = await getPrices(productId);
         const { buyThreshold, sellThreshold } = await getThresholds(
             productId,
-            price,
-            averagePrice,
             buyThresholdPercentage,
             sellThresholdPercentage,
+            sellAtLoss
         );
+        const { price, averagePrice } = await getPrices(productId);
         const statusMessage = await getStatusMessage(
             fiatCurrency,
             cryptoCurrency,
@@ -77,5 +110,5 @@ export async function surf({
                 action = Actions.Sell;
             }
         }
-    }, 10000);
+    }, intervalMs);
 }

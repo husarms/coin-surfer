@@ -7,7 +7,7 @@ import { Products } from "./utils/enums";
         cryptoCurrency: Products.Etherium,
         buyThresholdPercentage: 4,
         sellThresholdPercentage: 4,
-        budget: 16000,
+        budget: 50000,
         notificationsEnabled: true,
     });
     await SimpleThresholdSurfer.surf({
@@ -15,7 +15,7 @@ import { Products } from "./utils/enums";
         cryptoCurrency: Products.Bitcoin,
         buyThresholdPercentage: 4,
         sellThresholdPercentage: 4,
-        budget: 16000,
+        budget: 50000,
         notificationsEnabled: true,
     });
 })();

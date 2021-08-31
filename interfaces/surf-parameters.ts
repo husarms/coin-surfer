@@ -4,6 +4,5 @@ export default interface SurfParameters {
     buyThresholdPercentage: number,
     sellThresholdPercentage: number,
     budget: number,
-    notificationsEnabled: boolean,
-    sellAtLoss: boolean
+    notificationsEnabled: boolean
 }
