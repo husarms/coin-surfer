@@ -16,6 +16,7 @@ export async function getStatusMessage (
     budget: number,
     price: number,
     averagePrice: number,
+    lastBuyPrice: number,
     buyThreshold: number,
     buyThresholdPercentage: number,
     sellThreshold: number,
@@ -32,7 +33,7 @@ export async function getStatusMessage (
     const currentPercentage = getCurrentPercentage(price, averagePrice);
 
     const message = action === Actions.Sell
-        ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} (+${sellThresholdPercentage}%)`
+        ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} (+${sellThresholdPercentage}%) (last buy price $${lastBuyPrice})`
         : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold} (-${buyThresholdPercentage}%)`;
 
     return `${formattedDate}, ${cryptoCurrency}, ${averagePrice.toFixed(4)}, ${price.toFixed(
@@ -110,20 +111,21 @@ export async function sell (cryptoCurrency: string, productId: string) {
 export async function getPrices (productId: string) {
     const price = await TradeOrchestrator.getProductPrice(productId);
     const averagePrice = await TradeOrchestrator.get24HrAveragePrice(productId);
-    return { price, averagePrice };
+    const lastBuyPrice = await TradeOrchestrator.getLastBuyPrice(productId);
+    return { price, averagePrice, lastBuyPrice };
 };
 
 export async function getThresholds (
-    productId: string,
     price: number,
     averagePrice: number,
+    lastBuyPrice: number,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number
 ) {
     return await TradeOrchestrator.getBuySellThresholds(
-        productId,
         price,
         averagePrice,
+        lastBuyPrice,
         buyThresholdPercentage,
         sellThresholdPercentage
     );

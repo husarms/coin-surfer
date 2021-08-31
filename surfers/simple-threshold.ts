@@ -26,11 +26,11 @@ export async function surf({
 
     console.log(`Let's go surfing with ${productId}...`);
     setInterval(async function () {
-        const { price, averagePrice } = await getPrices(productId);
+        const { price, averagePrice, lastBuyPrice } = await getPrices(productId);
         const { buyThreshold, sellThreshold } = await getThresholds(
-            productId,
             price,
             averagePrice,
+            lastBuyPrice,
             buyThresholdPercentage,
             sellThresholdPercentage,
         );
@@ -40,6 +40,7 @@ export async function surf({
             budget,
             price,
             averagePrice,
+            lastBuyPrice,
             buyThreshold,
             buyThresholdPercentage,
             sellThreshold,

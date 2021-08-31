@@ -39,13 +39,12 @@ const getSellThreshold = (
 };
 
 export async function getBuySellThresholds(
-    productId: string,
     price: number,
     averagePrice: number,
+    lastBuyPrice: number,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number,
 ) {
-    const lastBuyPrice = await getLastBuyPrice(productId);
     const buyThreshold = getBuyThreshold(averagePrice, buyThresholdPercentage);
     const sellThreshold = getSellThreshold(
         price,
