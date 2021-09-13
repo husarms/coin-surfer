@@ -118,4 +118,5 @@ dist
 secrets*
 log-file*
 logs*
+state*
 tests/data/*
