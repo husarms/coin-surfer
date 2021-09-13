@@ -10,6 +10,7 @@ export enum Products {
     Litecoin = "LTC",
     EOS = "EOS",
     Cardano = "ADA",
+    DogeCoin = "DOGE",
     Stellar = "XLM",
     USDollar = "USD",
 }

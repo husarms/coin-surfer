@@ -1,5 +1,5 @@
 import { getBuyThreshold, getSellThreshold } from "./shared/functions";
-import { Data } from "../interfaces/data";
+import { Data } from "../../web/src/interfaces/data";
 import * as Formatters from "../../utils/formatters";
 
 export function surf(data: Data[], budget: number, buyThresholdPercentage: number, sellThresholdPercentage: number) {
