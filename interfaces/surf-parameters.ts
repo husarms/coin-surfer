@@ -4,5 +4,6 @@ export default interface SurfParameters {
     buyThresholdPercentage: number,
     sellThresholdPercentage: number,
     budget: number,
-    notificationsEnabled: boolean
+    notificationsEnabled: boolean,
+    tickerFeedEnabled: boolean
 }

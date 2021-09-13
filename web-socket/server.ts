@@ -3,11 +3,14 @@ import * as CoinbaseGateway from "../gateways/coinbase-gateway";
 // Create web socket server
 const WebSocket = require("ws");
 let sockets = [];
+let websocketUrl = "";
 
 export const startWebSocketServer = (port: number) => {
     const server = new WebSocket.Server({
         port,
     });
+    websocketUrl = `ws://localhost:${port}/ws`;
+    console.log(`Starting web socket server at ${websocketUrl}`);
     server.on("connection", function (socket) {
         console.log("Web socket connection received");
         sockets.push(socket);
@@ -18,7 +21,9 @@ export const startWebSocketServer = (port: number) => {
     });
 }
 
-export const emitTickerMessages = (productId: string) => {
+export const emitTickerMessages = (cryptoCurrency: string, fiatCurrency: string) => {
+    const productId = `${cryptoCurrency}-${fiatCurrency}`;
+    console.log(`Emitting ticker messages for ${productId} at ${websocketUrl}`);
     const callback = (tickerMessage: any) => {
         if (tickerMessage.type === "ticker") {
             sockets.forEach((s) => {
