@@ -5,7 +5,7 @@
     "main": "index.ts",
     "dependencies": {
         "@sendgrid/mail": "^7.4.4",
-        "axios": "^0.21.1",
+        "axios": "^0.21.4",
         "coinbase-pro-node": "^3.0.4",
         "csv-parse": "^4.15.4",
         "ts-node": "^10.0.0",
