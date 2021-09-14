@@ -169,8 +169,8 @@ export async function sell(cryptoCurrency: string, productId: string) : Promise<
         return { isComplete: false, size: size.toString() };
     }
     const { status } = (await TradeOrchestrator.sellAtMarketValue(
-        cryptoCurrency,
-        productId
+        productId,
+        size.toString()
     )) as PendingOrder;
     console.log(`Sell complete. Status = ${status} Size = ${size}`);
     return { isComplete: true, size: size.toString() };

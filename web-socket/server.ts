@@ -12,10 +12,10 @@ export const startWebSocketServer = (port: number) => {
     websocketUrl = `ws://localhost:${port}/ws`;
     console.log(`Starting web socket server at ${websocketUrl}`);
     server.on("connection", function (socket) {
-        console.log("Web socket connection received");
+        // console.log("Web socket connection received");
         sockets.push(socket);
         socket.on("close", function () {
-            console.log("Web socket connection closed");
+            // console.log("Web socket connection closed");
             sockets = sockets.filter((s) => s !== socket);
         });
     });

@@ -5,6 +5,10 @@ import { Actions } from "../../utils/enums";
 import state from "../../state/ETH-state.json";
 import useWebSocket from "react-use-websocket";
 
+const priceColor = "#5E4FA2";
+const averageColor = "#A0D3FF";
+const thresholdColor = "#A8DF53";
+
 function App() {
     const maxDataPoints = 100000;
     const { lastMessage } = useWebSocket("ws://localhost:8080/ws", {
@@ -12,7 +16,6 @@ function App() {
             handleMessage(messageEvent);
         },
     });
-    const [clickCount, setClickCount] = useState(0);
     const [messageCount, setMessageCount] = useState(0);
     const [priceData, setPriceData] = useState([]);
     const [averageData, setAverageData] = useState([]);
@@ -47,39 +50,49 @@ function App() {
         if (data.length >= maxDataPoints) data.shift();
         setThresholdData(data);
     };
-    const handleClick = (e) => {
-        e.preventDefault();
-        const count = clickCount;
-        setClickCount(count + 1);
-    };
     const formatNumber = (number: number): string => {
         return (Math.round(number * 100) / 100).toFixed(2);
-    }
+    };
     const lastPrice = (priceData[priceData.length - 1] as any)?.value;
+    const lastAverage = (averageData[priceData.length - 1] as any)?.value;
     const lastThreshold = (thresholdData[thresholdData.length - 1] as any)
         ?.value;
     return (
         <div className="App">
             <header className="App-header">
-                <p style={{ fontSize: "14px" }}>
-                    Price: ${formatNumber(lastPrice)} - Threshold: ${formatNumber(lastThreshold)} - Data
-                    length: {priceData.length}
+                <p style={{ marginTop: 0, fontSize: "16px" }}>
+                    <span
+                        style={{
+                            color: priceColor,
+                            fontWeight: "bold",
+                            filter: "brightness(1.5)",
+                            marginRight: "24px",
+                        }}
+                    >
+                        Price{": "}${formatNumber(lastPrice)}
+                    </span>
+                    <span style={{ color: averageColor, marginRight: "24px" }}>
+                        Average{": "}${formatNumber(lastAverage)}
+                    </span>
+                    <span style={{ color: thresholdColor }}>
+                        Threshold{": "}${formatNumber(lastThreshold)}
+                    </span>
                 </p>
                 <MultilineChart
                     data={[
                         {
                             name: "Price",
-                            color: "#5E4FA2",
+                            color: priceColor,
                             items: priceData,
                         },
                         {
                             name: "Average",
-                            color: "#A0D3FF",
+                            color: averageColor,
                             items: averageData,
                         },
                         {
                             name: "Threshold",
-                            color: "#A8DF53",
+                            color: thresholdColor,
                             items: thresholdData,
                         },
                     ]}
@@ -94,16 +107,6 @@ function App() {
                         },
                     }}
                 />
-                <button
-                    onClick={handleClick}
-                    style={{
-                        fontSize: "14px",
-                        backgroundColor: "black",
-                        color: "white",
-                    }}
-                >
-                    This has been clicked {clickCount} times
-                </button>
             </header>
         </div>
     );
