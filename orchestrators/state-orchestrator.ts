@@ -14,6 +14,8 @@ function getFilePath(cryptoCurrency: string): string {
 export function defineState(
     action: Actions.Buy | Actions.Sell,
     parameters: SurfParameters,
+    cryptoBalance: number,
+    fiatBalance: number,
     buyThreshold: number,
     sellThreshold: number,
     lastBuyFill: Fill,
@@ -22,6 +24,8 @@ export function defineState(
     const state: SurfState = {
         action,
         parameters,
+        cryptoBalance,
+        fiatBalance,
         buyThreshold,
         sellThreshold,
         lastBuyFill,

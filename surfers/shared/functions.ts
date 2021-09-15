@@ -13,6 +13,8 @@ import Balances from "../../interfaces/balances";
 export function defineState(
     action: Actions.Buy | Actions.Sell,
     parameters: SurfParameters,
+    cryptoBalance: number,
+    fiatBalance: number,
     buyThreshold: number,
     sellThreshold: number,
     lastBuyFill: Fill,
@@ -21,6 +23,8 @@ export function defineState(
     return StateOrchestrator.defineState(
         action,
         parameters,
+        cryptoBalance,
+        fiatBalance,
         buyThreshold,
         sellThreshold,
         lastBuyFill,

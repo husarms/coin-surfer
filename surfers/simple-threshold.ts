@@ -98,11 +98,13 @@ async function updateState(
     productId: string,
     parameters: SurfParameters
 ): Promise<SurfState> {
-    const { lastBuyFill, lastSellFill, buyThreshold, sellThreshold } =
+    const { cryptoBalance, fiatBalance, lastBuyFill, lastSellFill, buyThreshold, sellThreshold } =
         await getAllData(productId, parameters);
     let state = defineState(
         action,
         parameters,
+        cryptoBalance,
+        fiatBalance,
         buyThreshold,
         sellThreshold,
         lastBuyFill,
@@ -132,7 +134,9 @@ async function getThresholdData(
 }
 
 async function getAllData(productId: string, parameters: SurfParameters) {
-    const { buyThresholdPercentage, sellThresholdPercentage } = parameters;
+    const { fiatCurrency, cryptoCurrency, buyThresholdPercentage, sellThresholdPercentage } = parameters;
+    const balances = await getBalances(fiatCurrency, cryptoCurrency);
+    const { fiatBalance, cryptoBalance } = balances;
     const { price, averagePrice } = await getPrices(productId);
     const { lastBuyFill, lastSellFill } = await getLastFills(productId);
     const lastBuyPrice = lastBuyFill.price;
@@ -148,6 +152,8 @@ async function getAllData(productId: string, parameters: SurfParameters) {
     return {
         price,
         averagePrice,
+        fiatBalance,
+        cryptoBalance,
         lastBuyFill,
         lastSellFill,
         lastBuyPrice,
