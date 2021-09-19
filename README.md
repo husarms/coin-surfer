@@ -11,7 +11,7 @@ The current "simple threshold" surfer works as follows -
 2. Calculate buy / sell thresholds based on threshold percentages
 3. Poll the Coinbase API for the current ticker price and 24-hour average price
 4. Buy or sell when the threshold is hit (e.g. buy when current price is 4% below average price, sell when 4% above)
-5. Stop loss and sell if price drops below threshold (e.g. price drops 4% below last buy price)
+5. Stop loss and sell if price drops below threshold (e.g. price drops 8% below last buy price)
 
 ![log](docs/images/log.png)
 
