@@ -23,6 +23,15 @@ Logs for each currency are kept if you wish to do historical analysis and optimi
 
 ![historical-log](docs/images/historical-log.jpg)
 
+## Visualization
+The web folder contains a React app for visualizing the service as it runs. This is still a work in progress.
+
+It displays the current price, average and threshold over time.
+
+It connects to a web socket feed that can be enabled via Surf Parameters.
+
+![visualization](docs/images/visualization.jpg)
+
 ## Future goals
 
 1. **Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends.
