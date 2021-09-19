@@ -30,7 +30,7 @@ It displays the current price, average and threshold over time.
 
 It connects to a web socket feed that can be enabled via Surf Parameters.
 
-![visualization](docs/images/visualization.jpg)
+![visualization](docs/images/visualization.png)
 
 ## Future goals
 
