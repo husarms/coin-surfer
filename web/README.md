@@ -1,7 +1,7 @@
 # Coin Surfer Visualization
 This web app visualizes Coin Surfer as it runs.
 
-![visualization](docs/images/visualization.png)
+![visualization](../docs/images/visualization.png)
 
 ## How to run
 1. Navigate to web directory
