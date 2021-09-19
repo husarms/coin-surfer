@@ -24,11 +24,11 @@ Logs for each currency are kept if you wish to do historical analysis and optimi
 ![historical-log](docs/images/historical-log.jpg)
 
 ## Visualization
-The [web folder](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing the service as it runs. This is still a work in progress.
+The [web folder](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing the Coin Surfer as it runs. 
+
+This is still a work in progress - and currently only supports visualizing one product at a time.
 
 It displays the current price, average and threshold over time.
-
-It connects to a web socket feed that can be enabled via Surf Parameters.
 
 ![visualization](docs/images/visualization.png)
 
@@ -68,6 +68,7 @@ export default {
         sellThresholdPercentage: 4,
         budget: 1000,
         notificationsEnabled: true,
+        tickerFeedEnabled: true,
     });
     await SimpleThresholdSurfer.surf({
         fiatCurrency: Products.USDollar,
@@ -76,6 +77,7 @@ export default {
         sellThresholdPercentage: 4,
         budget: 1000,
         notificationsEnabled: true,
+        tickerFeedEnabled: false,
     });
 })();
 ```
