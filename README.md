@@ -24,11 +24,11 @@ Logs for each currency are kept if you wish to do historical analysis and optimi
 ![historical-log](docs/images/historical-log.jpg)
 
 ## Visualization
-The [web folder](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing the Coin Surfer as it runs. 
+The [web folder](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs.
 
-This is still a work in progress - and currently only supports visualizing one product at a time.
+Check out this folder for instructions on how to run.
 
-It displays the current price, average and threshold over time.
+It displays the current price, average and threshold over time - as well as status messages.
 
 ![visualization](docs/images/visualization.png)
 
