@@ -3,7 +3,7 @@ import * as SimpleThresholdSurfer from "./surfers/simple-threshold";
 import { Products } from "./utils/enums";
 import * as WebSocketServer from "./web-socket/server";
 
-const parameterSet: SurfParameters[] = [
+const parameters: SurfParameters[] = [
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Etherium,
@@ -11,7 +11,7 @@ const parameterSet: SurfParameters[] = [
         sellThresholdPercentage: 4,
         budget: 50000,
         notificationsEnabled: true,
-        tickerFeedEnabled: true,
+        webSocketFeedEnabled: true,
     },
     {
         fiatCurrency: Products.USDollar,
@@ -20,7 +20,7 @@ const parameterSet: SurfParameters[] = [
         sellThresholdPercentage: 4,
         budget: 50000,
         notificationsEnabled: true,
-        tickerFeedEnabled: false,
+        webSocketFeedEnabled: true,
     },
     {
         fiatCurrency: Products.USDollar,
@@ -29,23 +29,15 @@ const parameterSet: SurfParameters[] = [
         sellThresholdPercentage: 4,
         budget: 50000,
         notificationsEnabled: true,
-        tickerFeedEnabled: false,
+        webSocketFeedEnabled: true,
     },
 ];
 
 (async () => {
-    await parameterSet.map((parameters) => {
+    parameters.map((parameters) => {
         SimpleThresholdSurfer.surf(parameters);
     });
-    if (parameterSet.find((p) => p.tickerFeedEnabled)) {
+    if (parameters.find((p) => p.webSocketFeedEnabled)) {
         WebSocketServer.startWebSocketServer(8080);
-        parameterSet.map((p) => {
-            if (p.tickerFeedEnabled) {
-                WebSocketServer.emitTickerMessages(
-                    p.cryptoCurrency,
-                    p.fiatCurrency
-                );
-            }
-        });
     }
 })();

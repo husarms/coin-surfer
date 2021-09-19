@@ -33,3 +33,9 @@ export const emitTickerMessages = (cryptoCurrency: string, fiatCurrency: string)
     };
     CoinbaseGateway.listenToTickerFeed(productId, callback);
 };
+
+export const emitMessage = (message: string) => {
+    sockets.forEach((s) => {
+        s.send(JSON.stringify(message));
+    });
+};

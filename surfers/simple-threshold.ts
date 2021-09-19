@@ -15,9 +15,10 @@ import { Logger } from "../utils/logger";
 import { Actions } from "../utils/enums";
 import SurfParameters from "../interfaces/surf-parameters";
 import SurfState from "../interfaces/surf-state";
+import * as WebSocketServer from "../web-socket/server";
 
 export async function surf(parameters: SurfParameters) {
-    const { cryptoCurrency, fiatCurrency, budget, notificationsEnabled } =
+    const { cryptoCurrency, fiatCurrency, budget, notificationsEnabled, webSocketFeedEnabled } =
         parameters;
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
     const logger = new Logger(productId);
@@ -39,6 +40,7 @@ export async function surf(parameters: SurfParameters) {
         state.sellThreshold = sellThreshold;
         const statusMessage = await getStatusMessage(prices, balances, state);
         logger.log(statusMessage);
+        if (webSocketFeedEnabled) WebSocketServer.emitMessage(statusMessage);
 
         if (state.action === Actions.Sell) {
             if (price >= sellThreshold) {
