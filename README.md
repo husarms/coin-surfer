@@ -66,7 +66,7 @@ export default {
         sellThresholdPercentage: 4,
         budget: 1000,
         notificationsEnabled: true,
-        tickerFeedEnabled: true,
+        webSocketFeedEnabled: true,
     });
     await SimpleThresholdSurfer.surf({
         fiatCurrency: Products.USDollar,
@@ -75,7 +75,7 @@ export default {
         sellThresholdPercentage: 4,
         budget: 1000,
         notificationsEnabled: true,
-        tickerFeedEnabled: false,
+        webSocketFeedEnabled: false,
     });
 })();
 ```
