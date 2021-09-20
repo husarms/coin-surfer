@@ -1,5 +1,5 @@
 # coin-surfer
-Node.js app for automated cryptocurrency trading.
+Node.js app for automated cryptocurrency trading
 
 ## How it works
 
