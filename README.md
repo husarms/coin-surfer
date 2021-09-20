@@ -26,7 +26,7 @@ Logs for each currency are kept if you wish to do historical analysis and optimi
 ## Visualization
 The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs
 
-Check out this folder for instructions on how to run
+Check out this folder for more details
 
 ![visualization](docs/images/visualization.png)
 
