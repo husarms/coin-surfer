@@ -24,9 +24,9 @@ Logs for each currency are kept if you wish to do historical analysis and optimi
 ![historical-log](docs/images/historical-log.jpg)
 
 ## Visualization
-The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs.
+The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs
 
-Check out this folder for instructions on how to run.
+Check out this folder for instructions on how to run
 
 ![visualization](docs/images/visualization.png)
 
@@ -56,7 +56,7 @@ export default {
     },
 };
 ```
-5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts. This example surfs both Bitcoin and Etherium.
+5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts
 ```JavaScript
 (async () => {
     await SimpleThresholdSurfer.surf({
@@ -79,6 +79,8 @@ export default {
     });
 })();
 ```
+This example surfs both Bitcoin and Etherium
+
 ## How to run
 Install depedencies
 ```bash
