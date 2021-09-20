@@ -32,9 +32,9 @@ Check out this folder for instructions on how to run
 
 ## Future goals
 
-1. **Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends.
-2. **Know when to hold 'em** - detect abnormal trends in price and override sell threshold to increase profit margin.
-3. **Know when to fold 'em** - incrementally lower the sell threshold after a period of time (cut your losses if a profit cannot be made quickly).
+1. **Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends
+2. **Know when to hold 'em** - detect abnormal trends in price and override sell threshold to increase profit margin
+3. **Know when to fold 'em** - incrementally lower the sell threshold after a period of time (cut your losses if a profit cannot be made quickly)
 
 ## Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
