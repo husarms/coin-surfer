@@ -151,17 +151,17 @@ export async function buy(
     price: number,
     productId: string
 ) : Promise<any> {
-    const size = await TradeOrchestrator.getAccountBalance(fiatCurrency);
-    if (size < 0.01) {
-        console.log(`Skipping buy. Size ${size} < 0.01`);
-        return { isComplete: false, size: size.toString() };
+    const fiatBalance = await TradeOrchestrator.getAccountBalance(fiatCurrency);
+    if (fiatBalance < 0.01) {
+        console.log(`Skipping buy. Balance ${fiatBalance} < 0.01`);
+        return { isComplete: false, size: 0 };
     }
-    const { status } = (await TradeOrchestrator.buyAtMarketValue(
-        size,
+    const { status, size } = await TradeOrchestrator.buyAtMarketValue(
+        fiatBalance,
         budget,
         price,
         productId
-    )) as PendingOrder;
+    );
     console.log(`Buy complete. Status = ${status} Size = ${size}`);
     return { isComplete: true, size: size.toString() };
 }

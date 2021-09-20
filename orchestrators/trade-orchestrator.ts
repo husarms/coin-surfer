@@ -1,6 +1,7 @@
 import {
     Fill,
     PaginatedData,
+    PendingOrder,
     ProductStats,
     ProductTicker,
 } from "coinbase-pro-node";
@@ -162,6 +163,7 @@ export async function buyAtMarketValue(
         fiatBalance.toString(),
         size.toString(),
         productId
-    );
-    return buyResponse;
+    ) as PendingOrder;
+    const { status } = buyResponse;
+    return { status, size };
 }
