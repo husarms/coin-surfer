@@ -1,7 +1,7 @@
 # Coin Surfer Visualization
-This web app allows you to visualize Coin Surfer as it runs.
+This web app allows you to visualize Coin Surfer as it runs
 
-It displays the current price, average and threshold over time - as well as status messages.
+It displays the current price, average and threshold over time - as well as status messages
 
 ![visualization](../docs/images/visualization.png)
 
