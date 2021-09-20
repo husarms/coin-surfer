@@ -28,8 +28,6 @@ The [web folder](https://github.com/husarms/coin-surfer/tree/master/web) contain
 
 Check out this folder for instructions on how to run.
 
-It displays the current price, average and threshold over time - as well as status messages.
-
 ![visualization](docs/images/visualization.png)
 
 ## Future goals
