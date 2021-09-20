@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import ProductPage, { ProductPageProps } from "./pages/ProductPage";
+import * as formatters from "../../utils/formatters";
 import "react-tabs/style/react-tabs.css";
 import "./App.css";
 
@@ -16,12 +17,16 @@ function App() {
     });
     const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
         const messageItems = JSON.stringify(messageEvent.data).split(",");
-        const message = messageEvent.data.replaceAll('"', "");
         const timestamp = new Date(messageItems[0]);
         const product = messageItems[1];
         const average = parseFloat(messageItems[2]);
         const price = parseFloat(messageItems[3]);
         const threshold = parseFloat(messageItems[4]);
+        const message = `${formatters.formatDateMMddyyyyHHmmss(
+            timestamp.toString()
+        )} - Currently${messageItems[5]
+            .replaceAll('"', "")
+            .replaceAll("\\", "")}`;
         let map = productMap;
         let value = map.get(product);
         let data = value?.data;
