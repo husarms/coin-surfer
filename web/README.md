@@ -1,9 +1,7 @@
 # Coin Surfer Visualization
 This web app allows you to visualize Coin Surfer as it runs.
 
-**Important** - the app is dependent on enabling a web socket feed in the main app via [Surf Parameters](https://github.com/husarms/coin-surfer/blob/master/interfaces/surf-parameters.ts#L8). The main app must also be running.
-
-The visualization displays the current price, average and threshold over time - as well as status messages.
+It displays the current price, average and threshold over time - as well as status messages.
 
 ![visualization](../docs/images/visualization.png)
 
