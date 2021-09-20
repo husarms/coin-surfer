@@ -1,0 +1,32 @@
+.react-tabs__tab {
+    font-size: 16px;
+    color: #C8CACC;
+}
+
+.react-tabs__tab.react-tabs__tab--selected {
+    color: #2A343D;
+    background-color: #C8CACC;
+    font-weight: bold;
+}
+
+p.price-data {
+    margin-top: 0;
+    font-size: 16px;
+}
+
+p.message {
+    margin-top: 0;
+    font-size: 16px;
+    color: #C8CACC;
+}
+
+span.price {
+    color: priceColor;
+    font-weight: bold;
+    filter: brightness(1.5);
+    margin-right: 24px;
+}
+
+span.average {
+    margin-right: 24px;
+}

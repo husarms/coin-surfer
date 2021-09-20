@@ -1,6 +1,7 @@
 import React from "react";
 import MultilineChart from "../components/MultilineChart";
 import { PriceData } from "../interfaces/price-data";
+import "./ProductPage.css";
 
 const priceColor = "#5E4FA2";
 const averageColor = "#A0D3FF";
@@ -34,18 +35,11 @@ function ProductPage({
     });
     return (
         <>
-            <p style={{ marginTop: 0, fontSize: "16px" }}>
-                <span
-                    style={{
-                        color: priceColor,
-                        fontWeight: "bold",
-                        filter: "brightness(1.5)",
-                        marginRight: "24px",
-                    }}
-                >
+            <p className="price-data">
+                <span className="price" style={{ color: priceColor }}>
                     Price{": "}${price}
                 </span>
-                <span style={{ color: averageColor, marginRight: "24px" }}>
+                <span className="average" style={{ color: averageColor }}>
                     Average{": "}${average}
                 </span>
                 <span style={{ color: thresholdColor }}>
@@ -81,7 +75,7 @@ function ProductPage({
                     },
                 }}
             />
-            <p style={{ marginTop: 0, fontSize: "16px" }}>{message}</p>
+            <p className="message">{message}</p>
         </>
     );
 }
