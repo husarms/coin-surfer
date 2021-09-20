@@ -10,11 +10,11 @@ It displays the current price, average and threshold over time - as well as stat
 2. Ensure Coin Surfer is running ([see how to run](https://github.com/husarms/coin-surfer#how-to-run))
 3. Navigate to web directory
 4. Install depedencies
-```bash
-npm install
-```
+  ```bash
+  npm install
+  ```
 5. Run 
-```bash
-npm run dev
-```
+  ```bash
+  npm run dev
+  ```
 
