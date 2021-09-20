@@ -55,14 +55,14 @@ function ProductPage({
             <MultilineChart
                 data={[
                     {
-                        name: "Price",
-                        color: priceColor,
-                        items: priceData,
-                    },
-                    {
                         name: "Average",
                         color: averageColor,
                         items: averageData,
+                    },
+                    {
+                        name: "Price",
+                        color: priceColor,
+                        items: priceData,
                     },
                     {
                         name: "Threshold",

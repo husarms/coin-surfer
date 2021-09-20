@@ -16,8 +16,8 @@ const MultilineChart = ({ data, dimensions }) => {
         const yScale = d3
             .scaleLinear()
             .domain([
-                d3.min(data[0].items, (d) => d.value) * 0.93,
-                d3.max(data[0].items, (d) => d.value) * 1.07,
+                d3.min(data[0].items, (d) => d.value) * 0.9,
+                d3.max(data[0].items, (d) => d.value) * 1.1,
             ])
             .range([height, 0]);
         // Create root container where we will append all other chart elements

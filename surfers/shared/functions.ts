@@ -1,44 +1,12 @@
 import * as TradeOrchestrator from "../../orchestrators/trade-orchestrator";
 import * as NotificationOrchestrator from "../../orchestrators/notification-orchestrator";
-import * as StateOrchestrator from "../../orchestrators/state-orchestrator";
 import { PendingOrder } from "coinbase-pro-node";
 import Fill from "../../interfaces/fill";
-import SurfParameters from "../../interfaces/surf-parameters";
-import SurfState from "../../interfaces/surf-state";
 import { Actions } from "../../utils/enums";
 import * as Formatters from "../../utils/formatters";
 import Prices from "../../interfaces/prices";
 import Balances from "../../interfaces/balances";
-
-export function defineState(
-    action: Actions.Buy | Actions.Sell,
-    parameters: SurfParameters,
-    cryptoBalance: number,
-    fiatBalance: number,
-    buyThreshold: number,
-    sellThreshold: number,
-    lastBuyFill: Fill,
-    lastSellFill: Fill
-): SurfState {
-    return StateOrchestrator.defineState(
-        action,
-        parameters,
-        cryptoBalance,
-        fiatBalance,
-        buyThreshold,
-        sellThreshold,
-        lastBuyFill,
-        lastSellFill
-    );
-}
-
-export function saveState(state: SurfState): SurfState {
-    return StateOrchestrator.saveState(state);
-}
-
-export function getState(cryptoCurrency: string): SurfState {
-    return StateOrchestrator.getState(cryptoCurrency);
-}
+import SurfParameters from "../../interfaces/surf-parameters";
 
 export function getCurrentPercentage(
     price: number,
@@ -54,21 +22,22 @@ export function getCurrentPercentage(
 }
 
 export async function getStatusMessage(
-    prices: Prices,
+    price: number,
+    averagePrice: number,
+    action: Actions.Buy | Actions.Sell,
     balances: Balances,
-    state: SurfState
+    lastBuyPrice: number,
+    buyThreshold: number,
+    sellThreshold: number,
+    parameters: SurfParameters,
 ): Promise<string> {
-    const { action, parameters, buyThreshold, sellThreshold, lastBuyFill } =
-        state;
     const {
         cryptoCurrency,
         budget,
         buyThresholdPercentage,
         sellThresholdPercentage,
     } = parameters;
-    const { price, averagePrice } = prices;
     const { fiatBalance, cryptoBalance } = balances;
-    const lastBuyPrice = lastBuyFill.price;
     const buyBudget = fiatBalance > budget ? budget : fiatBalance;
     const formattedDate = Formatters.getDateMMddyyyyHHmmss();
     const currentPercentage = getCurrentPercentage(price, averagePrice);

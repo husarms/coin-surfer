@@ -8,41 +8,45 @@ import {
     getPrices,
     getThresholds,
     getLastFills,
-    defineState,
-    saveState,
 } from "./shared/functions";
 import { Logger } from "../utils/logger";
 import { Actions } from "../utils/enums";
 import SurfParameters from "../interfaces/surf-parameters";
-import SurfState from "../interfaces/surf-state";
+import Balances from "../interfaces/balances";
 import * as WebSocketServer from "../web-socket/server";
 
+let logger: Logger;
+
 export async function surf(parameters: SurfParameters) {
-    const { cryptoCurrency, fiatCurrency, budget, notificationsEnabled, webSocketFeedEnabled } =
+    const { cryptoCurrency, fiatCurrency, budget, notificationsEnabled } =
         parameters;
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
-    const logger = new Logger(productId);
+    logger = new Logger(productId);
     const balances = await getBalances(fiatCurrency, cryptoCurrency);
     const { cryptoBalance } = balances;
     let action = cryptoBalance > 0.1 ? Actions.Sell : Actions.Buy;
-    let state = await updateState(action, productId, parameters);
 
     console.log(`Let's go surfing with ${productId}...`);
     setInterval(async function () {
-        const prices = await getPrices(productId);
-        const { price, averagePrice } = prices;
-        const { buyThreshold, sellThreshold } = await getThresholdData(
+        const {
             price,
             averagePrice,
-            state
+            balances,
+            lastBuyPrice,
+            buyThreshold,
+            sellThreshold,
+        } = await getAllData(productId, parameters);
+        await updateStatus(
+            price,
+            averagePrice,
+            action,
+            balances,
+            lastBuyPrice,
+            buyThreshold,
+            sellThreshold,
+            parameters
         );
-        state.buyThreshold = buyThreshold;
-        state.sellThreshold = sellThreshold;
-        const statusMessage = await getStatusMessage(prices, balances, state);
-        logger.log(statusMessage);
-        if (webSocketFeedEnabled) WebSocketServer.emitMessage(statusMessage);
-
-        if (state.action === Actions.Sell) {
+        if (action === Actions.Sell) {
             if (price >= sellThreshold) {
                 console.log(
                     `Sell threshold hit (${price} >= ${sellThreshold})`
@@ -59,11 +63,7 @@ export async function surf(parameters: SurfParameters) {
                             price,
                             fiatCurrency
                         );
-                    state = await updateState(
-                        Actions.Buy,
-                        productId,
-                        parameters
-                    );
+                    Actions.Buy;
                 }
             }
         } else {
@@ -83,62 +83,46 @@ export async function surf(parameters: SurfParameters) {
                             price,
                             fiatCurrency
                         );
-                    state = await updateState(
-                        Actions.Sell,
-                        productId,
-                        parameters
-                    );
+                    action = Actions.Sell;
                 }
             }
         }
-        state = saveState(state);
     }, 10000);
 }
 
-async function updateState(
-    action: Actions.Buy | Actions.Sell,
-    productId: string,
-    parameters: SurfParameters
-): Promise<SurfState> {
-    const { cryptoBalance, fiatBalance, lastBuyFill, lastSellFill, buyThreshold, sellThreshold } =
-        await getAllData(productId, parameters);
-    let state = defineState(
-        action,
-        parameters,
-        cryptoBalance,
-        fiatBalance,
-        buyThreshold,
-        sellThreshold,
-        lastBuyFill,
-        lastSellFill
-    );
-    return saveState(state);
-}
-
-async function getThresholdData(
+async function updateStatus(
     price: number,
     averagePrice: number,
-    state: SurfState
+    action: Actions.Buy | Actions.Sell,
+    balances: Balances,
+    lastBuyPrice: number,
+    buyThreshold: number,
+    sellThreshold: number,
+    parameters: SurfParameters
 ) {
-    const lastSellDate = state.lastSellFill.date;
-    const lastBuyPrice = state.lastBuyFill.price;
-    const { buyThresholdPercentage, sellThresholdPercentage } =
-        state.parameters;
-    const { buyThreshold, sellThreshold } = await getThresholds(
+    const statusMessage = await getStatusMessage(
         price,
         averagePrice,
-        lastSellDate,
+        action,
+        balances,
         lastBuyPrice,
-        buyThresholdPercentage,
-        sellThresholdPercentage
+        buyThreshold,
+        sellThreshold,
+        parameters
     );
-    return { buyThreshold, sellThreshold };
+    logger.log(statusMessage);
+    if (parameters.webSocketFeedEnabled)
+        WebSocketServer.emitMessage(statusMessage);
 }
 
 async function getAllData(productId: string, parameters: SurfParameters) {
-    const { fiatCurrency, cryptoCurrency, buyThresholdPercentage, sellThresholdPercentage } = parameters;
+    const {
+        fiatCurrency,
+        cryptoCurrency,
+        buyThresholdPercentage,
+        sellThresholdPercentage,
+    } = parameters;
     const balances = await getBalances(fiatCurrency, cryptoCurrency);
-    const { fiatBalance, cryptoBalance } = balances;
     const { price, averagePrice } = await getPrices(productId);
     const { lastBuyFill, lastSellFill } = await getLastFills(productId);
     const lastBuyPrice = lastBuyFill.price;
@@ -154,12 +138,8 @@ async function getAllData(productId: string, parameters: SurfParameters) {
     return {
         price,
         averagePrice,
-        fiatBalance,
-        cryptoBalance,
-        lastBuyFill,
-        lastSellFill,
+        balances,
         lastBuyPrice,
-        lastSellDate,
         buyThreshold,
         sellThreshold,
     };
