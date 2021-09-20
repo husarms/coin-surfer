@@ -6,15 +6,6 @@ import * as WebSocketServer from "./web-socket/server";
 const parameters: SurfParameters[] = [
     {
         fiatCurrency: Products.USDollar,
-        cryptoCurrency: Products.Etherium,
-        buyThresholdPercentage: 4,
-        sellThresholdPercentage: 4,
-        budget: 50000,
-        notificationsEnabled: true,
-        webSocketFeedEnabled: true,
-    },
-    {
-        fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Bitcoin,
         buyThresholdPercentage: 4,
         sellThresholdPercentage: 4,
@@ -24,7 +15,7 @@ const parameters: SurfParameters[] = [
     },
     {
         fiatCurrency: Products.USDollar,
-        cryptoCurrency: Products.BitcoinCash,
+        cryptoCurrency: Products.Etherium,
         buyThresholdPercentage: 4,
         sellThresholdPercentage: 4,
         budget: 50000,

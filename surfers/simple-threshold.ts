@@ -12,16 +12,13 @@ import {
 import { Logger } from "../utils/logger";
 import { Actions } from "../utils/enums";
 import SurfParameters from "../interfaces/surf-parameters";
-import Balances from "../interfaces/balances";
 import * as WebSocketServer from "../web-socket/server";
-
-let logger: Logger;
 
 export async function surf(parameters: SurfParameters) {
     const { cryptoCurrency, fiatCurrency, budget, notificationsEnabled } =
         parameters;
     const productId = `${cryptoCurrency}-${fiatCurrency}`;
-    logger = new Logger(productId);
+    const logger = new Logger(productId);
     const balances = await getBalances(fiatCurrency, cryptoCurrency);
     const { cryptoBalance } = balances;
     let action = cryptoBalance > 0.1 ? Actions.Sell : Actions.Buy;
@@ -36,7 +33,7 @@ export async function surf(parameters: SurfParameters) {
             buyThreshold,
             sellThreshold,
         } = await getAllData(productId, parameters);
-        await updateStatus(
+        const statusMessage = await getStatusMessage(
             price,
             averagePrice,
             action,
@@ -46,6 +43,9 @@ export async function surf(parameters: SurfParameters) {
             sellThreshold,
             parameters
         );
+        logger.log(statusMessage);
+        if (parameters.webSocketFeedEnabled) WebSocketServer.emitMessage(statusMessage);
+        
         if (action === Actions.Sell) {
             if (price >= sellThreshold) {
                 console.log(
@@ -88,31 +88,6 @@ export async function surf(parameters: SurfParameters) {
             }
         }
     }, 10000);
-}
-
-async function updateStatus(
-    price: number,
-    averagePrice: number,
-    action: Actions.Buy | Actions.Sell,
-    balances: Balances,
-    lastBuyPrice: number,
-    buyThreshold: number,
-    sellThreshold: number,
-    parameters: SurfParameters
-) {
-    const statusMessage = await getStatusMessage(
-        price,
-        averagePrice,
-        action,
-        balances,
-        lastBuyPrice,
-        buyThreshold,
-        sellThreshold,
-        parameters
-    );
-    logger.log(statusMessage);
-    if (parameters.webSocketFeedEnabled)
-        WebSocketServer.emitMessage(statusMessage);
 }
 
 async function getAllData(productId: string, parameters: SurfParameters) {

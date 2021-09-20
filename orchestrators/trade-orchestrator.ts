@@ -31,6 +31,7 @@ const getSellThreshold = (
     thresholdPercentage: number
 ) => {
     const averageMargin = averagePrice * (thresholdPercentage / 100);
+    // What if last buy price is not up to date?
     const lastBuyMargin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
     const averageMarginThreshold = formatters.roundDownToTwoDecimals(
         averagePrice + averageMargin
@@ -43,7 +44,7 @@ const getSellThreshold = (
     );
     if (lastBuyPrice > 0) {
         if (price <= stopLossThreshold) return 0;
-        return Math.min(averageMarginThreshold, lastBuyMarginThreshold);
+        return Math.max(averageMarginThreshold, lastBuyMarginThreshold);
     }
     return averageMarginThreshold;
 };
