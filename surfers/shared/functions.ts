@@ -118,17 +118,8 @@ export async function buy(state: SurfState): Promise<any> {
 }
 
 export async function sell(state: SurfState): Promise<any> {
-    const { productId, cryptoBalance, lastBuyDate } = state;
+    const { productId, cryptoBalance } = state;
     const size = cryptoBalance;
-    const now = new Date();
-    const hoursSinceLastBuy =
-        Math.abs(now.valueOf() - lastBuyDate.valueOf()) / 36e5;
-    if (hoursSinceLastBuy < 1) {
-        console.log(
-            `Skipping sell. Hours since last buy ${hoursSinceLastBuy} < 1`
-        );
-        return { isComplete: false, size: 0 };
-    }
     if (size < 0.01) {
         console.log(`Skipping sell. Size ${size} < 0.01`);
         return { isComplete: false, size: size.toString() };
