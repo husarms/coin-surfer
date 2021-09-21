@@ -39,7 +39,7 @@ export async function surf(parameters: SurfParameters) {
                 if (isComplete) {
                     notificationsEnabled &&
                         sendSellNotification(state, size);
-                    state.lastBuyPrice = price;
+                    state.lastSellDate = new Date();
                     state.action = Actions.Buy;
                 }
             }
@@ -50,7 +50,7 @@ export async function surf(parameters: SurfParameters) {
                 if (isComplete) {
                     notificationsEnabled &&
                         sendBuyNotification(state, size);
-                    state.lastSellDate = new Date();
+                    state.lastBuyPrice = price;
                     state.action = Actions.Sell;
                 }
             }
