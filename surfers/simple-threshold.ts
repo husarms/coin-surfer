@@ -50,6 +50,7 @@ export async function surf(parameters: SurfParameters) {
                 if (isComplete) {
                     notificationsEnabled &&
                         sendBuyNotification(state, size);
+                    state.lastBuyDate = new Date();
                     state.lastBuyPrice = price;
                     state.action = Actions.Sell;
                 }
@@ -79,8 +80,9 @@ async function updateBalances(state: SurfState): Promise<SurfState> {
 async function updateFills(state: SurfState): Promise<SurfState> {
     const { productId } = state;
     const { lastBuyFill, lastSellFill } = await getLastFills(productId);
-    state.lastBuyPrice = lastBuyFill.price;
-    state.lastSellDate = lastSellFill.date;
+    state.lastBuyPrice = lastBuyFill?.price;
+    state.lastBuyDate = lastBuyFill?.date;
+    state.lastSellDate = lastSellFill?.date;
     return state;
 }
 
@@ -91,13 +93,12 @@ async function updatePricesBalancesThresholds(state: SurfState) : Promise<SurfSt
         buyThresholdPercentage,
         sellThresholdPercentage,
     } = state.parameters;
-    const { productId, lastBuyPrice, lastSellDate } = state;
+    const { productId, lastBuyPrice } = state;
     const balances = await getBalances(fiatCurrency, cryptoCurrency);
     const { price, averagePrice } = await getPrices(productId);
     const { buyThreshold, sellThreshold } = await getThresholds(
         price,
         averagePrice,
-        lastSellDate,
         lastBuyPrice,
         buyThresholdPercentage,
         sellThresholdPercentage

@@ -10,6 +10,7 @@ export default interface SurfState {
     buyThreshold: number;
     sellThreshold: number;
     lastBuyPrice: number;
+    lastBuyDate: Date;
     lastSellDate: Date;
     fiatBalance: number;
     cryptoBalance: number;

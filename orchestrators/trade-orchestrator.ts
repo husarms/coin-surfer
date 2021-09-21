@@ -10,15 +10,8 @@ import * as formatters from "../utils/formatters";
 
 const getBuyThreshold = (
     averagePrice: number,
-    lastSellDate: Date,
     thresholdPercentage: number
 ) => {
-    const now = new Date();
-    const hoursSinceLastSell =
-        Math.abs(now.valueOf() - lastSellDate.valueOf()) / 36e5;
-    if (hoursSinceLastSell < 4) {
-        return 0;
-    }
     return formatters.roundDownToTwoDecimals(
         averagePrice - averagePrice * (thresholdPercentage / 100)
     );
@@ -51,14 +44,12 @@ const getSellThreshold = (
 export async function getBuySellThresholds(
     price: number,
     averagePrice: number,
-    lastSellDate: Date,
     lastBuyPrice: number,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number
 ) {
     const buyThreshold = getBuyThreshold(
         averagePrice,
-        lastSellDate,
         buyThresholdPercentage
     );
     const sellThreshold = getSellThreshold(

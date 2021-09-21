@@ -92,8 +92,17 @@ export async function sendSellNotification(state: SurfState, size: string) {
 }
 
 export async function buy(state: SurfState): Promise<any> {
-    const { parameters, fiatBalance, price, productId } = state;
+    const { parameters, fiatBalance, price, productId, lastSellDate } = state;
     const { budget } = parameters;
+    const now = new Date();
+    const hoursSinceLastSell =
+        Math.abs(now.valueOf() - lastSellDate.valueOf()) / 36e5;
+    if (hoursSinceLastSell < 4) {
+        console.log(
+            `Skipping buy. Hours since last sell ${hoursSinceLastSell} < 4`
+        );
+        return { isComplete: false, size: 0 };
+    }
     if (fiatBalance < 0.01) {
         console.log(`Skipping buy. Balance ${fiatBalance} < 0.01`);
         return { isComplete: false, size: 0 };
@@ -109,8 +118,17 @@ export async function buy(state: SurfState): Promise<any> {
 }
 
 export async function sell(state: SurfState): Promise<any> {
-    const { productId, cryptoBalance } = state;
+    const { productId, cryptoBalance, lastBuyDate } = state;
     const size = cryptoBalance;
+    const now = new Date();
+    const hoursSinceLastBuy =
+        Math.abs(now.valueOf() - lastBuyDate.valueOf()) / 36e5;
+    if (hoursSinceLastBuy < 1) {
+        console.log(
+            `Skipping sell. Hours since last buy ${hoursSinceLastBuy} < 1`
+        );
+        return { isComplete: false, size: 0 };
+    }
     if (size < 0.01) {
         console.log(`Skipping sell. Size ${size} < 0.01`);
         return { isComplete: false, size: size.toString() };
@@ -149,7 +167,6 @@ export async function getLastFills(productId: string) {
 export async function getThresholds(
     price: number,
     averagePrice: number,
-    lastSellDate: Date,
     lastBuyPrice: number,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number
@@ -157,7 +174,6 @@ export async function getThresholds(
     return await TradeOrchestrator.getBuySellThresholds(
         price,
         averagePrice,
-        lastSellDate,
         lastBuyPrice,
         buyThresholdPercentage,
         sellThresholdPercentage
