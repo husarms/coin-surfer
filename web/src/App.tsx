@@ -14,6 +14,7 @@ function App() {
         onMessage: (messageEvent: WebSocketEventMap["message"]) => {
             handleMessage(messageEvent);
         },
+        shouldReconnect: () => true,
     });
     const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
         const messageItems = JSON.stringify(messageEvent.data).split(",");

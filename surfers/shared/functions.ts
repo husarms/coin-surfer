@@ -6,7 +6,7 @@ import { Actions } from "../../utils/enums";
 import * as Formatters from "../../utils/formatters";
 import Prices from "../../interfaces/prices";
 import Balances from "../../interfaces/balances";
-import SurfParameters from "../../interfaces/surf-parameters";
+import SurfState from "../../interfaces/surf-state";
 
 export function getCurrentPercentage(
     price: number,
@@ -21,23 +21,24 @@ export function getCurrentPercentage(
     return currentPercentage;
 }
 
-export async function getStatusMessage(
-    price: number,
-    averagePrice: number,
-    action: Actions.Buy | Actions.Sell,
-    balances: Balances,
-    lastBuyPrice: number,
-    buyThreshold: number,
-    sellThreshold: number,
-    parameters: SurfParameters,
-): Promise<string> {
+export function getStatusMessage(state: SurfState): string {
     const {
-        cryptoCurrency,
+        parameters,
+        action,
+        price,
+        averagePrice,
+        buyThreshold,
+        sellThreshold,
+        cryptoBalance,
+        fiatBalance,
+        lastBuyPrice,
+    } = state;
+    const {
         budget,
+        cryptoCurrency,
         buyThresholdPercentage,
         sellThresholdPercentage,
     } = parameters;
-    const { fiatBalance, cryptoBalance } = balances;
     const buyBudget = fiatBalance > budget ? budget : fiatBalance;
     const formattedDate = Formatters.getDateMMddyyyyHHmmss();
     const currentPercentage = getCurrentPercentage(price, averagePrice);
@@ -58,18 +59,6 @@ export async function getBalance(currency: string): Promise<number> {
 
 export async function getBalances(
     fiatCurrency: string,
-    cryptoCurrency
-): Promise<Balances> {
-    const { fiatBalance, cryptoBalance } =
-        await TradeOrchestrator.getAccountBalances(
-            fiatCurrency,
-            cryptoCurrency
-        );
-    return { fiatBalance, cryptoBalance };
-}
-
-export async function getBalancesAndVerify(
-    fiatCurrency: string,
     cryptoCurrency: string
 ): Promise<Balances> {
     const { fiatBalance, cryptoBalance } =
@@ -77,21 +66,12 @@ export async function getBalancesAndVerify(
             fiatCurrency,
             cryptoCurrency
         );
-    console.log(
-        `${fiatCurrency} balance = $${fiatBalance}, ${cryptoCurrency} balance = ${cryptoBalance}`
-    );
-
-    if (fiatBalance < 10 && cryptoBalance < 0.1) throw "Insufficient balances";
-
     return { fiatBalance, cryptoBalance };
 }
 
-export async function sendBuyNotification(
-    size: string,
-    cryptoCurrency: string,
-    price: number,
-    fiatCurrency: string
-) {
+export async function sendBuyNotification(state: SurfState, size: string) {
+    const { parameters, price } = state;
+    const { cryptoCurrency, fiatCurrency } = parameters;
     NotificationOrchestrator.sendBuyNotification(
         size,
         cryptoCurrency,
@@ -100,12 +80,9 @@ export async function sendBuyNotification(
     );
 }
 
-export async function sendSellNotification(
-    size: string,
-    cryptoCurrency: string,
-    price: number,
-    fiatCurrency: string
-) {
+export async function sendSellNotification(state: SurfState, size: string) {
+    const { parameters, price } = state;
+    const { cryptoCurrency, fiatCurrency } = parameters;
     NotificationOrchestrator.sendSellNotification(
         size,
         cryptoCurrency,
@@ -114,13 +91,9 @@ export async function sendSellNotification(
     );
 }
 
-export async function buy(
-    fiatCurrency: string,
-    budget: number,
-    price: number,
-    productId: string
-) : Promise<any> {
-    const fiatBalance = await TradeOrchestrator.getAccountBalance(fiatCurrency);
+export async function buy(state: SurfState): Promise<any> {
+    const { parameters, fiatBalance, price, productId } = state;
+    const { budget } = parameters;
     if (fiatBalance < 0.01) {
         console.log(`Skipping buy. Balance ${fiatBalance} < 0.01`);
         return { isComplete: false, size: 0 };
@@ -135,9 +108,10 @@ export async function buy(
     return { isComplete: true, size: size.toString() };
 }
 
-export async function sell(cryptoCurrency: string, productId: string) : Promise<any> {
-    const size = await TradeOrchestrator.getAccountBalance(cryptoCurrency);
-    if(size < 0.01) {
+export async function sell(state: SurfState): Promise<any> {
+    const { productId, cryptoBalance } = state;
+    const size = cryptoBalance;
+    if (size < 0.01) {
         console.log(`Skipping sell. Size ${size} < 0.01`);
         return { isComplete: false, size: size.toString() };
     }

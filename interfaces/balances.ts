@@ -1,4 +1,4 @@
 export default interface Balances {
-    fiatBalance: number,
-    cryptoBalance: number,
+    fiatBalance: number;
+    cryptoBalance: number;
 }
