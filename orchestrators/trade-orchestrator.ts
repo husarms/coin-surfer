@@ -25,6 +25,7 @@ const getSellThreshold = (
 ) => {
     const averageMargin = averagePrice * (thresholdPercentage / 100);
     const lastBuyMargin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
+    const stopLossMargin = lastBuyPrice * ((thresholdPercentage * 1.5) / 100);
     const averageMarginThreshold = formatters.roundDownToTwoDecimals(
         averagePrice + averageMargin
     );
@@ -32,7 +33,7 @@ const getSellThreshold = (
         lastBuyPrice + lastBuyMargin
     );
     const stopLossThreshold = formatters.roundDownToTwoDecimals(
-        lastBuyPrice - lastBuyMargin
+        lastBuyPrice - stopLossMargin
     );
     if (lastBuyPrice > 0) {
         if (price <= stopLossThreshold) return 0;
