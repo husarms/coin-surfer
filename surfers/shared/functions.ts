@@ -159,6 +159,7 @@ export async function getThresholds(
     price: number,
     averagePrice: number,
     lastBuyPrice: number,
+    lastBuyDate: Date,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number
 ) {
@@ -166,6 +167,7 @@ export async function getThresholds(
         price,
         averagePrice,
         lastBuyPrice,
+        lastBuyDate,
         buyThresholdPercentage,
         sellThresholdPercentage
     );

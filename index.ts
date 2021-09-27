@@ -16,7 +16,7 @@ const parameters: SurfParameters[] = [
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Etherium,
-        buyThresholdPercentage: 5,
+        buyThresholdPercentage: 4,
         sellThresholdPercentage: 4,
         budget: 50000,
         notificationsEnabled: true,

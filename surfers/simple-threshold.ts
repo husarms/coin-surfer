@@ -105,13 +105,14 @@ async function updatePricesBalancesThresholds(state: SurfState) : Promise<SurfSt
         buyThresholdPercentage,
         sellThresholdPercentage,
     } = state.parameters;
-    const { productId, lastBuyPrice } = state;
+    const { productId, lastBuyPrice, lastBuyDate } = state;
     const balances = await getBalances(fiatCurrency, cryptoCurrency);
     const { price, averagePrice } = await getPrices(productId);
     const { buyThreshold, sellThreshold } = await getThresholds(
         price,
         averagePrice,
         lastBuyPrice,
+        lastBuyDate,
         buyThresholdPercentage,
         sellThresholdPercentage
     );
