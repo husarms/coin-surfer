@@ -28,7 +28,7 @@ The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) cont
 
 Check out this folder for more details
 
-![visualization](docs/images/visualization.png)
+![visualization](docs/images/visualization-2.png)
 
 ## Future goals
 
