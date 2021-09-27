@@ -20,6 +20,12 @@ export function formatDateMMddyyyyHHmmss(dateString: string) {
     return date.toLocaleString().replace(",", "");
 }
 
+export function addDays(date: Date, days: number) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
 export function getDateyyyyMMddHHmmss() {
     const now = new Date();
     let d = new Date(now),
