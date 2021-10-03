@@ -2,7 +2,34 @@
 import React from "react";
 import * as d3 from "d3";
 
-const MultilineChart = ({ data, dimensions }) => {
+export interface MultilineChartProps {
+    data: ChartData[];
+    dimensions: Dimensions;
+}
+
+interface Dimensions {
+    width: number;
+    height: number;
+    margin: Margin;
+}
+
+interface Margin {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+}
+
+interface ChartData {
+    name: string;
+    color: string;
+    items: any[];
+}
+
+const MultilineChart = ({
+    data,
+    dimensions,
+}: MultilineChartProps) => {
     const svgRef = React.useRef(null);
     const { width, height, margin } = dimensions;
     const svgWidth = width + margin.left + margin.right;
@@ -47,7 +74,7 @@ const MultilineChart = ({ data, dimensions }) => {
             .axisLeft(yScale)
             .ticks(10)
             .tickSize(-width)
-            .tickFormat(val => `${val}`);
+            .tickFormat((val) => `${val}`);
         const yAxisGroup = svg.append("g").call(yAxis);
         yAxisGroup.select(".domain").remove();
         yAxisGroup.selectAll("line").attr("stroke", "rgba(255, 255, 255, 0.2)");
@@ -59,16 +86,16 @@ const MultilineChart = ({ data, dimensions }) => {
         // Draw the lines
         const line = d3
             .line()
-            .x(d => xScale(d.date))
-            .y(d => yScale(d.value));
+            .x((d) => xScale(d.date))
+            .y((d) => yScale(d.value));
         svg.selectAll(".line")
             .data(data)
             .enter()
             .append("path")
             .attr("fill", "none")
-            .attr("stroke", d => d.color)
+            .attr("stroke", (d) => d.color)
             .attr("stroke-width", 3)
-            .attr("d", d => line(d.items));
+            .attr("d", (d) => line(d.items));
     }, [data]); // Redraw chart if data changes
 
     return <svg ref={svgRef} width={svgWidth} height={svgHeight} />;
