@@ -7,45 +7,26 @@ const priceColor = "#5E4FA2";
 const averageColor = "#A0D3FF";
 const thresholdColor = "#A8DF53";
 
-export interface ProductPageProps {
-    product: string;
-    timestamp: Date;
-    price: string;
-    average: string;
-    threshold: string;
-    message: string;
+export interface HistoricalPageProps {
+    title: string;
     data: PriceData[];
+    goBack: () => void;
 }
 
-function ProductPage({
-    price,
-    average,
-    threshold,
-    message,
-    data,
-}: ProductPageProps): JSX.Element {
+function HistoricalPage({ title, data, goBack }: HistoricalPageProps): JSX.Element {
+    console.log(data);
     const priceData = data.map((value) => {
-        return { value: value.price, date: value.timestamp };
+        return { value: value.price, date: new Date(value.timestamp) };
     });
     const averageData = data.map((value) => {
-        return { value: value.average, date: value.timestamp };
+        return { value: value.average, date: new Date(value.timestamp) };
     });
     const thresholdData = data.map((value) => {
-        return { value: value.threshold, date: value.timestamp };
+        return { value: value.threshold, date: new Date(value.timestamp) };
     });
     return (
         <>
-            <p className="price-data">
-                <span className="price" style={{ color: priceColor }}>
-                    Price{": "}${price}
-                </span>
-                <span className="average" style={{ color: averageColor }}>
-                    Average{": "}${average}
-                </span>
-                <span style={{ color: thresholdColor }}>
-                    Threshold{": "}${threshold}
-                </span>
-            </p>
+            <p className="price-data">{title}</p>
             <MultilineChart
                 data={[
                     {
@@ -75,9 +56,9 @@ function ProductPage({
                     },
                 }}
             />
-            <p className="message">{message}</p>
+            <button className="link-button" onClick={goBack}>Go Back</button>
         </>
     );
 }
 
-export default ProductPage;
+export default HistoricalPage;

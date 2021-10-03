@@ -40,3 +40,33 @@
 button {
   font-size: calc(10px + 2vmin);
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto;
+  /* background-color: #2196F3; */
+  /* padding: 10px; */
+}
+
+.grid-item {
+  /* background-color: rgba(255, 255, 255, 0.8); */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 16px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.link-button {
+  font-size: 16px;
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  font-family: arial, sans-serif;
+  color: #509fb5;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: #61dafb;
+}

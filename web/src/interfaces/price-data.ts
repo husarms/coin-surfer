@@ -1,4 +1,4 @@
-export interface PriceData {
+export default interface PriceData {
     average: number;
     price: number;
     threshold: number;

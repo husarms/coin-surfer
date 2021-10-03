@@ -1,23 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+
+import LogEntry from "./interfaces/log-entry";
+import PriceData from "./interfaces/price-data";
 import ProductPage, { ProductPageProps } from "./pages/ProductPage";
+import HistoricalPage from "./pages/HistoricalPage";
 import * as formatters from "../../utils/formatters";
 import "react-tabs/style/react-tabs.css";
-import "./App.css";
+import "./App.scss";
 
 function App() {
     const maxDataPoints = 100000;
     const initialMap = new Map<string, ProductPageProps>();
     const [productMap, setProductMap] = useState(initialMap);
+    const [historicalFiles, setHistoricalFiles] = useState([]);
+    const [historicalFile, setHistoricalFile] = useState("");
+    const [historicalData, setHistoricalData] = useState([] as PriceData[]);
+    useEffect(() => {
+        getHistoricalFiles();
+    }, []);
     useWebSocket("ws://localhost:8080/ws", {
         onMessage: (messageEvent: WebSocketEventMap["message"]) => {
             handleMessage(messageEvent);
         },
         shouldReconnect: () => true,
     });
-    const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
-        const messageItems = JSON.stringify(messageEvent.data).split(",");
+    const parseLogEntry = (logEntryString: string): LogEntry => {
+        const messageItems = JSON.stringify(logEntryString).split(",");
         const timestamp = new Date(messageItems[0]);
         const product = messageItems[1];
         const average = parseFloat(messageItems[2]);
@@ -28,6 +38,19 @@ function App() {
         )} - Currently${messageItems[5]
             .replaceAll('"', "")
             .replaceAll("\\", "")}`;
+        return { product, timestamp, price, average, threshold, message };
+    };
+    const getHistoricalFiles = () => {
+        fetch("_manifest.json")
+            .then((res) => res.json())
+            .then((data) => {
+                data.sort();
+                setHistoricalFiles(data);
+            });
+    };
+    const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
+        const { product, timestamp, price, average, threshold, message } =
+            parseLogEntry(messageEvent.data);
         let map = productMap;
         let value = map.get(product);
         let data = value?.data;
@@ -51,6 +74,14 @@ function App() {
     const formatNumber = (number: number): string => {
         return (Math.round(number * 100) / 100).toFixed(2);
     };
+    const selectHistoricalFile = (fileName: string) => {
+        setHistoricalFile(fileName);
+        fetch(fileName)
+            .then((res) => res.json())
+            .then((data) => {
+                setHistoricalData(data);
+            });
+    };
     return (
         <div className="App">
             <header className="App-header">
@@ -59,6 +90,7 @@ function App() {
                         {[...productMap].map(([key]) => (
                             <Tab key={key}>{key}</Tab>
                         ))}
+                        <Tab key="history">Historical Data</Tab>
                     </TabList>
                     {[...productMap].map(([key, value]) => (
                         <TabPanel key={key}>
@@ -73,6 +105,29 @@ function App() {
                             />
                         </TabPanel>
                     ))}
+                    <TabPanel key="history">
+                        {historicalFile === "" ? (
+                            <div className="grid-container">
+                                {historicalFiles.map((value) => (
+                                    <div key={value} className="grid-item">
+                                        <button className="link-button"
+                                            onClick={() =>
+                                                selectHistoricalFile(value)
+                                            }
+                                        >
+                                            {value}
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <HistoricalPage
+                                title={historicalFile}
+                                data={historicalData}
+                                goBack={() => setHistoricalFile("")}
+                            />
+                        )}
+                    </TabPanel>
                 </Tabs>
             </header>
         </div>

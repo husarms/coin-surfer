@@ -120,3 +120,4 @@ log-file*
 logs*
 state*
 tests/data/*
+web/public*

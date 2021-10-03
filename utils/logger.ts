@@ -3,6 +3,7 @@ import * as Formatters from "../utils/formatters";
 
 export class Logger {
     private logger: Winston.Logger;
+    private jsonLogger: Winston.Logger;
 
     private myFormat = Winston.format.printf(({ message }) => {
         return `${message}`;
@@ -16,6 +17,14 @@ export class Logger {
                 new Winston.transports.File({
                     format: this.myFormat,
                     filename: `logs/${timestamp}-${logLabel}.csv`,
+                }),
+            ],
+        });
+        this.jsonLogger = Winston.createLogger({
+            transports: [
+                new Winston.transports.File({
+                    format: this.myFormat,
+                    filename: `logs/json/${timestamp}-${logLabel}.json`,
                 }),
             ],
         });
