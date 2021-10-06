@@ -1,6 +1,6 @@
-/** MultilineChart.js */
-import React from "react";
+import React, { useState } from "react";
 import * as d3 from "d3";
+import LoadingPage from "../pages/LoadingPage";
 
 export interface MultilineChartProps {
     data: ChartData[];
@@ -23,19 +23,19 @@ interface Margin {
 interface ChartData {
     name: string;
     color: string;
+    strokeWidth: number;
     items: any[];
 }
 
-const MultilineChart = ({
-    data,
-    dimensions,
-}: MultilineChartProps) => {
+const MultilineChart = ({ data, dimensions }: MultilineChartProps) => {
     const svgRef = React.useRef(null);
     const { width, height, margin } = dimensions;
     const svgWidth = width + margin.left + margin.right;
     const svgHeight = height + margin.top + margin.bottom;
+    const [isLoading, setIsLoading] = useState(true);
 
     React.useEffect(() => {
+        setIsLoading(true);
         const xScale = d3
             .scaleTime()
             .domain(d3.extent(data[0].items, (d) => d.date))
@@ -94,11 +94,16 @@ const MultilineChart = ({
             .append("path")
             .attr("fill", "none")
             .attr("stroke", (d) => d.color)
-            .attr("stroke-width", 3)
+            .attr("stroke-width", (d) => d.strokeWidth)
             .attr("d", (d) => line(d.items));
+        setIsLoading(false);
     }, [data]); // Redraw chart if data changes
 
-    return <svg ref={svgRef} width={svgWidth} height={svgHeight} />;
+    if (isLoading) {
+        return <LoadingPage />;
+    } else {
+        return <svg ref={svgRef} width={svgWidth} height={svgHeight} />;
+    }
 };
 
 export default MultilineChart;
