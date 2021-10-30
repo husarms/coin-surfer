@@ -22,6 +22,24 @@ const parameters: SurfParameters[] = [
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
     },
+    {
+        fiatCurrency: Products.USDollar,
+        cryptoCurrency: Products.Litecoin,
+        buyThresholdPercentage: 4,
+        sellThresholdPercentage: 4,
+        budget: 0,
+        notificationsEnabled: true,
+        webSocketFeedEnabled: true,
+    },
+    {
+        fiatCurrency: Products.USDollar,
+        cryptoCurrency: Products.Cardano,
+        buyThresholdPercentage: 4,
+        sellThresholdPercentage: 4,
+        budget: 0,
+        notificationsEnabled: true,
+        webSocketFeedEnabled: true,
+    },
 ];
 
 (async () => {

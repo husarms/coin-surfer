@@ -1,7 +1,7 @@
 export function getLineOfBestFit(
-    values_x: Number[],
-    values_y: Number[]
-): { slope: Number; lineOfBestFit: Number[] } {
+    values_x: number[],
+    values_y: number[]
+): { slope: number; lineOfBestFit: number[] } {
     var x_sum = 0;
     var y_sum = 0;
     var xy_sum = 0;
@@ -36,8 +36,8 @@ export function getLineOfBestFit(
     var m = (count * xy_sum - x_sum * y_sum) / (count * xx_sum - x_sum * x_sum);
     var b = y_sum / count - (m * x_sum) / count;
     // We then return the x and y data points according to our fit
-    var result_values_x = [] as Number[];
-    var result_values_y = [] as Number[];
+    var result_values_x = [] as number[];
+    var result_values_y = [] as number[];
     for (let i = 0; i < values_length; i++) {
         x = values_x[i];
         y = x * m + b;
@@ -46,4 +46,8 @@ export function getLineOfBestFit(
     }
     //return [result_values_x, result_values_y];
     return { slope: m, lineOfBestFit: result_values_y };
+}
+
+export function getSlope(point1: {x: number, y: number}, point2: {x: number, y: number}): number {
+    return (point2.y - point1.y) / (point2.x - point1.x);
 }

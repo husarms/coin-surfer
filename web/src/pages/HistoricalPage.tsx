@@ -59,10 +59,8 @@ function HistoricalPage({
             strokeWidth: 2,
             items: mappedThresholdData as any,
         });
-        const numberOfSegments = 10;
-        const segmentLength = Math.round(
-            mappedPriceData.length / numberOfSegments
-        );
+        const segmentLength = 360;
+        const numberOfSegments = Math.round(mappedPriceData.length / segmentLength);
         for (let i = 0; i <= numberOfSegments; i++) {
             const startIndex = i * segmentLength;
             const endIndex = (i + 1) * segmentLength;
@@ -86,7 +84,7 @@ function HistoricalPage({
                 color: regressionColor,
                 strokeWidth: 2,
                 items: mappedLinearProgressionData as any,
-            });
+            });;
         }
         setDataMap(currentDataMap);
     }, [data]);

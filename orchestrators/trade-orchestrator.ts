@@ -40,9 +40,10 @@ const getSellThreshold = (
     );
     if (lastBuyPrice > 0) {
         // if (price <= stopLossThreshold) return 0;
-        return hoursSinceLastBuy < 72 
-        ? Math.max(averageMarginThreshold, lastBuyMarginThreshold)
-        : Math.min(averageMarginThreshold, lastBuyMarginThreshold);
+        // return hoursSinceLastBuy < 72 
+        // ? Math.max(averageMarginThreshold, lastBuyMarginThreshold)
+        // : Math.min(averageMarginThreshold, lastBuyMarginThreshold);
+        return Math.min(averageMarginThreshold, lastBuyMarginThreshold);
     }
     return averageMarginThreshold;
 };
