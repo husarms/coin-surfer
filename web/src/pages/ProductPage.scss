@@ -24,9 +24,8 @@ span.price {
     color: priceColor;
     font-weight: bold;
     filter: brightness(1.5);
-    margin-right: 24px;
 }
 
-span.average {
+span.price, span.average, span.threshold, span.long-slope {
     margin-right: 24px;
 }

@@ -6,11 +6,12 @@ export enum Actions {
 export enum Products {
     Bitcoin = "BTC",
     BitcoinCash = "BCH",
+    Cardano = "ADA",
+    Chainlink = "LINK",
+    DogeCoin = "DOGE",
+    EOS = "EOS",
     Etherium = "ETH",
     Litecoin = "LTC",
-    EOS = "EOS",
-    Cardano = "ADA",
-    DogeCoin = "DOGE",
-    Stellar = "XLM",
+    Polkadot = "DOT",
     USDollar = "USD",
 }
