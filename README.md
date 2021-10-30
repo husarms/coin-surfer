@@ -1,6 +1,5 @@
 ![logo](docs/images/logo.png)
 
-# coin-surfer
 Node.js app for automated cryptocurrency trading
 
 ## How it works
