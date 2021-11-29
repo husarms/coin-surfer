@@ -28,7 +28,7 @@ const getSellThreshold = (
     const hoursSinceLastBuy = Math.abs(now.valueOf() - lastBuyDate.valueOf()) / 36e5;
     const averageMargin = averagePrice * (thresholdPercentage / 100);
     const lastBuyMargin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
-    const stopLossMargin = lastBuyPrice * ((thresholdPercentage * 1.5) / 100);
+    const stopLossMargin = lastBuyPrice * ((thresholdPercentage * 3) / 100);
     const averageMarginThreshold = formatters.roundDownToTwoDecimals(
         averagePrice + averageMargin
     );
@@ -39,10 +39,7 @@ const getSellThreshold = (
         lastBuyPrice - stopLossMargin
     );
     if (lastBuyPrice > 0) {
-        // if (price <= stopLossThreshold) return 0;
-        // return hoursSinceLastBuy < 72 
-        // ? Math.max(averageMarginThreshold, lastBuyMarginThreshold)
-        // : Math.min(averageMarginThreshold, lastBuyMarginThreshold);
+        if (price <= stopLossThreshold) return 0;
         return Math.min(averageMarginThreshold, lastBuyMarginThreshold);
     }
     return averageMarginThreshold;
