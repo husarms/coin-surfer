@@ -1,4 +1,4 @@
-![logo-2](docs/images/logo-2.png)
+![logo](docs/images/logo.png)
 
 Node.js app for automated cryptocurrency trading
 
