@@ -29,8 +29,8 @@ export async function surf(parameters: SurfParameters) {
         state = await updateBalances(state);
         state = await updatePrices(state);
         state = await updateThresholds(state);
+        state = updateStatus(state, logger);
         const { action, price, buyThreshold, sellThreshold } = state;
-        reportStatus(state, logger);
         if (action === Actions.Sell) {
             if (price >= sellThreshold) {
                 console.log(
@@ -73,14 +73,16 @@ async function handleSell(state: SurfState) : Promise<SurfState> {
     return state;
 }
 
-function reportStatus(state: SurfState, logger: Logger) {
+function updateStatus(state: SurfState, logger: Logger): SurfState {
     const { parameters } = state;
     const { webSocketFeedEnabled } = parameters;
-    const statusMessage = getStatusMessage(state);
-    logger.log(statusMessage);
+    state.statusMessage = getStatusMessage(state);
+    state.timestamp = new Date();
+    logger.log(state.statusMessage);
     if (webSocketFeedEnabled) { 
-        WebSocketServer.emitMessage(statusMessage);
+        WebSocketServer.emitMessage(state);
     }
+    return state;
 } 
 
 async function updateBalances(state: SurfState): Promise<SurfState> {
@@ -102,10 +104,10 @@ async function updateFills(state: SurfState): Promise<SurfState> {
 
 async function updatePrices(state: SurfState): Promise<SurfState> {
     const { productId } = state;
-    const { price, averagePrice, historicalAveragePrice } = await getPrices(productId);
+    const { price, averagePrice, historicalAverages } = await getPrices(productId);
     state.price = price;
     state.averagePrice = averagePrice;
-    state.historicalAveragePrice = historicalAveragePrice;
+    state.historicalAverages = historicalAverages;
     return state;
 }
 

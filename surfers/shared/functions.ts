@@ -27,7 +27,6 @@ export function getStatusMessage(state: SurfState): string {
         action,
         price,
         averagePrice,
-        historicalAveragePrice,
         buyThreshold,
         sellThreshold,
         cryptoBalance,
@@ -48,11 +47,10 @@ export function getStatusMessage(state: SurfState): string {
         action === Actions.Sell
             ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} (+${sellThresholdPercentage}%) (last buy price $${lastBuyPrice})`
             : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold} (-${buyThresholdPercentage}%)`;
-    const formattedPrice = price.toFixed(4);
-    const formattedAveragePrice = averagePrice.toFixed(4);
-    const formattedHistoricalAveragePrice = historicalAveragePrice.toFixed(4);
+    const formattedPrice = price.toFixed(2);
+    const formattedAveragePrice = averagePrice.toFixed(2);
     const plusMinus = currentPercentage > 0 ? "+" : "";
-    return `${formattedDate}, ${cryptoCurrency}, ${formattedAveragePrice}, ${formattedHistoricalAveragePrice}, ${formattedPrice}, ${threshold}, ${message}; current price = $${formattedPrice} (${plusMinus}${currentPercentage}%)`;
+    return `${formattedDate}, ${cryptoCurrency}, ${formattedAveragePrice}, ${formattedPrice}, ${threshold}, ${message}; current price = $${formattedPrice} (${plusMinus}${currentPercentage}%)`;
 }
 
 export async function getBalance(currency: string): Promise<number> {
@@ -137,8 +135,8 @@ export async function sell(state: SurfState): Promise<any> {
 export async function getPrices(productId: string): Promise<Prices> {
     const price = await TradeOrchestrator.getProductPrice(productId);
     const averagePrice = await TradeOrchestrator.get24HrAveragePrice(productId);
-    const historicalAveragePrice = await TradeOrchestrator.get30DayAveragePrice(productId);
-    return { price, averagePrice, historicalAveragePrice };
+    const historicalAverages = await TradeOrchestrator.getHistoricalAverages(productId);
+    return { price, averagePrice, historicalAverages };
 }
 
 export async function getLastFills(productId: string) {

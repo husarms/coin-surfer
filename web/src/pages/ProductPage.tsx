@@ -19,7 +19,7 @@ export interface ProductPageProps {
     historicalAverageData: ChartData[];
     threshold: string;
     thresholdData: ChartData[];
-    confidenceScore: string;
+    historicalAnalysis: string;
     message: string;
 }
 
@@ -28,11 +28,10 @@ function ProductPage({
     priceData,
     average,
     averageData,
-    historicalAverage,
     historicalAverageData,
     threshold,
     thresholdData,
-    confidenceScore,
+    historicalAnalysis,
     message,
 }: ProductPageProps): JSX.Element {
     return (
@@ -51,7 +50,7 @@ function ProductPage({
                     className="historical-average"
                     style={{ color: historicalAverageColor }}
                 >
-                    30-Day Average{": "}${historicalAverage} ({confidenceScore}%)
+                    Historical{": "}{historicalAnalysis}
                 </span>
             </p>
             <MultilineChart
