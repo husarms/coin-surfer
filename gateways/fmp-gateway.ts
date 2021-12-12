@@ -14,8 +14,12 @@ export async function getHistoricalData(
     );
 }
 
-export async function getFullHistoricalData(product: string) {
+export async function getFullHistoricalData(product: string): Promise<any> {
     return await axios.get(
-        `${baseUrl}/api/v3/historical-chart/${product}?apikey=${apiKey}`
-    );
+        `${baseUrl}/api/v3/historical-price-full/${product}?apikey=${apiKey}`
+    ).then(response => {
+        return response;
+    }).catch(error => {
+        console.log(error);
+    });
 }

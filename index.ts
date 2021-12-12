@@ -1,5 +1,5 @@
 import SurfParameters from "./interfaces/surf-parameters";
-import * as SimpleThresholdSurfer from "./surfers/simple-threshold";
+import * as AiThresholdSurfer from "./surfers/ai-threshold";
 import { Products } from "./utils/enums";
 import * as WebSocketServer from "./web-socket/server";
 
@@ -7,16 +7,16 @@ const parameters: SurfParameters[] = [
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Bitcoin,
-        buyThresholdPercentage: 4,
-        sellThresholdPercentage: 5,
-        budget: 50000,
+        buyThresholdPercentage: 5,
+        sellThresholdPercentage: 10,
+        budget: 0,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
     },
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Etherium,
-        buyThresholdPercentage: 4,
+        buyThresholdPercentage: 5,
         sellThresholdPercentage: 5,
         budget: 50000,
         notificationsEnabled: true,
@@ -25,17 +25,17 @@ const parameters: SurfParameters[] = [
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Litecoin,
-        buyThresholdPercentage: 8,
-        sellThresholdPercentage: 8,
-        budget: 0,
+        buyThresholdPercentage: 7,
+        sellThresholdPercentage: 7,
+        budget: 50000,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
     },
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Cardano,
-        buyThresholdPercentage: 8,
-        sellThresholdPercentage: 8,
+        buyThresholdPercentage: 7,
+        sellThresholdPercentage: 7,
         budget: 0,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
@@ -44,7 +44,7 @@ const parameters: SurfParameters[] = [
 
 (async () => {
     parameters.map((parameters) => {
-        SimpleThresholdSurfer.surf(parameters);
+        AiThresholdSurfer.surf(parameters);
     });
     if (parameters.find((p) => p.webSocketFeedEnabled)) {
         WebSocketServer.startWebSocketServer(8080);
