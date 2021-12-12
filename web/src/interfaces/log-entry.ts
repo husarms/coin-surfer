@@ -3,6 +3,7 @@ export default interface LogEntry {
     timestamp: Date;
     price: number;
     average: number;
+    historicalAverage:number;
     threshold: number;
     message: string;
 }

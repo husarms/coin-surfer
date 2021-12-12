@@ -1,4 +1,5 @@
 import {
+    Candle,
     Fill,
     PaginatedData,
     PendingOrder,
@@ -119,6 +120,16 @@ export async function get24HrAveragePrice(productId: string) {
     const high = parseFloat(product24HrStats.high);
     const low = parseFloat(product24HrStats.low);
     let average = high - (high - low) / 2;
+    return average;
+}
+
+export async function get30DayAveragePrice(productId: string): Promise<number> {
+    const end = new Date();
+    const start = new Date();
+    start.setDate(start.getDate() - 30);
+    const candles = (await CoinbaseGateway.getProductCandles(productId, start, end)) as Candle[];
+    const sum = (candles: any) => candles.reduce((total: number, next: Candle) => total + ((next.high + next.low) / 2), 0);
+    const average = sum(candles) / candles.length;
     return average;
 }
 

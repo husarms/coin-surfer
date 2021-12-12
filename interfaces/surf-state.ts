@@ -7,6 +7,7 @@ export default interface SurfState {
     action: Actions.Buy | Actions.Sell;
     price: number;
     averagePrice: number;
+    historicalAveragePrice: number;
     buyThreshold: number;
     sellThreshold: number;
     lastBuyPrice: number;

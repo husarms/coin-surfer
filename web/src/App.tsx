@@ -31,14 +31,15 @@ function App() {
         const timestamp = new Date(messageItems[0]);
         const product = messageItems[1];
         const average = parseFloat(messageItems[2]);
-        const price = parseFloat(messageItems[3]);
-        const threshold = parseFloat(messageItems[4]);
+        const historicalAverage = parseFloat(messageItems[3])
+        const price = parseFloat(messageItems[4]);
+        const threshold = parseFloat(messageItems[5]);
         const message = `${formatters.formatDateMMddyyyyHHmmss(
             timestamp.toString()
-        )} - Currently${messageItems[5]
+        )} - Currently${messageItems[6]
             .replaceAll('"', "")
             .replaceAll("\\", "")}`;
-        return { product, timestamp, price, average, threshold, message };
+        return { product, timestamp, price, average, historicalAverage, threshold, message };
     };
     const getHistoricalFiles = () => {
         fetch("_manifest.json")
@@ -49,25 +50,52 @@ function App() {
             });
     };
     const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
-        const { product, timestamp, price, average, threshold, message } =
+        const { product, timestamp, price, average, historicalAverage, threshold, message } =
             parseLogEntry(messageEvent.data);
         let map = productMap;
         let value = map.get(product);
-        let data = value?.data;
-        if (data) {
-            data.push({ average, price, threshold, timestamp });
-            if (data.length >= maxDataPoints) data.shift();
+        let priceData = value?.priceData;
+        if (priceData) {
+            priceData.push({ value: price, date: timestamp });
+            if (priceData.length >= maxDataPoints) priceData.shift();
         } else {
-            data = [];
+            priceData = [];
         }
+        let averageData = value?.averageData;
+        if (averageData) {
+            averageData.push({ value: average, date: timestamp });
+            if (averageData.length >= maxDataPoints) averageData.shift();
+        } else {
+            averageData = [];
+        }
+        let historicalAverageData = value?.historicalAverageData;
+        if (historicalAverageData) {
+            historicalAverageData.push({ value: historicalAverage, date: timestamp });
+            if (historicalAverageData.length >= maxDataPoints) historicalAverageData.shift();
+        } else {
+            historicalAverageData = [];
+        }
+        let thresholdData = value?.thresholdData;
+        if (thresholdData) {
+            thresholdData.push({ value: threshold, date: timestamp });
+            if (thresholdData.length >= maxDataPoints) thresholdData.shift();
+        } else {
+            thresholdData = [];
+        }
+        const confidenceScore = ((average - historicalAverage) / historicalAverage) * 100;
         map.set(product, {
             product,
             timestamp,
             price: formatNumber(price),
+            priceData: priceData,
             average: formatNumber(average),
+            averageData: averageData,
+            historicalAverage: formatNumber(historicalAverage),
+            historicalAverageData: historicalAverageData,
             threshold: formatNumber(threshold),
+            thresholdData: thresholdData,
+            confidenceScore: formatNumber(confidenceScore),
             message,
-            data,
         });
         setProductMap(map);
     };
@@ -98,10 +126,15 @@ function App() {
                                 product={key}
                                 timestamp={value.timestamp}
                                 price={value.price}
+                                priceData={value.priceData}
                                 average={value.average}
+                                averageData={value.averageData}
+                                historicalAverage={value.historicalAverage}
+                                historicalAverageData={value.historicalAverageData}
                                 threshold={value.threshold}
+                                thresholdData={value.thresholdData}
+                                confidenceScore={value.confidenceScore}
                                 message={value.message}
-                                data={value.data}
                             />
                         </TabPanel>
                     ))}

@@ -65,6 +65,17 @@ export async function getProduct24HrStats(product: string) {
         });
 }
 
+export async function getProductCandles(product: string, start: Date, end: Date) {
+    return coinbaseClient.rest.product
+        .getCandles(product, { granularity: 86400, start: start.toUTCString(), end: end.toUTCString() })
+        .then((data) => {
+            return data;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
 export async function getAccount(account_id: string) {
     return coinbaseClient.rest.account
         .getAccount(account_id)
@@ -192,7 +203,7 @@ export async function getHistoricRates(product_id: string, startDate: Date, endD
     const start = startDate.toISOString();
     const end = endDate.toISOString();
     return coinbaseClient.rest.product
-        .getCandles(product_id, {start, end, granularity: 300})
+        .getCandles(product_id, { start, end, granularity: 300 })
         .then((data) => {
             return data;
         })

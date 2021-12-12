@@ -36,6 +36,22 @@ Check out this folder for more details
 2. **Know when to hold 'em** - detect abnormal trends in price and override sell threshold to increase profit margin
 3. **Know when to fold 'em** - incrementally lower the sell threshold after a period of time (cut your losses if a profit cannot be made quickly)
 
+## TODO
+1. Handle bad requests (catch API errors)
+2. Handle crashes
+    - Stop loss, buy in low, adjust sell margins higher
+3. Basic AI - use scoring to adjust thresholds
+    - Confidence score 
+        - 30-day vs 24-hour average
+        - 24h < 30d = more confident, lower buy threshold, higher sell threshold
+        - 24h > 30d = less confident, higher buy threshold, lower sell threshold
+    - Volatility score 
+        - 30-day max and min
+        - More volatile = wider thresholds
+4. Visualization
+    - Experiment with other chart packages
+    - Hover over line and see value
+
 ## Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
 2. Optionally - a [SendGrid](https://sendgrid.com) account to send buy / sell notifications
