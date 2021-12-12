@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
-import LogEntry from "./interfaces/log-entry";
 import PriceData from "./interfaces/price-data";
 import SurfState from "../../interfaces/surf-state";
 import { Actions } from "../../utils/enums";
 import ProductPage, { ProductPageProps } from "./pages/ProductPage";
 import HistoricalPage from "./pages/HistoricalPage";
-import * as formatters from "../../utils/formatters";
 import "react-tabs/style/react-tabs.css";
 import "./App.scss";
 
@@ -28,21 +26,6 @@ function App() {
         },
         shouldReconnect: () => true,
     });
-    const parseLogEntry = (logEntryString: string): LogEntry => {
-        const messageItems = JSON.stringify(logEntryString).split(",");
-        const timestamp = new Date(messageItems[0]);
-        const product = messageItems[1];
-        const average = parseFloat(messageItems[2]);
-        const historicalAverage = parseFloat(messageItems[3])
-        const price = parseFloat(messageItems[4]);
-        const threshold = parseFloat(messageItems[5]);
-        const message = `${formatters.formatDateMMddyyyyHHmmss(
-            timestamp.toString()
-        )} - Currently${messageItems[6]
-            .replaceAll('"', "")
-            .replaceAll("\\", "")}`;
-        return { product, timestamp, price, average, historicalAverage, threshold, message };
-    };
     const getHistoricalFiles = () => {
         fetch("_manifest.json")
             .then((res) => res.json())
