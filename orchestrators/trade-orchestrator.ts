@@ -6,6 +6,7 @@ import {
     ProductStats,
     ProductTicker,
 } from "coinbase-pro-node";
+import HistoricalAverages from "../interfaces/historical-averages";
 import * as CoinbaseGateway from "../gateways/coinbase-gateway";
 import * as formatters from "../utils/formatters";
 
@@ -123,14 +124,25 @@ export async function get24HrAveragePrice(productId: string) {
     return average;
 }
 
-export async function get30DayAveragePrice(productId: string): Promise<number> {
+export async function getHistoricalAverages(productId: string): Promise<HistoricalAverages> {
     const end = new Date();
+    end.setDate(end.getDate() - 1)
+    end.setUTCHours(0, 0, 0, 0);
     const start = new Date();
-    start.setDate(start.getDate() - 30);
-    const candles = (await CoinbaseGateway.getProductCandles(productId, start, end)) as Candle[];
-    const sum = (candles: any) => candles.reduce((total: number, next: Candle) => total + ((next.high + next.low) / 2), 0);
-    const average = sum(candles) / candles.length;
-    return average;
+    start.setDate(start.getDate() - 31);
+    start.setUTCHours(0, 0, 0, 0);
+    const thirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, start, end)) as Candle[];
+    const sevenDayCandles = thirtyDayCandles.slice(0, 6);
+    const sumMidAverage = (candles: any) => candles.reduce((total: number, next: Candle) => total + ((next.close + next.open) / 2), 0);
+    const sumLowAverage = (candles: any) => candles.reduce((total: number, next: Candle) => total + next.low, 0);
+    const sumHighAverage = (candles: any) => candles.reduce((total: number, next: Candle) => total + next.high, 0);
+    const thirtyDayMidAverage = formatters.roundDownToTwoDecimals(sumMidAverage(thirtyDayCandles) / thirtyDayCandles.length);
+    const thirtyDayLowAverage = formatters.roundDownToTwoDecimals(sumLowAverage(thirtyDayCandles) / thirtyDayCandles.length);
+    const thirtyDayHighAverage = formatters.roundDownToTwoDecimals(sumHighAverage(thirtyDayCandles) / thirtyDayCandles.length);
+    const sevenDayMidAverage = formatters.roundDownToTwoDecimals(sumMidAverage(sevenDayCandles) / sevenDayCandles.length);
+    const sevenDayLowAverage = formatters.roundDownToTwoDecimals(sumLowAverage(sevenDayCandles) / sevenDayCandles.length);
+    const sevenDayHighAverage = formatters.roundDownToTwoDecimals(sumHighAverage(sevenDayCandles) / sevenDayCandles.length);
+    return { thirtyDayMidAverage, thirtyDayLowAverage, thirtyDayHighAverage, sevenDayMidAverage, sevenDayLowAverage, sevenDayHighAverage };
 }
 
 export async function getProductPrice(productId: string) {

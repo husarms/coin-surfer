@@ -1,4 +1,5 @@
 import { Actions } from "../utils/enums";
+import HistoricalAverages from "./historical-averages";
 import SurfParameters from "./surf-parameters";
 
 export default interface SurfState {
@@ -7,7 +8,7 @@ export default interface SurfState {
     action: Actions.Buy | Actions.Sell;
     price: number;
     averagePrice: number;
-    historicalAveragePrice: number;
+    historicalAverages: HistoricalAverages;
     buyThreshold: number;
     sellThreshold: number;
     lastBuyPrice: number;
@@ -15,4 +16,6 @@ export default interface SurfState {
     lastSellDate: Date;
     fiatBalance: number;
     cryptoBalance: number;
+    statusMessage: string;
+    timestamp: Date;
 }

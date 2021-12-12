@@ -1,5 +1,7 @@
+import HistoricalAverages from "./historical-averages";
+
 export default interface Prices {
     price: number;
     averagePrice: number;
-    historicalAveragePrice: number;
+    historicalAverages: HistoricalAverages;
 }

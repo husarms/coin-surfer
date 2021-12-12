@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
-import LogEntry from "./interfaces/log-entry";
 import PriceData from "./interfaces/price-data";
+import SurfState from "../../interfaces/surf-state";
+import { Actions } from "../../utils/enums";
 import ProductPage, { ProductPageProps } from "./pages/ProductPage";
 import HistoricalPage from "./pages/HistoricalPage";
-import * as formatters from "../../utils/formatters";
 import "react-tabs/style/react-tabs.css";
 import "./App.scss";
 
@@ -26,21 +26,6 @@ function App() {
         },
         shouldReconnect: () => true,
     });
-    const parseLogEntry = (logEntryString: string): LogEntry => {
-        const messageItems = JSON.stringify(logEntryString).split(",");
-        const timestamp = new Date(messageItems[0]);
-        const product = messageItems[1];
-        const average = parseFloat(messageItems[2]);
-        const historicalAverage = parseFloat(messageItems[3])
-        const price = parseFloat(messageItems[4]);
-        const threshold = parseFloat(messageItems[5]);
-        const message = `${formatters.formatDateMMddyyyyHHmmss(
-            timestamp.toString()
-        )} - Currently${messageItems[6]
-            .replaceAll('"', "")
-            .replaceAll("\\", "")}`;
-        return { product, timestamp, price, average, historicalAverage, threshold, message };
-    };
     const getHistoricalFiles = () => {
         fetch("_manifest.json")
             .then((res) => res.json())
@@ -50,52 +35,59 @@ function App() {
             });
     };
     const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
-        const { product, timestamp, price, average, historicalAverage, threshold, message } =
-            parseLogEntry(messageEvent.data);
+        const surfState = JSON.parse(messageEvent.data) as SurfState;
+        const { productId, timestamp, price, averagePrice, historicalAverages, buyThreshold, sellThreshold, statusMessage, action } = surfState;
+        const threshold = action === Actions.Buy ? buyThreshold : sellThreshold;
         let map = productMap;
-        let value = map.get(product);
+        let value = map.get(productId);
         let priceData = value?.priceData;
         if (priceData) {
-            priceData.push({ value: price, date: timestamp });
+            priceData.push({ value: price, date: new Date(timestamp) });
             if (priceData.length >= maxDataPoints) priceData.shift();
         } else {
             priceData = [];
         }
         let averageData = value?.averageData;
         if (averageData) {
-            averageData.push({ value: average, date: timestamp });
+            averageData.push({ value: averagePrice, date: new Date(timestamp) });
             if (averageData.length >= maxDataPoints) averageData.shift();
         } else {
             averageData = [];
         }
         let historicalAverageData = value?.historicalAverageData;
         if (historicalAverageData) {
-            historicalAverageData.push({ value: historicalAverage, date: timestamp });
+            historicalAverageData.push({ value: historicalAverages.thirtyDayMidAverage, date: new Date(timestamp) });
             if (historicalAverageData.length >= maxDataPoints) historicalAverageData.shift();
         } else {
             historicalAverageData = [];
         }
         let thresholdData = value?.thresholdData;
         if (thresholdData) {
-            thresholdData.push({ value: threshold, date: timestamp });
+            thresholdData.push({ value: threshold, date: new Date(timestamp) });
             if (thresholdData.length >= maxDataPoints) thresholdData.shift();
         } else {
             thresholdData = [];
         }
-        const confidenceScore = ((average - historicalAverage) / historicalAverage) * 100;
-        map.set(product, {
-            product,
+        const highVolatility30 = formatNumber(((historicalAverages.thirtyDayHighAverage - historicalAverages.thirtyDayMidAverage) / historicalAverages.thirtyDayMidAverage) * 100);
+        const lowVolatility30 = formatNumber(((historicalAverages.thirtyDayLowAverage - historicalAverages.thirtyDayMidAverage) / historicalAverages.thirtyDayMidAverage) * 100);
+        const confidenceScore30 = formatNumber(((averagePrice - historicalAverages.thirtyDayMidAverage) / historicalAverages.thirtyDayMidAverage) * 100);
+        const highVolatility7 = formatNumber(((historicalAverages.sevenDayHighAverage - historicalAverages.sevenDayMidAverage) / historicalAverages.sevenDayMidAverage) * 100);
+        const lowVolatility7 = formatNumber(((historicalAverages.sevenDayLowAverage - historicalAverages.sevenDayMidAverage) / historicalAverages.sevenDayMidAverage) * 100);
+        const confidenceScore7 = formatNumber(((averagePrice - historicalAverages.sevenDayMidAverage) / historicalAverages.sevenDayMidAverage) * 100);
+        const historicalAnalysis = `30 = ${highVolatility30}% / ${lowVolatility30}% (${confidenceScore30}%) ~ 7 = ${highVolatility7}% / ${lowVolatility7}% (${confidenceScore7}%)`;
+        map.set(productId, {
+            product: productId,
             timestamp,
             price: formatNumber(price),
-            priceData: priceData,
-            average: formatNumber(average),
-            averageData: averageData,
-            historicalAverage: formatNumber(historicalAverage),
-            historicalAverageData: historicalAverageData,
+            priceData,
+            average: formatNumber(averagePrice),
+            averageData,
+            historicalAverage: formatNumber(historicalAverages.thirtyDayMidAverage),
+            historicalAverageData,
             threshold: formatNumber(threshold),
-            thresholdData: thresholdData,
-            confidenceScore: formatNumber(confidenceScore),
-            message,
+            thresholdData,
+            historicalAnalysis,
+            message: statusMessage,
         });
         setProductMap(map);
     };
@@ -133,7 +125,7 @@ function App() {
                                 historicalAverageData={value.historicalAverageData}
                                 threshold={value.threshold}
                                 thresholdData={value.thresholdData}
-                                confidenceScore={value.confidenceScore}
+                                historicalAnalysis={value.historicalAnalysis}
                                 message={value.message}
                             />
                         </TabPanel>
