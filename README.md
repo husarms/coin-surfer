@@ -94,7 +94,7 @@ Check out this folder for more details
 ![visualization](docs/images/visualization-2.png)
 
 ## Web socket feed
-When a web socket feed is enabled - the app emits a web socket message with it's current state on each update interval.
+When a web socket feed is enabled - the app emits it's current state on each update interval.
 
 The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed - or could be used to create your own visualization.
 
