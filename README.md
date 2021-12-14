@@ -3,14 +3,14 @@
 Node.js app for automated cryptocurrency trading
 
 ## Contents
-- [How it works](#how-it-works)
+- [How It Works](#how-it-works)
 - [Setup](#setup)
-- [How to run](#how-to-run)
+- [How to Run](#how-to-run)
 - [Visualization](#visualization)
-- [Web socket feed](#web-socket-feed)
+- [Web Socket Feed](#web-socket-feed)
 - [TODO](#todo)
 
-## How it works
+## How It Works
 
 The current "simple threshold" surfer works as follows -
 
@@ -76,7 +76,7 @@ export default {
 ```
 This example surfs both Bitcoin and Etherium
 
-## How to run
+## How to Run
 Install depedencies
 ```bash
 npm install
@@ -93,7 +93,7 @@ Check out this folder for more details
 
 ![visualization](docs/images/visualization-2.png)
 
-## Web socket feed
+## Web Socket Feed
 When a web socket feed is enabled - the app emits it's current state on each update interval
 
 The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed
