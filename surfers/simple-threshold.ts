@@ -7,6 +7,7 @@ import {
     getBalances,
     getPrices,
     getThresholds,
+    getTrendAnalysis,
     getLastFills,
 } from "./shared/functions";
 import { Logger } from "../utils/logger";
@@ -28,6 +29,7 @@ export async function surf(parameters: SurfParameters) {
     setInterval(async function () {
         state = await updateBalances(state);
         state = await updatePrices(state);
+        state = await updateTrendAnalysis(state);
         state = await updateThresholds(state);
         state = updateStatus(state, logger);
         const { action, price, buyThreshold, sellThreshold } = state;
@@ -104,10 +106,16 @@ async function updateFills(state: SurfState): Promise<SurfState> {
 
 async function updatePrices(state: SurfState): Promise<SurfState> {
     const { productId } = state;
-    const { price, averagePrice, historicalAverages } = await getPrices(productId);
+    const { price, averagePrice } = await getPrices(productId);
     state.price = price;
     state.averagePrice = averagePrice;
-    state.historicalAverages = historicalAverages;
+    return state;
+}
+
+async function updateTrendAnalysis(state: SurfState): Promise<SurfState> {
+    const { productId } = state;
+    const trendAnaylsis = await getTrendAnalysis(productId);
+    state.trendAnalysis = trendAnaylsis;
     return state;
 }
 
@@ -116,16 +124,17 @@ async function updateThresholds(state: SurfState) : Promise<SurfState> {
         buyThresholdPercentage,
         sellThresholdPercentage,
     } = state.parameters;
-    const { price, averagePrice, lastBuyPrice, lastBuyDate } = state;
+    const { price, averagePrice, lastBuyPrice } = state;
     const { buyThreshold, sellThreshold } = await getThresholds(
         price,
         averagePrice,
         lastBuyPrice,
-        lastBuyDate,
         buyThresholdPercentage,
         sellThresholdPercentage
     );
     state.buyThreshold = buyThreshold;
+    state.buyThresholdPercentage = buyThresholdPercentage;
     state.sellThreshold = sellThreshold;
+    state.sellThreshold = sellThresholdPercentage;
     return state;
 }

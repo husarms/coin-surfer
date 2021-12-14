@@ -7,6 +7,7 @@ import * as Formatters from "../../utils/formatters";
 import Prices from "../../interfaces/prices";
 import Balances from "../../interfaces/balances";
 import SurfState from "../../interfaces/surf-state";
+import TrendAnalysis from "../../interfaces/trend-analysis";
 
 export function getCurrentPercentage(
     price: number,
@@ -28,7 +29,9 @@ export function getStatusMessage(state: SurfState): string {
         price,
         averagePrice,
         buyThreshold,
+        buyThresholdPercentage,
         sellThreshold,
+        sellThresholdPercentage,
         cryptoBalance,
         fiatBalance,
         lastBuyPrice,
@@ -36,8 +39,6 @@ export function getStatusMessage(state: SurfState): string {
     const {
         budget,
         cryptoCurrency,
-        buyThresholdPercentage,
-        sellThresholdPercentage,
     } = parameters;
     const buyBudget = fiatBalance > budget ? budget : fiatBalance;
     const formattedDate = Formatters.getDateMMddyyyyHHmmss();
@@ -135,8 +136,12 @@ export async function sell(state: SurfState): Promise<any> {
 export async function getPrices(productId: string): Promise<Prices> {
     const price = await TradeOrchestrator.getProductPrice(productId);
     const averagePrice = await TradeOrchestrator.get24HrAveragePrice(productId);
-    const historicalAverages = await TradeOrchestrator.getHistoricalAverages(productId);
-    return { price, averagePrice, historicalAverages };
+    return { price, averagePrice };
+}
+
+export async function getTrendAnalysis(productId: string): Promise<TrendAnalysis> {
+    const trendAnalysis = await TradeOrchestrator.getTrendAnalysis(productId);
+    return trendAnalysis;
 }
 
 export async function getLastFills(productId: string) {
@@ -160,7 +165,6 @@ export async function getThresholds(
     price: number,
     averagePrice: number,
     lastBuyPrice: number,
-    lastBuyDate: Date,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number
 ) {
@@ -168,7 +172,6 @@ export async function getThresholds(
         price,
         averagePrice,
         lastBuyPrice,
-        lastBuyDate,
         buyThresholdPercentage,
         sellThresholdPercentage
     );

@@ -36,10 +36,12 @@ function App() {
     };
     const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
         const surfState = JSON.parse(messageEvent.data) as SurfState;
-        const { productId, timestamp, price, averagePrice, historicalAverages, buyThreshold, sellThreshold, statusMessage, action } = surfState;
+        const { parameters, timestamp, price, averagePrice, trendAnalysis, buyThreshold, sellThreshold, statusMessage, action } = surfState;
+        const { thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold } = trendAnalysis;
+        const product = parameters.cryptoCurrency;
         const threshold = action === Actions.Buy ? buyThreshold : sellThreshold;
         let map = productMap;
-        let value = map.get(productId);
+        let value = map.get(product);
         let priceData = value?.priceData;
         if (priceData) {
             priceData.push({ value: price, date: new Date(timestamp) });
@@ -56,7 +58,7 @@ function App() {
         }
         let historicalAverageData = value?.historicalAverageData;
         if (historicalAverageData) {
-            historicalAverageData.push({ value: historicalAverages.thirtyDayMidAverage, date: new Date(timestamp) });
+            historicalAverageData.push({ value: thirtyDayAverage, date: new Date(timestamp) });
             if (historicalAverageData.length >= maxDataPoints) historicalAverageData.shift();
         } else {
             historicalAverageData = [];
@@ -68,21 +70,21 @@ function App() {
         } else {
             thresholdData = [];
         }
-        const highVolatility30 = formatNumber(((historicalAverages.thirtyDayHighAverage - historicalAverages.thirtyDayMidAverage) / historicalAverages.thirtyDayMidAverage) * 100);
-        const lowVolatility30 = formatNumber(((historicalAverages.thirtyDayLowAverage - historicalAverages.thirtyDayMidAverage) / historicalAverages.thirtyDayMidAverage) * 100);
-        const confidenceScore30 = formatNumber(((averagePrice - historicalAverages.thirtyDayMidAverage) / historicalAverages.thirtyDayMidAverage) * 100);
-        const highVolatility7 = formatNumber(((historicalAverages.sevenDayHighAverage - historicalAverages.sevenDayMidAverage) / historicalAverages.sevenDayMidAverage) * 100);
-        const lowVolatility7 = formatNumber(((historicalAverages.sevenDayLowAverage - historicalAverages.sevenDayMidAverage) / historicalAverages.sevenDayMidAverage) * 100);
-        const confidenceScore7 = formatNumber(((averagePrice - historicalAverages.sevenDayMidAverage) / historicalAverages.sevenDayMidAverage) * 100);
-        const historicalAnalysis = `30 = ${highVolatility30}% / ${lowVolatility30}% (${confidenceScore30}%) ~ 7 = ${highVolatility7}% / ${lowVolatility7}% (${confidenceScore7}%)`;
-        map.set(productId, {
-            product: productId,
+        const confidenceScore30 = formatNumber(((averagePrice - thirtyDayAverage) / thirtyDayAverage) * 100);
+        const confidenceScore7 = formatNumber(((averagePrice - sevenDayAverage) / sevenDayAverage) * 100);
+        const lowThreshold30 = formatNumber(thirtyDayLowThreshold);
+        const highThreshold30 = formatNumber(thirtyDayHighThreshold);
+        const lowThreshold7 = formatNumber(sevenDayLowThreshold);
+        const highThreshold7 = formatNumber(sevenDayHighThreshold);
+        const historicalAnalysis = `30 = -${lowThreshold30}% / ${highThreshold30}% (${confidenceScore30}%) ~ 7 = -${lowThreshold7}% / ${highThreshold7}% (${confidenceScore7}%)`;
+        map.set(product, {
+            product: product,
             timestamp,
             price: formatNumber(price),
             priceData,
             average: formatNumber(averagePrice),
             averageData,
-            historicalAverage: formatNumber(historicalAverages.thirtyDayMidAverage),
+            historicalAverage: formatNumber(thirtyDayAverage),
             historicalAverageData,
             threshold: formatNumber(threshold),
             thresholdData,

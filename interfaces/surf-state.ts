@@ -1,5 +1,5 @@
 import { Actions } from "../utils/enums";
-import HistoricalAverages from "./historical-averages";
+import TrendAnalysis from "./trend-analysis";
 import SurfParameters from "./surf-parameters";
 
 export default interface SurfState {
@@ -8,9 +8,11 @@ export default interface SurfState {
     action: Actions.Buy | Actions.Sell;
     price: number;
     averagePrice: number;
-    historicalAverages: HistoricalAverages;
+    trendAnalysis: TrendAnalysis;
     buyThreshold: number;
+    buyThresholdPercentage: number;
     sellThreshold: number;
+    sellThresholdPercentage: number;
     lastBuyPrice: number;
     lastBuyDate: Date;
     lastSellDate: Date;
