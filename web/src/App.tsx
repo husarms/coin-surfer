@@ -70,13 +70,10 @@ function App() {
         } else {
             thresholdData = [];
         }
-        const confidenceScore30 = formatNumber(((averagePrice - thirtyDayAverage) / thirtyDayAverage) * 100);
-        const confidenceScore7 = formatNumber(((averagePrice - sevenDayAverage) / sevenDayAverage) * 100);
-        const lowThreshold30 = formatNumber(thirtyDayLowThreshold);
-        const highThreshold30 = formatNumber(thirtyDayHighThreshold);
-        const lowThreshold7 = formatNumber(sevenDayLowThreshold);
-        const highThreshold7 = formatNumber(sevenDayHighThreshold);
-        const historicalAnalysis = `30 = -${lowThreshold30}% / ${highThreshold30}% (${confidenceScore30}%) ~ 7 = -${lowThreshold7}% / ${highThreshold7}% (${confidenceScore7}%)`;
+        const thirtyDayConfidenceScore= formatNumber(((averagePrice - thirtyDayAverage) / thirtyDayAverage) * 100);
+        const sevenDayConfidenceScore = formatNumber(((averagePrice - sevenDayAverage) / sevenDayAverage) * 100);
+        const thirtyDayTrend = `$${formatNumber(thirtyDayAverage)} (${thirtyDayConfidenceScore}%)`;
+        const sevenDayTrend = `-${formatNumber(sevenDayLowThreshold)}% / ${formatNumber(sevenDayHighThreshold)}% (${sevenDayConfidenceScore}%)`;
         map.set(product, {
             product: product,
             timestamp,
@@ -88,7 +85,8 @@ function App() {
             historicalAverageData,
             threshold: formatNumber(threshold),
             thresholdData,
-            historicalAnalysis,
+            thirtyDayTrend,
+            sevenDayTrend,
             message: statusMessage,
         });
         setProductMap(map);
@@ -127,7 +125,8 @@ function App() {
                                 historicalAverageData={value.historicalAverageData}
                                 threshold={value.threshold}
                                 thresholdData={value.thresholdData}
-                                historicalAnalysis={value.historicalAnalysis}
+                                thirtyDayTrend={value.thirtyDayTrend}
+                                sevenDayTrend={value.sevenDayTrend}
                                 message={value.message}
                             />
                         </TabPanel>
