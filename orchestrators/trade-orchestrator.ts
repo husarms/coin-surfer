@@ -6,9 +6,9 @@ import {
     ProductStats,
     ProductTicker,
 } from "coinbase-pro-node";
-import HistoricalAverages from "../interfaces/historical-averages";
 import * as CoinbaseGateway from "../gateways/coinbase-gateway";
 import * as formatters from "../utils/formatters";
+import TrendAnalysis from "../interfaces/trend-analysis";
 
 const getBuyThreshold = (
     averagePrice: number,
@@ -23,11 +23,9 @@ const getSellThreshold = (
     price: number,
     averagePrice: number,
     lastBuyPrice: number,
-    lastBuyDate: Date,
     thresholdPercentage: number
 ) => {
     const now = new Date();
-    const hoursSinceLastBuy = Math.abs(now.valueOf() - lastBuyDate.valueOf()) / 36e5;
     const averageMargin = averagePrice * (thresholdPercentage / 100);
     const lastBuyMargin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
     const stopLossMargin = lastBuyPrice * ((thresholdPercentage * 3) / 100);
@@ -51,7 +49,6 @@ export async function getBuySellThresholds(
     price: number,
     averagePrice: number,
     lastBuyPrice: number,
-    lastBuyDate: Date,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number
 ) {
@@ -63,7 +60,6 @@ export async function getBuySellThresholds(
         price,
         averagePrice,
         lastBuyPrice,
-        lastBuyDate,
         sellThresholdPercentage
     );
     return {
@@ -124,7 +120,7 @@ export async function get24HrAveragePrice(productId: string) {
     return average;
 }
 
-export async function getHistoricalAverages(productId: string): Promise<HistoricalAverages> {
+export async function getTrendAnalysis(productId: string): Promise<TrendAnalysis> {
     const end = new Date();
     end.setDate(end.getDate() - 1)
     end.setUTCHours(0, 0, 0, 0);
@@ -132,17 +128,30 @@ export async function getHistoricalAverages(productId: string): Promise<Historic
     start.setDate(start.getDate() - 31);
     start.setUTCHours(0, 0, 0, 0);
     const thirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, start, end)) as Candle[];
-    const sevenDayCandles = thirtyDayCandles.slice(0, 6);
-    const sumMidAverage = (candles: any) => candles.reduce((total: number, next: Candle) => total + ((next.close + next.open) / 2), 0);
-    const sumLowAverage = (candles: any) => candles.reduce((total: number, next: Candle) => total + next.low, 0);
-    const sumHighAverage = (candles: any) => candles.reduce((total: number, next: Candle) => total + next.high, 0);
-    const thirtyDayMidAverage = formatters.roundDownToTwoDecimals(sumMidAverage(thirtyDayCandles) / thirtyDayCandles.length);
-    const thirtyDayLowAverage = formatters.roundDownToTwoDecimals(sumLowAverage(thirtyDayCandles) / thirtyDayCandles.length);
-    const thirtyDayHighAverage = formatters.roundDownToTwoDecimals(sumHighAverage(thirtyDayCandles) / thirtyDayCandles.length);
-    const sevenDayMidAverage = formatters.roundDownToTwoDecimals(sumMidAverage(sevenDayCandles) / sevenDayCandles.length);
-    const sevenDayLowAverage = formatters.roundDownToTwoDecimals(sumLowAverage(sevenDayCandles) / sevenDayCandles.length);
-    const sevenDayHighAverage = formatters.roundDownToTwoDecimals(sumHighAverage(sevenDayCandles) / sevenDayCandles.length);
-    return { thirtyDayMidAverage, thirtyDayLowAverage, thirtyDayHighAverage, sevenDayMidAverage, sevenDayLowAverage, sevenDayHighAverage };
+    let thirtyDayAverage = 0;
+    let thirtyDayLowThreshold = 0;
+    let thirtyDayHighThreshold = 0;
+    let sevenDayAverage = 0;
+    let sevenDayLowThreshold = 0;
+    let sevenDayHighThreshold = 0;
+    let thirtyDayRunningAverage = 0;
+    let sevenDayRunningAverage = 0;
+    for (const [index, value] of thirtyDayCandles.entries()) {
+        const average = (value.close + value.open) / 2;
+        const lowThreshold = Math.abs((average - value.low) / average) * 100;
+        const highThreshold = Math.abs((average - value.high) / average) * 100;
+        if (index >= (thirtyDayCandles.length - 7)) {
+            if (lowThreshold > sevenDayLowThreshold) sevenDayLowThreshold = lowThreshold;
+            if (highThreshold > sevenDayHighThreshold) sevenDayHighThreshold = highThreshold;
+            sevenDayRunningAverage += average;
+            sevenDayAverage = sevenDayRunningAverage / ((index + 1) - (thirtyDayCandles.length - 7));
+        }
+        thirtyDayRunningAverage += average;
+        if (lowThreshold > thirtyDayLowThreshold) thirtyDayLowThreshold = lowThreshold;
+        if (highThreshold > thirtyDayHighThreshold) thirtyDayHighThreshold = highThreshold;
+        thirtyDayAverage = thirtyDayRunningAverage / (index + 1);
+    }
+    return { thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold };
 }
 
 export async function getProductPrice(productId: string) {
