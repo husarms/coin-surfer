@@ -25,7 +25,6 @@ const getSellThreshold = (
     lastBuyPrice: number,
     thresholdPercentage: number
 ) => {
-    const now = new Date();
     const averageMargin = averagePrice * (thresholdPercentage / 100);
     const lastBuyMargin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
     const stopLossMargin = lastBuyPrice * ((thresholdPercentage * 3) / 100);

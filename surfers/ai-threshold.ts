@@ -1,20 +1,17 @@
 import {
-    getStatusMessage,
-    sendBuyNotification,
-    sendSellNotification,
-    buy,
-    sell,
-    getBalances,
-    getPrices,
-    getThresholds,
-    getLastFills,
-} from "./shared/functions";
+    handleBuy,
+    handleSell,
+    updateBalances,
+    updateFills,
+    updatePrices,
+    updateStatus,
+    updateThresholdsWithAI,
+    updateTrendAnalysis
+} from "./shared/surf-orchestrator";
 import { Logger } from "../utils/logger";
 import { Actions } from "../utils/enums";
 import SurfParameters from "../interfaces/surf-parameters";
 import SurfState from "../interfaces/surf-state";
-import * as WebSocketServer from "../web-socket/server";
-import { getTrendAnalysis } from "../orchestrators/trade-orchestrator";
 
 export async function surf(parameters: SurfParameters) {
     let state = {} as SurfState;
@@ -30,7 +27,7 @@ export async function surf(parameters: SurfParameters) {
         state = await updateBalances(state);
         state = await updatePrices(state);
         state = await updateTrendAnalysis(state);
-        state = await updateThresholds(state);
+        state = await updateThresholdsWithAI(state);
         state = updateStatus(state, logger);
         const { action, price, buyThreshold, sellThreshold } = state;
         if (action === Actions.Sell) {
@@ -43,102 +40,4 @@ export async function surf(parameters: SurfParameters) {
             }
         }
     }, 10000);
-}
-
-async function handleBuy(state: SurfState): Promise<SurfState> {
-    const { parameters, price, buyThreshold } = state;
-    const { notificationsEnabled } = parameters;
-    console.log(`Buy threshold hit (${price} <= ${buyThreshold})`);
-    const { isComplete, size } = await buy(state);
-    if (isComplete) {
-        notificationsEnabled &&
-            sendBuyNotification(state, size);
-        state.lastBuyDate = new Date();
-        state.lastBuyPrice = price;
-        state.action = Actions.Sell;
-    }
-    return state;
-}
-
-async function handleSell(state: SurfState): Promise<SurfState> {
-    const { parameters, price, sellThreshold } = state;
-    const { notificationsEnabled } = parameters;
-    console.log(`Sell threshold hit (${price} >= ${sellThreshold})`);
-    const { isComplete, size } = await sell(state);
-    if (isComplete) {
-        notificationsEnabled &&
-            sendSellNotification(state, size);
-        state.lastSellDate = new Date();
-        state.action = Actions.Buy;
-    }
-    return state;
-}
-
-function updateStatus(state: SurfState, logger: Logger): SurfState {
-    const { parameters } = state;
-    const { webSocketFeedEnabled } = parameters;
-    state.statusMessage = getStatusMessage(state);
-    state.timestamp = new Date();
-    logger.log(state.statusMessage);
-    if (webSocketFeedEnabled) {
-        WebSocketServer.emitMessage(state);
-    }
-    return state;
-}
-
-async function updateBalances(state: SurfState): Promise<SurfState> {
-    const { fiatCurrency, cryptoCurrency } = state.parameters;
-    const balances = await getBalances(fiatCurrency, cryptoCurrency);
-    state.cryptoBalance = balances.cryptoBalance;
-    state.fiatBalance = balances.fiatBalance;
-    return state;
-}
-
-async function updateFills(state: SurfState): Promise<SurfState> {
-    const { productId } = state;
-    const { lastBuyFill, lastSellFill } = await getLastFills(productId);
-    state.lastBuyPrice = lastBuyFill?.price;
-    state.lastBuyDate = lastBuyFill?.date;
-    state.lastSellDate = lastSellFill?.date;
-    return state;
-}
-
-async function updatePrices(state: SurfState): Promise<SurfState> {
-    const { productId } = state;
-    const { price, averagePrice } = await getPrices(productId);
-    state.price = price;
-    state.averagePrice = averagePrice;
-    return state;
-}
-
-async function updateTrendAnalysis(state: SurfState): Promise<SurfState> {
-    const { productId } = state;
-    const trendAnaylsis = await getTrendAnalysis(productId);
-    state.trendAnalysis = trendAnaylsis;
-    return state;
-}
-
-async function updateThresholds(state: SurfState): Promise<SurfState> {
-    const { buyThresholdPercentage, sellThresholdPercentage } = getAiThresholdsPercentages(state);
-    const { price, averagePrice, lastBuyPrice } = state;
-    const { buyThreshold, sellThreshold } = await getThresholds(
-        price,
-        averagePrice,
-        lastBuyPrice,
-        buyThresholdPercentage,
-        sellThresholdPercentage
-    );
-    state.buyThreshold = buyThreshold;
-    state.buyThresholdPercentage = buyThresholdPercentage;
-    state.sellThreshold = sellThreshold;
-    state.sellThresholdPercentage = sellThresholdPercentage;
-    return state;
-}
-
-function getAiThresholdsPercentages(state: SurfState): any {
-    const { trendAnalysis } = state;
-    const { sevenDayLowThreshold, sevenDayHighThreshold } = trendAnalysis;
-    const buyThresholdPercentage = Math.round(sevenDayLowThreshold * 10) / 10;
-    const sellThresholdPercentage = Math.round(sevenDayHighThreshold * 10) / 10;
-    return { buyThresholdPercentage, sellThresholdPercentage };
 }

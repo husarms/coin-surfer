@@ -6,7 +6,8 @@ import "./ProductPage.scss";
 const priceColor = "#5E4FA2";
 const averageColor = "#A0D3FF";
 const thresholdColor = "#A8DF53";
-const historicalAverageColor = "#C7BA00";
+const historicalAverageColor = "#C98C3C";
+const sevenDayTrendColor = "#C7BA00";
 
 export interface ProductPageProps {
     product: string;
@@ -19,7 +20,8 @@ export interface ProductPageProps {
     historicalAverageData: ChartData[];
     threshold: string;
     thresholdData: ChartData[];
-    historicalAnalysis: string;
+    thirtyDayTrend: string;
+    sevenDayTrend: string;
     message: string;
 }
 
@@ -31,7 +33,8 @@ function ProductPage({
     historicalAverageData,
     threshold,
     thresholdData,
-    historicalAnalysis,
+    thirtyDayTrend,
+    sevenDayTrend,
     message,
 }: ProductPageProps): JSX.Element {
     return (
@@ -47,10 +50,16 @@ function ProductPage({
                     Threshold{": "}${threshold}
                 </span>
                 <span
-                    className="historical-average"
+                    className="thirty-day-average"
                     style={{ color: historicalAverageColor }}
                 >
-                    Historical{": "}{historicalAnalysis}
+                    30-Day Average{": "}{thirtyDayTrend}
+                </span>
+                <span
+                    className="seven-day-trend"
+                    style={{ color: sevenDayTrendColor }}
+                >
+                    7-Day Trend{": "}{sevenDayTrend}
                 </span>
             </p>
             <MultilineChart
