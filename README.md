@@ -2,6 +2,14 @@
 
 Node.js app for automated cryptocurrency trading
 
+## Contents
+- [How it works](#how-it-works)
+- [Setup](#setup)
+- [How to run](#how-to-run)
+- [Visualization](#visualization)
+- [Web socket feed](#web-socket-feed)
+- [TODO](#todo)
+
 ## How it works
 
 The current "simple threshold" surfer works as follows -
@@ -23,35 +31,6 @@ Logs for each currency are kept if you wish to do historical analysis and optimi
 
 ![historical-log](docs/images/historical-log.jpg)
 
-## Visualization
-The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs
-
-Check out this folder for more details
-
-![visualization](docs/images/visualization-2.png)
-
-## Future goals
-
-1. ~~**Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends~~
-2. **Know when to hold 'em** - detect abnormal trends in price and override sell threshold to increase profit margin
-3. **Know when to fold 'em** - incrementally lower the sell threshold after a period of time (cut your losses if a profit cannot be made quickly)
-
-## TODO
-1. Handle bad requests (catch API errors)
-2. Handle crashes
-    - Stop loss, buy in low, adjust sell margins higher
-3. ~~Basic AI - use scoring to adjust thresholds~~
-    ~~- Confidence score~~ 
-        ~~- 30-day vs 24-hour average~~
-        ~~- 24h < 30d = more confident, lower buy threshold, higher sell threshold~~
-        ~~- 24h > 30d = less confident, higher buy threshold, lower sell threshold~~
-    ~~- Volatility score~~
-        ~~- 30-day max and min~~
-        ~~- More volatile = wider thresholds~~
-4. Visualization
-    - Experiment with other chart packages
-    - Hover over line and see value
-
 ## Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
 2. Optionally - a [SendGrid](https://sendgrid.com) account to send buy / sell notifications
@@ -72,7 +51,7 @@ export default {
     },
 };
 ```
-5. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts
+4. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in index.ts
 ```JavaScript
 (async () => {
     await SimpleThresholdSurfer.surf({
@@ -97,7 +76,24 @@ export default {
 ```
 This example surfs both Bitcoin and Etherium
 
-## Web Socket Feed
+## How to run
+Install depedencies
+```bash
+npm install
+```
+Run 
+```bash
+npm run start
+```
+
+## Visualization
+The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs
+
+Check out this folder for more details
+
+![visualization](docs/images/visualization-2.png)
+
+## Web socket feed
 When a web socket feed is enabled - the app emits a web socket message with it's current state on each update interval.
 
 The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed - or could be used to create your own visualization.
@@ -140,12 +136,12 @@ An example web socket message:
 }
 ```
 
-## How to run
-Install depedencies
-```bash
-npm install
-```
-Run 
-```bash
-npm run start
-```
+## TODO
+1. ~~**Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends~~
+2. Improve error handling (API errors)
+3. Add more unit tests
+4. Get better at handling crashes
+    - Stop loss, buy in low, adjust sell margins higher
+5. Visualization
+    - Experiment with other chart packages
+    - Add ability to hover over charts and get values
