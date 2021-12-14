@@ -37,7 +37,7 @@ function App() {
     const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
         const surfState = JSON.parse(messageEvent.data) as SurfState;
         const { parameters, timestamp, price, averagePrice, trendAnalysis, buyThreshold, sellThreshold, statusMessage, action } = surfState;
-        const { thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold } = trendAnalysis;
+        const { thirtyDayAverage, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold } = trendAnalysis;
         const product = parameters.cryptoCurrency;
         const threshold = action === Actions.Buy ? buyThreshold : sellThreshold;
         let map = productMap;

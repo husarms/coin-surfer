@@ -22,12 +22,12 @@ export async function surf(parameters: SurfParameters) {
     state.productId = `${state.parameters.cryptoCurrency}-${state.parameters.fiatCurrency}`;
     const logger = new Logger(state.productId);
     state = await updateBalances(state);
-    state = await updateFills(state);
     state.action = state.cryptoBalance > 0.1 ? Actions.Sell : Actions.Buy;
 
     console.log(`Let's go surfing with ${state.productId}...`);
     setInterval(async function () {
         state = await updateBalances(state);
+        state = await updateFills(state);
         state = await updatePrices(state);
         state = await updateTrendAnalysis(state);
         state = await updateThresholds(state);

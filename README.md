@@ -32,7 +32,7 @@ Check out this folder for more details
 
 ## Future goals
 
-1. **Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends
+1. ~~**Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends~~
 2. **Know when to hold 'em** - detect abnormal trends in price and override sell threshold to increase profit margin
 3. **Know when to fold 'em** - incrementally lower the sell threshold after a period of time (cut your losses if a profit cannot be made quickly)
 
@@ -40,14 +40,14 @@ Check out this folder for more details
 1. Handle bad requests (catch API errors)
 2. Handle crashes
     - Stop loss, buy in low, adjust sell margins higher
-3. Basic AI - use scoring to adjust thresholds
-    - Confidence score 
-        - 30-day vs 24-hour average
-        - 24h < 30d = more confident, lower buy threshold, higher sell threshold
-        - 24h > 30d = less confident, higher buy threshold, lower sell threshold
-    - Volatility score 
-        - 30-day max and min
-        - More volatile = wider thresholds
+3. ~~Basic AI - use scoring to adjust thresholds~~
+    ~~- Confidence score~~ 
+        ~~- 30-day vs 24-hour average~~
+        ~~- 24h < 30d = more confident, lower buy threshold, higher sell threshold~~
+        ~~- 24h > 30d = less confident, higher buy threshold, lower sell threshold~~
+    ~~- Volatility score~~
+        ~~- 30-day max and min~~
+        ~~- More volatile = wider thresholds~~
 4. Visualization
     - Experiment with other chart packages
     - Hover over line and see value
@@ -96,6 +96,49 @@ export default {
 })();
 ```
 This example surfs both Bitcoin and Etherium
+
+## Web Socket Feed
+When a web socket feed is enabled - the app emits a web socket message with it's current state on each update interval.
+
+The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed - or could be used to create your own visualization.
+
+An example web socket message:
+``` JSON
+{
+    "parameters": {
+        "fiatCurrency": "USD",
+        "cryptoCurrency": "BTC",
+        "buyThresholdPercentage": 5,
+        "sellThresholdPercentage": 5,
+        "budget": 0,
+        "notificationsEnabled": true,
+        "webSocketFeedEnabled": true
+    },
+    "productId": "BTC-USD",
+    "cryptoBalance": 0.7024,
+    "fiatBalance": 0.0004,
+    "lastBuyPrice": 45078.26,
+    "lastBuyDate": "2021-12-04T05:26:55.559Z",
+    "lastSellDate": "2021-11-19T02:42:39.992Z",
+    "action": "SELL",
+    "price": 46782.52,
+    "averagePrice": 47550,
+    "trendAnalysis": {
+        "thirtyDayAverage": 55663.285322580654,
+        "thirtyDayLowThreshold": 17.699433501947137,
+        "thirtyDayHighThreshold": 5.866209581085457,
+        "sevenDayAverage": 49145.645000000004,
+        "sevenDayLowThreshold": 5.537933058197211,
+        "sevenDayHighThreshold": 5.866209581085457
+    },
+    "buyThreshold": 44934.75,
+    "buyThresholdPercentage": 5.5,
+    "sellThreshold": 50355.45,
+    "sellThresholdPercentage": 5.9,
+    "statusMessage": "12/13/2021 9:26:38 PM, BTC, 47550.00, 46782.52, 50355.45, looking to sell 0.7024 BTC at $50355.45 (+5.9%) (last buy price $45078.26); current price = $46782.52 (-1.61%)",
+    "timestamp": "2021-12-14T02:26:38.932Z"
+}
+```
 
 ## How to run
 Install depedencies
