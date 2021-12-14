@@ -96,7 +96,7 @@ Check out this folder for more details
 ## Web socket feed
 When a web socket feed is enabled - the app emits it's current state on each update interval
 
-The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed - or could be used to create your own visualization
+The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed
 
 An example web socket message:
 ``` JSON
