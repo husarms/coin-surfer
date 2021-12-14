@@ -6,8 +6,8 @@ import "./ProductPage.scss";
 const priceColor = "#5E4FA2";
 const averageColor = "#A0D3FF";
 const thresholdColor = "#A8DF53";
-const historicalAverageColor = "#C98C3C";
 const sevenDayTrendColor = "#C7BA00";
+const thirtyDayTrendColor = "#C98C3C";
 
 export interface ProductPageProps {
     product: string;
@@ -20,8 +20,8 @@ export interface ProductPageProps {
     historicalAverageData: ChartData[];
     threshold: string;
     thresholdData: ChartData[];
-    thirtyDayTrend: string;
     sevenDayTrend: string;
+    thirtyDayTrend: string;
     message: string;
 }
 
@@ -33,8 +33,8 @@ function ProductPage({
     historicalAverageData,
     threshold,
     thresholdData,
-    thirtyDayTrend,
     sevenDayTrend,
+    thirtyDayTrend,
     message,
 }: ProductPageProps): JSX.Element {
     return (
@@ -50,16 +50,16 @@ function ProductPage({
                     Threshold{": "}${threshold}
                 </span>
                 <span
-                    className="thirty-day-average"
-                    style={{ color: historicalAverageColor }}
-                >
-                    30-Day Average{": "}{thirtyDayTrend}
-                </span>
-                <span
                     className="seven-day-trend"
                     style={{ color: sevenDayTrendColor }}
                 >
-                    7-Day Trend{": "}{sevenDayTrend}
+                    7-Day{": "}{sevenDayTrend}
+                </span>
+                <span
+                    className="thirty-day-trend"
+                    style={{ color: thirtyDayTrendColor }}
+                >
+                    30-Day{": "}{thirtyDayTrend}
                 </span>
             </p>
             <MultilineChart
@@ -84,7 +84,7 @@ function ProductPage({
                     },
                     {
                         name: "HistoricalAverage",
-                        color: historicalAverageColor,
+                        color: thirtyDayTrendColor,
                         items: historicalAverageData ? historicalAverageData : [],
                         strokeWidth: 2,
                     },

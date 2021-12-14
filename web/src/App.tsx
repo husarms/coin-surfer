@@ -37,7 +37,7 @@ function App() {
     const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
         const surfState = JSON.parse(messageEvent.data) as SurfState;
         const { parameters, timestamp, price, averagePrice, trendAnalysis, buyThreshold, sellThreshold, statusMessage, action } = surfState;
-        const { thirtyDayAverage, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold } = trendAnalysis;
+        const { thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold } = trendAnalysis;
         const product = parameters.cryptoCurrency;
         const threshold = action === Actions.Buy ? buyThreshold : sellThreshold;
         let map = productMap;
@@ -70,10 +70,12 @@ function App() {
         } else {
             thresholdData = [];
         }
-        const thirtyDayConfidenceScore= formatNumber(((averagePrice - thirtyDayAverage) / thirtyDayAverage) * 100);
+        const sevenDayIndicator = averagePrice > sevenDayAverage ? '▲' : '▼';
+        const thirtyDayIndicator = averagePrice > thirtyDayAverage ? '▲' : '▼';
         const sevenDayConfidenceScore = formatNumber(((averagePrice - sevenDayAverage) / sevenDayAverage) * 100);
-        const thirtyDayTrend = `$${formatNumber(thirtyDayAverage)} (${thirtyDayConfidenceScore}%)`;
-        const sevenDayTrend = `-${formatNumber(sevenDayLowThreshold)}% / ${formatNumber(sevenDayHighThreshold)}% (${sevenDayConfidenceScore}%)`;
+        const thirtyDayConfidenceScore= formatNumber(((averagePrice - thirtyDayAverage) / thirtyDayAverage) * 100);
+        const sevenDayTrend = `$${formatNumber(sevenDayAverage)} (${sevenDayConfidenceScore}%) ${sevenDayIndicator} -${formatNumber(sevenDayLowThreshold)}% / ${formatNumber(sevenDayHighThreshold)}%`;
+        const thirtyDayTrend = `$${formatNumber(thirtyDayAverage)} (${thirtyDayConfidenceScore}%) ${thirtyDayIndicator} -${formatNumber(thirtyDayLowThreshold)}% / ${formatNumber(thirtyDayHighThreshold)}%`;
         map.set(product, {
             product: product,
             timestamp,
@@ -85,8 +87,8 @@ function App() {
             historicalAverageData,
             threshold: formatNumber(threshold),
             thresholdData,
-            thirtyDayTrend,
             sevenDayTrend,
+            thirtyDayTrend,
             message: statusMessage,
         });
         setProductMap(map);
@@ -125,8 +127,8 @@ function App() {
                                 historicalAverageData={value.historicalAverageData}
                                 threshold={value.threshold}
                                 thresholdData={value.thresholdData}
-                                thirtyDayTrend={value.thirtyDayTrend}
                                 sevenDayTrend={value.sevenDayTrend}
+                                thirtyDayTrend={value.thirtyDayTrend}
                                 message={value.message}
                             />
                         </TabPanel>
