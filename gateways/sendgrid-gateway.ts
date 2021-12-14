@@ -9,7 +9,6 @@ export function sendEmail (subject: string, body: string) {
         to: Secrets.Email.toAddress,
         subject,
         text: body,
-        // html: '<b>Hello world</b>'
     };
 
     SendGridMail
