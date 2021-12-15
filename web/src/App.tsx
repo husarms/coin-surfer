@@ -10,6 +10,21 @@ import HistoricalPage from "./pages/HistoricalPage";
 import "react-tabs/style/react-tabs.css";
 import "./App.scss";
 
+function formatTrendAnalysis(currentAverage: number, historicalAverage: number, lowThreshold: number, highThreshold: number): string {
+    const upOrDown = currentAverage > historicalAverage ? '▲' : '▼';
+    let indicator = upOrDown;
+    const confidenceScore = ((currentAverage - historicalAverage) / historicalAverage) * 100;
+    const multiplier = Math.floor(Math.abs(confidenceScore) / 5);
+    for (var i = 0; i < multiplier; i++) {
+        indicator += upOrDown;
+    }
+    return `$${formatNumber(currentAverage)} (${formatNumber(confidenceScore)}%) ${indicator} -${formatNumber(lowThreshold)}% / ${formatNumber(highThreshold)}%`;
+}
+
+const formatNumber = (number: number): string => {
+    return (Math.round(number * 100) / 100).toFixed(2);
+};
+
 function App() {
     const maxDataPoints = 100000;
     const initialMap = new Map<string, ProductPageProps>();
@@ -70,12 +85,8 @@ function App() {
         } else {
             thresholdData = [];
         }
-        const sevenDayIndicator = averagePrice > sevenDayAverage ? '▲' : '▼';
-        const thirtyDayIndicator = averagePrice > thirtyDayAverage ? '▲' : '▼';
-        const sevenDayConfidenceScore = formatNumber(((averagePrice - sevenDayAverage) / sevenDayAverage) * 100);
-        const thirtyDayConfidenceScore= formatNumber(((averagePrice - thirtyDayAverage) / thirtyDayAverage) * 100);
-        const sevenDayTrend = `$${formatNumber(sevenDayAverage)} (${sevenDayConfidenceScore}%) ${sevenDayIndicator} -${formatNumber(sevenDayLowThreshold)}% / ${formatNumber(sevenDayHighThreshold)}%`;
-        const thirtyDayTrend = `$${formatNumber(thirtyDayAverage)} (${thirtyDayConfidenceScore}%) ${thirtyDayIndicator} -${formatNumber(thirtyDayLowThreshold)}% / ${formatNumber(thirtyDayHighThreshold)}%`;
+        const sevenDayTrend = formatTrendAnalysis(averagePrice, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold);
+        const thirtyDayTrend = formatTrendAnalysis(averagePrice, thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold);
         map.set(product, {
             product: product,
             timestamp,
@@ -92,9 +103,6 @@ function App() {
             message: statusMessage,
         });
         setProductMap(map);
-    };
-    const formatNumber = (number: number): string => {
-        return (Math.round(number * 100) / 100).toFixed(2);
     };
     const selectHistoricalFile = (fileName: string) => {
         setHistoricalFile(fileName);
