@@ -93,19 +93,10 @@ export async function sendSellNotification(state: SurfState, size: string) {
 }
 
 export async function buy(state: SurfState): Promise<any> {
-    const { parameters, fiatBalance, price, productId, lastSellDate } = state;
+    const { parameters, fiatBalance, price, productId } = state;
     const { budget } = parameters;
-    const now = new Date();
-    const hoursSinceLastSell =
-        Math.abs(now.valueOf() - lastSellDate.valueOf()) / 36e5;
-    if (hoursSinceLastSell < 4) {
-        console.log(
-            `Skipping buy. Hours since last sell ${hoursSinceLastSell} < 4`
-        );
-        return { isComplete: false, size: 0 };
-    }
-    if (fiatBalance < 0.01) {
-        console.log(`Skipping buy. Balance ${fiatBalance} < 0.01`);
+    if (fiatBalance < 1) {
+        console.log(`Skipping buy. Balance ${fiatBalance} < 1`);
         return { isComplete: false, size: 0 };
     }
     const { status, size } = await TradeOrchestrator.buyAtMarketValue(
