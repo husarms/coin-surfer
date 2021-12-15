@@ -20,32 +20,25 @@ const getBuyThreshold = (
 };
 
 const getSellThreshold = (
-    price: number,
     averagePrice: number,
     lastBuyPrice: number,
     thresholdPercentage: number
 ) => {
     const averageMargin = averagePrice * (thresholdPercentage / 100);
     const lastBuyMargin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
-    const stopLossMargin = lastBuyPrice * ((thresholdPercentage * 3) / 100);
     const averageMarginThreshold = formatters.roundDownToTwoDecimals(
         averagePrice + averageMargin
     );
     const lastBuyMarginThreshold = formatters.roundDownToTwoDecimals(
         lastBuyPrice + lastBuyMargin
     );
-    const stopLossThreshold = formatters.roundDownToTwoDecimals(
-        lastBuyPrice - stopLossMargin
-    );
     if (lastBuyPrice > 0) {
-        if (price <= stopLossThreshold) return 0;
         return Math.min(averageMarginThreshold, lastBuyMarginThreshold);
     }
     return averageMarginThreshold;
 };
 
 export async function getBuySellThresholds(
-    price: number,
     averagePrice: number,
     lastBuyPrice: number,
     buyThresholdPercentage: number,
@@ -56,7 +49,6 @@ export async function getBuySellThresholds(
         buyThresholdPercentage
     );
     const sellThreshold = getSellThreshold(
-        price,
         averagePrice,
         lastBuyPrice,
         sellThresholdPercentage
