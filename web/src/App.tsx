@@ -18,7 +18,7 @@ function formatTrendAnalysis(currentAverage: number, historicalAverage: number, 
     for (var i = 0; i < multiplier; i++) {
         indicator += upOrDown;
     }
-    return `$${formatNumber(currentAverage)} (${formatNumber(confidenceScore)}%) ${indicator} -${formatNumber(lowThreshold)}% / ${formatNumber(highThreshold)}%`;
+    return `$${formatNumber(historicalAverage)} (${formatNumber(confidenceScore)}%) ${indicator} -${formatNumber(lowThreshold)}% / ${formatNumber(highThreshold)}%`;
 }
 
 const formatNumber = (number: number): string => {

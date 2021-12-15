@@ -162,14 +162,12 @@ export async function getLastFills(productId: string) {
 }
 
 export async function getThresholds(
-    price: number,
     averagePrice: number,
     lastBuyPrice: number,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number
 ) {
     return await TradeOrchestrator.getBuySellThresholds(
-        price,
         averagePrice,
         lastBuyPrice,
         buyThresholdPercentage,

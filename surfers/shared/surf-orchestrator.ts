@@ -93,9 +93,8 @@ export async function updateThresholds(state: SurfState) : Promise<SurfState> {
         buyThresholdPercentage,
         sellThresholdPercentage,
     } = state.parameters;
-    const { price, averagePrice, lastBuyPrice } = state;
+    const { averagePrice, lastBuyPrice } = state;
     const { buyThreshold, sellThreshold } = await getThresholds(
-        price,
         averagePrice,
         lastBuyPrice,
         buyThresholdPercentage,
@@ -110,9 +109,8 @@ export async function updateThresholds(state: SurfState) : Promise<SurfState> {
 
 export async function updateThresholdsWithAI(state: SurfState): Promise<SurfState> {
     const { buyThresholdPercentage, sellThresholdPercentage } = getAiThresholdsPercentages(state);
-    const { price, averagePrice, lastBuyPrice } = state;
+    const { averagePrice, lastBuyPrice } = state;
     const { buyThreshold, sellThreshold } = await getThresholds(
-        price,
         averagePrice,
         lastBuyPrice,
         buyThresholdPercentage,
