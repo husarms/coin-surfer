@@ -10,10 +10,10 @@ import HistoricalPage from "./pages/HistoricalPage";
 import "react-tabs/style/react-tabs.css";
 import "./App.scss";
 
-function formatTrendAnalysis(currentAverage: number, historicalAverage: number, lowThreshold: number, highThreshold: number): string {
-    const upOrDown = currentAverage > historicalAverage ? '▲' : '▼';
+function formatTrendAnalysis(price: number, historicalAverage: number, lowThreshold: number, highThreshold: number): string {
+    const upOrDown = price > historicalAverage ? '▲' : '▼';
     let indicator = upOrDown;
-    const confidenceScore = ((currentAverage - historicalAverage) / historicalAverage) * 100;
+    const confidenceScore = ((price - historicalAverage) / historicalAverage) * 100;
     const multiplier = Math.floor(Math.abs(confidenceScore) / 5);
     for (var i = 0; i < multiplier; i++) {
         indicator += upOrDown;
@@ -71,12 +71,19 @@ function App() {
         } else {
             averageData = [];
         }
-        let historicalAverageData = value?.historicalAverageData;
-        if (historicalAverageData) {
-            historicalAverageData.push({ value: thirtyDayAverage, date: new Date(timestamp) });
-            if (historicalAverageData.length >= maxDataPoints) historicalAverageData.shift();
+        let sevenDayAverageData = value?.sevenDayAverageData;
+        if (sevenDayAverageData) {
+            sevenDayAverageData.push({ value: sevenDayAverage, date: new Date(timestamp) });
+            if (sevenDayAverageData.length >= maxDataPoints) sevenDayAverageData.shift();
         } else {
-            historicalAverageData = [];
+            sevenDayAverageData = [];
+        }
+        let thirtyDayAverageData = value?.thirtyDayAverageData;
+        if (thirtyDayAverageData) {
+            thirtyDayAverageData.push({ value: thirtyDayAverage, date: new Date(timestamp) });
+            if (thirtyDayAverageData.length >= maxDataPoints) thirtyDayAverageData.shift();
+        } else {
+            thirtyDayAverageData = [];
         }
         let thresholdData = value?.thresholdData;
         if (thresholdData) {
@@ -85,8 +92,8 @@ function App() {
         } else {
             thresholdData = [];
         }
-        const sevenDayTrend = formatTrendAnalysis(averagePrice, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold);
-        const thirtyDayTrend = formatTrendAnalysis(averagePrice, thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold);
+        const sevenDayTrend = formatTrendAnalysis(price, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold);
+        const thirtyDayTrend = formatTrendAnalysis(price, thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold);
         map.set(product, {
             product: product,
             timestamp,
@@ -94,8 +101,10 @@ function App() {
             priceData,
             average: formatNumber(averagePrice),
             averageData,
-            historicalAverage: formatNumber(thirtyDayAverage),
-            historicalAverageData,
+            sevenDayAverage: formatNumber(sevenDayAverage),
+            sevenDayAverageData,
+            thirtyDayAverage: formatNumber(thirtyDayAverage),
+            thirtyDayAverageData,
             threshold: formatNumber(threshold),
             thresholdData,
             sevenDayTrend,
@@ -131,8 +140,10 @@ function App() {
                                 priceData={value.priceData}
                                 average={value.average}
                                 averageData={value.averageData}
-                                historicalAverage={value.historicalAverage}
-                                historicalAverageData={value.historicalAverageData}
+                                sevenDayAverage={value.sevenDayAverage}
+                                sevenDayAverageData={value.sevenDayAverageData}
+                                thirtyDayAverage={value.thirtyDayAverage}
+                                thirtyDayAverageData={value.thirtyDayAverageData}
                                 threshold={value.threshold}
                                 thresholdData={value.thresholdData}
                                 sevenDayTrend={value.sevenDayTrend}

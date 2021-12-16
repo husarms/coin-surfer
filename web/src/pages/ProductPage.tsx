@@ -16,8 +16,10 @@ export interface ProductPageProps {
     priceData: ChartData[];
     average: string;
     averageData: ChartData[];
-    historicalAverage: string;
-    historicalAverageData: ChartData[];
+    sevenDayAverage: string;
+    sevenDayAverageData: ChartData[];
+    thirtyDayAverage: string;
+    thirtyDayAverageData: ChartData[];
     threshold: string;
     thresholdData: ChartData[];
     sevenDayTrend: string;
@@ -30,7 +32,10 @@ function ProductPage({
     priceData,
     average,
     averageData,
-    historicalAverageData,
+    sevenDayAverage,
+    sevenDayAverageData,
+    thirtyDayAverage,
+    thirtyDayAverageData,
     threshold,
     thresholdData,
     sevenDayTrend,
@@ -83,10 +88,18 @@ function ProductPage({
                         strokeWidth: 2,
                     },
                     {
-                        name: "HistoricalAverage",
+                        name: "SevenDayAverage",
+                        color: sevenDayTrendColor,
+                        items: sevenDayAverageData ? sevenDayAverageData : [],
+                        strokeWidth: 1,
+                        strokeDashArray: '2,5',
+                    },
+                    {
+                        name: "ThirtyDayAverage",
                         color: thirtyDayTrendColor,
-                        items: historicalAverageData ? historicalAverageData : [],
-                        strokeWidth: 2,
+                        items: thirtyDayAverageData ? thirtyDayAverageData : [],
+                        strokeWidth: 1,
+                        strokeDashArray: '2,5',
                     },
                 ]}
                 dimensions={{
