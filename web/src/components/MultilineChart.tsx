@@ -23,6 +23,7 @@ interface ChartData {
     name: string;
     color: string;
     strokeWidth: number;
+    strokeDashArray?: string;
     items: any[];
 }
 
@@ -92,6 +93,7 @@ const MultilineChart = ({ data, dimensions }: MultilineChartProps) => {
             .attr("fill", "none")
             .attr("stroke", (d) => d.color)
             .attr("stroke-width", (d) => d.strokeWidth)
+            .attr("stroke-dasharray", (d) => d.strokeDashArray ? d.strokeDashArray : '')
             .attr("d", (d) => line(d.items));
     }, [data]); // Redraw chart if data changes
 
