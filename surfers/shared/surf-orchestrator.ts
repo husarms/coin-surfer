@@ -125,8 +125,10 @@ export async function updateThresholdsWithAI(state: SurfState): Promise<SurfStat
 
 function getAiThresholdsPercentages(state: SurfState): any {
     const { trendAnalysis } = state;
-    const { sevenDayLowThreshold, sevenDayHighThreshold } = trendAnalysis;
-    const buyThresholdPercentage = Math.round(sevenDayLowThreshold * 10) / 10;
-    const sellThresholdPercentage = Math.round(sevenDayHighThreshold * 10) / 10;
+    const { sevenDayLowThreshold, sevenDayHighThreshold, thirtyDayLowThreshold, thirtyDayHighThreshold } = trendAnalysis;
+    const averageLowThreshold = (sevenDayLowThreshold + thirtyDayLowThreshold) / 2;
+    const averageHighThreshold = (sevenDayHighThreshold + thirtyDayHighThreshold) / 2;
+    const buyThresholdPercentage = Math.round(averageLowThreshold * 10) / 10; // Average lower than 30 day? lower buy-in threshold
+    const sellThresholdPercentage = Math.round(averageHighThreshold * 10) / 10; // Average lower than 30 day? raise sell threshold
     return { buyThresholdPercentage, sellThresholdPercentage };
 }

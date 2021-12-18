@@ -65,9 +65,9 @@ export async function getProduct24HrStats(product: string) {
         });
 }
 
-export async function getProductCandles(product: string, start: Date, end: Date) {
+export async function getProductCandles(product: string, granularity: 60 | 300 | 900 | 3600 | 21600 | 86400 = 86400, start: Date, end: Date) {
     return coinbaseClient.rest.product
-        .getCandles(product, { granularity: 86400, start: start.toUTCString(), end: end.toUTCString() })
+        .getCandles(product, { granularity, start: start.toUTCString(), end: end.toUTCString() })
         .then((data) => {
             return data;
         })

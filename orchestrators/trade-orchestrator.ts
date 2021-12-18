@@ -10,22 +10,23 @@ import * as CoinbaseGateway from "../gateways/coinbase-gateway";
 import * as formatters from "../utils/formatters";
 import TrendAnalysis from "../interfaces/trend-analysis";
 
-const getBuyThreshold = (
+function getBuyThreshold(
     averagePrice: number,
-    thresholdPercentage: number
-) => {
+    sellThresholdPercentage: number,
+): number {
     return formatters.roundDownToTwoDecimals(
-        averagePrice - averagePrice * (thresholdPercentage / 100)
+        averagePrice - averagePrice * (sellThresholdPercentage / 100)
     );
-};
+}
 
-const getSellThreshold = (
+function getSellThreshold(
     averagePrice: number,
     lastBuyPrice: number,
-    thresholdPercentage: number
-) => {
-    const averageMargin = averagePrice * (thresholdPercentage / 100);
-    const lastBuyMargin = lastBuyPrice * ((thresholdPercentage * 2) / 100);
+    buyThresholdPercentage: number,
+    sellThresholdPercentage: number,
+): number {
+    const averageMargin = averagePrice * (sellThresholdPercentage / 100);
+    const lastBuyMargin = lastBuyPrice * ((buyThresholdPercentage + sellThresholdPercentage) / 100);
     const averageMarginThreshold = formatters.roundDownToTwoDecimals(
         averagePrice + averageMargin
     );
@@ -36,22 +37,23 @@ const getSellThreshold = (
         return Math.min(averageMarginThreshold, lastBuyMarginThreshold);
     }
     return averageMarginThreshold;
-};
+}
 
 export async function getBuySellThresholds(
     averagePrice: number,
     lastBuyPrice: number,
     buyThresholdPercentage: number,
     sellThresholdPercentage: number
-) {
+): Promise<{ buyThreshold: number; sellThreshold: number; }> {
     const buyThreshold = getBuyThreshold(
         averagePrice,
-        buyThresholdPercentage
+        buyThresholdPercentage,
     );
     const sellThreshold = getSellThreshold(
         averagePrice,
         lastBuyPrice,
-        sellThresholdPercentage
+        buyThresholdPercentage,
+        sellThresholdPercentage,
     );
     return {
         buyThreshold,
@@ -63,12 +65,12 @@ export function getBuySize(
     fiatBalance: number,
     budget: number,
     productPrice: number
-) {
+): number {
     const amount = fiatBalance > budget ? budget : fiatBalance;
     return formatters.roundDownToFourDecimals(amount / productPrice);
 }
 
-export async function getAccountBalance(currency: string) {
+export async function getAccountBalance(currency: string): Promise<number> {
     var accounts = await CoinbaseGateway.getAccounts();
     if (accounts) {
         var account = accounts.find((a) => a.currency === currency);
@@ -86,7 +88,7 @@ export async function getAccountBalance(currency: string) {
 export async function getAccountBalances(
     fiatCurrency: string,
     cryptoCurrency: string
-) {
+): Promise<{ fiatBalance: number; cryptoBalance: number; }> {
     const fiatBalance = await getAccountBalance(fiatCurrency);
     const cryptoBalance = await getAccountBalance(cryptoCurrency);
     return {
@@ -101,7 +103,9 @@ export async function getFills(
     return (await CoinbaseGateway.getFills(productId)) as PaginatedData<Fill>;
 }
 
-export async function get24HrAveragePrice(productId: string) {
+export async function get24HrAveragePrice(
+    productId: string
+): Promise<number> {
     const product24HrStats = (await CoinbaseGateway.getProduct24HrStats(
         productId
     )) as ProductStats;
@@ -111,14 +115,29 @@ export async function get24HrAveragePrice(productId: string) {
     return average;
 }
 
-export async function getTrendAnalysis(productId: string): Promise<TrendAnalysis> {
-    const end = new Date();
-    end.setDate(end.getDate() - 1)
-    end.setUTCHours(0, 0, 0, 0);
-    const start = new Date();
-    start.setDate(start.getDate() - 31);
-    start.setUTCHours(0, 0, 0, 0);
-    const thirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, start, end)) as Candle[];
+async function getThirtyDayCandles(
+    productId: string,
+): Promise<Candle[]> {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1)
+    yesterday.setUTCHours(0, 0, 0, 0);
+    const tenDaysAgo = new Date(yesterday);
+    tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+    const twentyDaysAgo = new Date(tenDaysAgo);
+    twentyDaysAgo.setDate(twentyDaysAgo.getDate() - 10);
+    const thirtyDaysAgo = new Date(twentyDaysAgo);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 10);
+
+    const lastTenDayCandles = (await CoinbaseGateway.getProductCandles(productId, 3600, tenDaysAgo, yesterday)) as Candle[];
+    const lastTwentyDayCandles = (await CoinbaseGateway.getProductCandles(productId, 3600, twentyDaysAgo, tenDaysAgo)) as Candle[];
+    const lastThirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, 3600, thirtyDaysAgo, twentyDaysAgo)) as Candle[];
+    return [...lastThirtyDayCandles, ...lastTwentyDayCandles, ...lastTenDayCandles];
+}
+
+export async function getTrendAnalysis(
+    productId: string,
+): Promise<TrendAnalysis> {
+    const thirtyDayCandles = await getThirtyDayCandles(productId);
     let thirtyDayAverage = 0;
     let thirtyDayLowThreshold = 0;
     let thirtyDayHighThreshold = 0;
@@ -131,11 +150,11 @@ export async function getTrendAnalysis(productId: string): Promise<TrendAnalysis
         const average = (value.close + value.open) / 2;
         const lowThreshold = Math.abs((average - value.low) / average) * 100;
         const highThreshold = Math.abs((average - value.high) / average) * 100;
-        if (index >= (thirtyDayCandles.length - 7)) {
+        if (index >= (thirtyDayCandles.length - (7 * 24))) {
             if (lowThreshold > sevenDayLowThreshold) sevenDayLowThreshold = lowThreshold;
             if (highThreshold > sevenDayHighThreshold) sevenDayHighThreshold = highThreshold;
             sevenDayRunningAverage += average;
-            sevenDayAverage = sevenDayRunningAverage / ((index + 1) - (thirtyDayCandles.length - 7));
+            sevenDayAverage = sevenDayRunningAverage / ((index + 1) - (thirtyDayCandles.length - (7 * 24)));
         }
         thirtyDayRunningAverage += average;
         if (lowThreshold > thirtyDayLowThreshold) thirtyDayLowThreshold = lowThreshold;
@@ -145,28 +164,33 @@ export async function getTrendAnalysis(productId: string): Promise<TrendAnalysis
     return { thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold };
 }
 
-export async function getProductPrice(productId: string) {
+export async function getProductPrice(
+    productId: string,
+): Promise<number> {
     const productTicker = (await CoinbaseGateway.getProductTicker(
         productId
     )) as ProductTicker;
     return parseFloat(productTicker.price);
 }
 
-export async function marketSell(size: string, productId: string) {
+export async function marketSell(
+    size: string, 
+    productId: string,
+) {
     return await CoinbaseGateway.marketSell(size, productId);
 }
 
 export async function marketBuy(
     price: string,
     size: string,
-    productId: string
+    productId: string,
 ) {
     return await CoinbaseGateway.marketBuy(price, size, productId);
 }
 
 export async function sellAtMarketValue(
     productId: string,
-    size: string
+    size: string,
 ) {
     const sellResponse = await marketSell(size, productId);
     return sellResponse;
@@ -176,7 +200,7 @@ export async function buyAtMarketValue(
     fiatBalance: number,
     budget: number,
     price: number,
-    productId: string
+    productId: string,
 ) {
     const size = getBuySize(fiatBalance, budget, price);
     const buyResponse = await marketBuy(

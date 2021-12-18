@@ -40,14 +40,16 @@ export function getStatusMessage(state: SurfState): string {
         budget,
         cryptoCurrency,
     } = parameters;
-    const buyBudget = fiatBalance > budget ? budget : fiatBalance;
+    const buyBudget = (fiatBalance > budget ? budget : fiatBalance).toFixed(2);
     const formattedDate = Formatters.getDateMMddyyyyHHmmss();
     const currentPercentage = getCurrentPercentage(price, averagePrice);
     const threshold = action === Actions.Sell ? sellThreshold : buyThreshold;
+    const profit = (cryptoBalance * sellThreshold) - (cryptoBalance * lastBuyPrice);
+    const profitWithFees = (profit * .975).toFixed(2);
     const message =
         action === Actions.Sell
-            ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${sellThreshold} (+${sellThresholdPercentage}%) (last buy price $${lastBuyPrice})`
-            : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${buyThreshold} (-${buyThresholdPercentage}%)`;
+            ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${threshold} (+${sellThresholdPercentage}%) (bought at $${lastBuyPrice}, profit $${profitWithFees})`
+            : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${threshold} (-${buyThresholdPercentage}%)`;
     const formattedPrice = price.toFixed(2);
     const formattedAveragePrice = averagePrice.toFixed(2);
     const plusMinus = currentPercentage > 0 ? "+" : "";

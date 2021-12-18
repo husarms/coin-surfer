@@ -21,7 +21,7 @@ export async function surf(parameters: SurfParameters) {
     state = await updateBalances(state);
     state.action = state.cryptoBalance > 0.1 ? Actions.Sell : Actions.Buy;
 
-    console.log(`Let's go surfing with ${state.productId}...`);
+    console.log(`Let's go AI threshold surfing with ${state.productId}...`);
     setInterval(async function () {
         state = await updateBalances(state);
         state = await updateFills(state);
