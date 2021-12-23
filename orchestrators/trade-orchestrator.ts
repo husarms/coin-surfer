@@ -119,17 +119,10 @@ async function getThirtyDayCandles(
     productId: string,
 ): Promise<Candle[]> {
     const now = new Date();
-    const tenDaysAgo = new Date(now);
-    tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
-    const twentyDaysAgo = new Date(tenDaysAgo);
-    twentyDaysAgo.setDate(twentyDaysAgo.getDate() - 10);
-    const thirtyDaysAgo = new Date(twentyDaysAgo);
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 10);
-
-    const lastTenDayCandles = (await CoinbaseGateway.getProductCandles(productId, 3600, tenDaysAgo, now)) as Candle[];
-    const lastTwentyDayCandles = (await CoinbaseGateway.getProductCandles(productId, 3600, twentyDaysAgo, tenDaysAgo)) as Candle[];
-    const lastThirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, 3600, thirtyDaysAgo, twentyDaysAgo)) as Candle[];
-    return [...lastThirtyDayCandles, ...lastTwentyDayCandles, ...lastTenDayCandles];
+    const thirtyDaysAgo = new Date(now);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const lastThirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, 86400, thirtyDaysAgo, now)) as Candle[];
+    return lastThirtyDayCandles;
 }
 
 export async function getTrendAnalysis(
@@ -137,67 +130,33 @@ export async function getTrendAnalysis(
 ): Promise<TrendAnalysis> {
     const thirtyDayCandles = await getThirtyDayCandles(productId);
     let thirtyDayAverage = 0;
-    let thirtyDayLowThreshold = 0;
     let thirtyDayLowPrice = Number.MAX_SAFE_INTEGER;
-    let thirtyDayLowDate = new Date();
-    let thirtyDayHighThreshold = 0;
     let thirtyDayHighPrice = 0;
-    let thirtyDayHighDate = new Date();
     let sevenDayAverage = 0;
-    let sevenDayLowThreshold = 0;
     let sevenDayLowPrice = Number.MAX_SAFE_INTEGER;
-    let sevenDayLowDate = new Date();
-    let sevenDayHighThreshold = 0;
     let sevenDayHighPrice = 0;
-    let sevenDayHighDate = new Date();
     let thirtyDayRunningAverage = 0;
     let sevenDayRunningAverage = 0;
     for (const [index, value] of thirtyDayCandles.entries()) {
         const average = (value.close + value.open) / 2;
-        const lowThreshold = Math.abs((average - value.low) / average) * 100;
-        const highThreshold = Math.abs((average - value.high) / average) * 100;
-        if (index >= (thirtyDayCandles.length - (7 * 24))) {
-            if (lowThreshold > sevenDayLowThreshold) sevenDayLowThreshold = lowThreshold;
-            if (value.low < sevenDayLowPrice) {
-                sevenDayLowPrice = value.low;
-                sevenDayLowDate = new Date(value.openTimeInISO);
-            }
-            if (highThreshold > sevenDayHighThreshold) sevenDayHighThreshold = highThreshold;
-            if (value.high > sevenDayHighPrice) {
-                sevenDayHighPrice = value.high;
-                sevenDayHighDate = new Date(value.openTimeInISO);
-            }
+        if (index >= (thirtyDayCandles.length - 7)) {
+            if (value.low < sevenDayLowPrice) sevenDayLowPrice = value.low;
+            if (value.high > sevenDayHighPrice) sevenDayHighPrice = value.high;
             sevenDayRunningAverage += average;
-            sevenDayAverage = sevenDayRunningAverage / ((index + 1) - (thirtyDayCandles.length - (7 * 24)));
+            sevenDayAverage = sevenDayRunningAverage / ((index + 1) - (thirtyDayCandles.length - 7));
         }
         thirtyDayRunningAverage += average;
-        if (lowThreshold > thirtyDayLowThreshold) thirtyDayLowThreshold = lowThreshold;
-        if (value.low < thirtyDayLowPrice) {
-            thirtyDayLowPrice = value.low;
-            thirtyDayLowDate = new Date(value.openTimeInISO);
-        }
-        if (highThreshold > thirtyDayHighThreshold) thirtyDayHighThreshold = highThreshold;
-        if (value.high > thirtyDayHighPrice) {
-            thirtyDayHighPrice = value.high;
-            thirtyDayHighDate = new Date(value.openTimeInISO);
-        }
+        if (value.low < thirtyDayLowPrice) thirtyDayLowPrice = value.low;
+        if (value.high > thirtyDayHighPrice) thirtyDayHighPrice = value.high;
         thirtyDayAverage = thirtyDayRunningAverage / (index + 1);
     }
     return {
         thirtyDayAverage,
-        thirtyDayLowThreshold,
         thirtyDayLowPrice,
-        thirtyDayLowDate,
-        thirtyDayHighThreshold,
         thirtyDayHighPrice,
-        thirtyDayHighDate,
         sevenDayAverage,
-        sevenDayLowThreshold,
         sevenDayLowPrice,
-        sevenDayLowDate,
-        sevenDayHighThreshold,
         sevenDayHighPrice,
-        sevenDayHighDate,
     };
 }
 

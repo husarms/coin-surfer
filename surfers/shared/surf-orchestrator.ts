@@ -89,7 +89,7 @@ export async function updateTrendAnalysis(state: SurfState): Promise<SurfState> 
     return state;
 }
 
-export async function updateThresholds(state: SurfState) : Promise<SurfState> {
+export async function updateThresholds(state: SurfState): Promise<SurfState> {
     const {
         buyThresholdPercentage,
         sellThresholdPercentage,
