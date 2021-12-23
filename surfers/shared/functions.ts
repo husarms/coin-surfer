@@ -137,7 +137,7 @@ export async function getTrendAnalysis(productId: string): Promise<TrendAnalysis
     return trendAnalysis;
 }
 
-export async function getLastFills(productId: string) {
+export async function getLastFills(productId: string) : Promise<{ lastBuyFill: Fill, lastSellFill: Fill}> {
     const fills = await TradeOrchestrator.getFills(productId);
     const buyFill = fills.data.find((f) => f.side === "buy");
     const sellFill = fills.data.find((f) => f.side === "sell");
