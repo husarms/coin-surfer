@@ -52,7 +52,7 @@ function ProductPage({
                     Average{": "}${average}
                 </span>
                 <span className="threshold" style={{ color: thresholdColor }}>
-                    Threshold{": "}${threshold}
+                    Threshold{": "}{threshold}
                 </span>
                 <span
                     className="seven-day-trend"

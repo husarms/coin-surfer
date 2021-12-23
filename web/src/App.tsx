@@ -101,6 +101,8 @@ function App() {
         }
         const sevenDayTrend = formatTrendAnalysis(price, sevenDayAverage, sevenDayLowPrice, sevenDayHighPrice);
         const thirtyDayTrend = formatTrendAnalysis(price, thirtyDayAverage, thirtyDayLowPrice, thirtyDayHighPrice);
+        const thresholdMargin = Math.abs(((sellThreshold - buyThreshold) / sellThreshold) * 100);
+        const thresholdSummary = `$${formatRoughNumber(buyThreshold)} - $${formatRoughNumber(sellThreshold)} (${formatNumber(thresholdMargin)}%)`;
         map.set(product, {
             product: product,
             timestamp,
@@ -112,7 +114,7 @@ function App() {
             sevenDayAverageData,
             thirtyDayAverage: formatNumber(thirtyDayAverage),
             thirtyDayAverageData,
-            threshold: formatNumber(threshold),
+            threshold: thresholdSummary,
             thresholdData,
             sevenDayTrend,
             thirtyDayTrend,
