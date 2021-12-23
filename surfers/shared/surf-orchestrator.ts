@@ -12,6 +12,7 @@ import {
 } from "./functions";
 import { Logger } from "../../utils/logger";
 import { Actions } from "../../utils/enums";
+import * as Formatters from "../../utils/formatters";
 import * as WebSocketServer from "../../web-socket/server";
 import SurfState from "../../interfaces/surf-state";
 
@@ -108,14 +109,7 @@ export async function updateThresholds(state: SurfState) : Promise<SurfState> {
 }
 
 export async function updateThresholdsWithAI(state: SurfState): Promise<SurfState> {
-    const { buyThresholdPercentage, sellThresholdPercentage } = getAiThresholdsPercentages(state);
-    const { averagePrice, lastBuyPrice } = state;
-    const { buyThreshold, sellThreshold } = await getThresholds(
-        averagePrice,
-        lastBuyPrice,
-        buyThresholdPercentage,
-        sellThresholdPercentage
-    );
+    const { buyThreshold, buyThresholdPercentage, sellThreshold, sellThresholdPercentage } = await getAiThresholds(state);
     state.buyThreshold = buyThreshold;
     state.buyThresholdPercentage = buyThresholdPercentage;
     state.sellThreshold = sellThreshold;
@@ -123,12 +117,17 @@ export async function updateThresholdsWithAI(state: SurfState): Promise<SurfStat
     return state;
 }
 
-function getAiThresholdsPercentages(state: SurfState): any {
-    const { trendAnalysis } = state;
-    const { sevenDayLowThreshold, sevenDayHighThreshold, thirtyDayLowThreshold, thirtyDayHighThreshold } = trendAnalysis;
-    const averageLowThreshold = (sevenDayLowThreshold + thirtyDayLowThreshold) / 2;
-    const averageHighThreshold = (sevenDayHighThreshold + thirtyDayHighThreshold) / 2;
-    const buyThresholdPercentage = Math.round(averageLowThreshold * 10) / 10; // Average lower than 30 day? lower buy-in threshold
-    const sellThresholdPercentage = Math.round(averageHighThreshold * 10) / 10; // Average lower than 30 day? raise sell threshold
-    return { buyThresholdPercentage, sellThresholdPercentage };
+function getAiThresholds(state: SurfState): { buyThreshold: number, buyThresholdPercentage: number, sellThreshold: number, sellThresholdPercentage: number, } {
+    const { price, trendAnalysis } = state;
+    const { sevenDayLowPrice, sevenDayHighPrice, thirtyDayLowPrice, thirtyDayHighPrice } = trendAnalysis;
+    const smoothingPercentage = 1.25 / 100;
+    const lowPriceAverage = (sevenDayLowPrice + thirtyDayLowPrice) / 2;
+    const highPriceAverage = (sevenDayHighPrice + thirtyDayHighPrice) / 2;
+    const lowPriceAverageWithSmoothing = lowPriceAverage + (lowPriceAverage * smoothingPercentage);
+    const highPriceAverageWithSmoothing = highPriceAverage - (highPriceAverage * smoothingPercentage);
+    const buyThreshold = Formatters.roundDownToTwoDecimals(lowPriceAverageWithSmoothing);
+    const buyThresholdPercentage = Formatters.roundDownToOneDecimal(Math.abs(((price - buyThreshold) / buyThreshold) * 100));
+    const sellThreshold = Formatters.roundDownToTwoDecimals(highPriceAverageWithSmoothing);
+    const sellThresholdPercentage = Formatters.roundDownToOneDecimal(Math.abs(((price - sellThreshold) / sellThreshold) * 100));
+    return { buyThreshold, buyThresholdPercentage, sellThreshold, sellThresholdPercentage };
 }

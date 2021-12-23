@@ -10,7 +10,7 @@ import HistoricalPage from "./pages/HistoricalPage";
 import "react-tabs/style/react-tabs.css";
 import "./App.scss";
 
-function formatTrendAnalysis(price: number, historicalAverage: number, lowThreshold: number, highThreshold: number): string {
+function formatTrendAnalysis(price: number, historicalAverage: number, lowPrice: number, highPrice: number): string {
     const upOrDown = price > historicalAverage ? '▲' : '▼';
     let indicator = upOrDown;
     const confidenceScore = ((price - historicalAverage) / historicalAverage) * 100;
@@ -18,12 +18,19 @@ function formatTrendAnalysis(price: number, historicalAverage: number, lowThresh
     for (var i = 0; i < multiplier; i++) {
         indicator += upOrDown;
     }
-    return `$${formatNumber(historicalAverage)} (${formatNumber(confidenceScore)}%) ${indicator} -${formatNumber(lowThreshold)}% / +${formatNumber(highThreshold)}%`;
+    return `$${formatRoughNumber(historicalAverage)} (${formatNumber(confidenceScore)}%) ${indicator} $${formatRoughNumber(lowPrice)} - $${formatRoughNumber(highPrice)}`;
 }
 
 const formatNumber = (number: number): string => {
     return (Math.round(number * 100) / 100).toFixed(2);
 };
+
+const formatRoughNumber = (number: number): string => {
+    if(number >= 100) {
+        return number.toFixed(0);
+    }
+    return number.toFixed(2);
+}
 
 function App() {
     const maxDataPoints = 100000;
@@ -52,7 +59,7 @@ function App() {
     const handleMessage = (messageEvent: WebSocketEventMap["message"]) => {
         const surfState = JSON.parse(messageEvent.data) as SurfState;
         const { parameters, timestamp, price, averagePrice, trendAnalysis, buyThreshold, sellThreshold, statusMessage, action } = surfState;
-        const { thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold } = trendAnalysis;
+        const { thirtyDayAverage, thirtyDayLowPrice, thirtyDayHighPrice, sevenDayAverage, sevenDayLowPrice, sevenDayHighPrice } = trendAnalysis;
         const product = parameters.cryptoCurrency;
         const threshold = action === Actions.Buy ? buyThreshold : sellThreshold;
         let map = productMap;
@@ -92,8 +99,8 @@ function App() {
         } else {
             thresholdData = [];
         }
-        const sevenDayTrend = formatTrendAnalysis(price, sevenDayAverage, sevenDayLowThreshold, sevenDayHighThreshold);
-        const thirtyDayTrend = formatTrendAnalysis(price, thirtyDayAverage, thirtyDayLowThreshold, thirtyDayHighThreshold);
+        const sevenDayTrend = formatTrendAnalysis(price, sevenDayAverage, sevenDayLowPrice, sevenDayHighPrice);
+        const thirtyDayTrend = formatTrendAnalysis(price, thirtyDayAverage, thirtyDayLowPrice, thirtyDayHighPrice);
         map.set(product, {
             product: product,
             timestamp,
