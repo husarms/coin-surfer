@@ -2,7 +2,7 @@
 
 Node.js app for automated cryptocurrency trading.
 
-## Contents
+# Contents
 - [Overview](#overview)
 - [Features](#features)
     - [Logging](#logging)
@@ -16,7 +16,7 @@ Node.js app for automated cryptocurrency trading.
 - [How to Run](#how-to-run)
 - [TODO](#todo)
 
-## Overview
+# Overview
 
 > If you don't find a way to make money while you sleep, you will work until you die.
 
@@ -26,9 +26,9 @@ It uses "surfers" to continually monitor the market and attempt to determine the
 
 A few example surfers are provided - or you can write your own utilizing the functions provided in the project.
 
-## Features
+# Features
 
-### Logging
+## Logging
 
 The current state of each surfer is logged to the console at each polling interval.
 
@@ -38,24 +38,24 @@ Logs for each product are kept in the "logs" folder if you wish to do historical
 
 ![historical-log](docs/images/historical-log.jpg)
 
-### Notifications
+## Notifications
 Optional text or email notifications can be sent on buy / sell actions.
 
 ![notification](docs/images/text-notification.jpg)
 
-### Visualization
+## Visualization
 The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs.
 
 ![visualization](docs/images/visualization-2.png)
 
-### Web Socket Feed
+## Web Socket Feed
 When a web socket feed is enabled (see [Setup](#setup)) - the app emits it's current state on each update interval.
 
 The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed.
 
-## Surfers
+# Surfers
 
-### Simple Threshold Surfer
+## Simple Threshold Surfer
 The [simple threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/simple-threshold.ts) is the first iteration of this app and uses the difference between the 24-hour average price and current price.
 
 Buy and sell thresholds are set manually as a percentage difference from the 24-hour average price.
@@ -64,7 +64,7 @@ The idea is to buy and sell when an unusal drop or increase in price occurs (e.g
 
 Please note that some products are more volatile than others - so choosing the right threshold percentages takes some experimentation.
 
-### AI Threshold Surfer
+## AI Threshold Surfer
 The [AI threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/ai-threshold.ts) is the second iteration of this app and uses 7-day and 30-day high and low prices to determine it's own thresholds.
 
 The historical high and low prices are taken from the [Coinbase Pro API product candles](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductcandles).
@@ -73,7 +73,7 @@ Rather than waiting for a sudden drop or rise in price - it waits for the price 
 
 Compared to the simple threshold method - this seems to less risky and has the potential for greater margins - and adjusts itself automatically.
 
-## Setup
+# Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
 2. Optionally - a [SendGrid](https://sendgrid.com) account to send buy / sell notifications
 3. Configure your own "secrets.ts" file under the [config directory](https://github.com/husarms/coin-surfer/tree/master/config)
@@ -118,7 +118,7 @@ export default {
 ```
 This example surfs both Bitcoin and Etherium
 
-## How to Run
+# How to Run
 Install depedencies
 ```bash
 npm install
@@ -128,7 +128,7 @@ Run
 npm run start
 ```
 
-## TODO
+# TODO
 1. ~~**Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends~~
 2. Improve error handling (API errors)
 3. Move secrets to environment variables
