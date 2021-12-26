@@ -22,7 +22,7 @@ Coin Surfer is an open-source project for automated cryptocurrency trading.
 
 It uses "surfers" to continually monitor the cryptocurrency market and determine the best time to make a trade.
 
-This application is fully capable of making real trades, with real money. It can also be used to learn and develop predictive algorithms with real-world live data - without risking anything financially. 
+This application is fully capable of making real trades, with real money. It can also be used to learn and develop predictive algorithms using real-world live data - without risking anything financially. 
 
 A few [example surfers](#surfers) are provided - or you can write your own utilizing the functions provided in the project.
 
