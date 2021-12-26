@@ -18,7 +18,7 @@
 
 # Overview
 
-Coinsurfer is a tool for automated cryptocurrency trading. 
+Coin Surfer is a tool for automated cryptocurrency trading. 
 
 It uses "surfers" to continually monitor the market and attempt to determine the best time to make a trade.
 
