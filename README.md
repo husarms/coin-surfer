@@ -14,8 +14,6 @@ Node.js app for automated cryptocurrency trading.
     - [AI Threshold Surfer](#ai-threshold-surfer)   
 - [Setup](#setup)
 - [How to Run](#how-to-run)
-- [Visualization](#visualization)
-- [Web Socket Feed](#web-socket-feed)
 - [TODO](#todo)
 
 ## Overview
