@@ -4,14 +4,14 @@
 
 # Contents
 - [Overview](#overview)
+- [Surfers](#surfers)
+    - [Simple Threshold Surfer](#simple-threshold-surfer)
+    - [AI Threshold Surfer](#ai-threshold-surfer)   
 - [Features](#features)
     - [Logging](#logging)
     - [Notifications](#notifications)
     - [Visualization](#visualization)
     - [Web Socket Feed](#web-socket-feed)
-- [Surfers](#surfers)
-    - [Simple Threshold Surfer](#simple-threshold-surfer)
-    - [AI Threshold Surfer](#ai-threshold-surfer)   
 - [Setup](#setup)
 - [How to Run](#how-to-run)
 - [TODO](#todo)
@@ -23,6 +23,26 @@ Coin Surfer is a tool for automated cryptocurrency trading.
 It uses "surfers" to continually monitor the market and attempt to determine the best time to make a trade.
 
 A few [example surfers](#surfers) are provided - or you can write your own utilizing the functions provided in the project.
+
+# Surfers
+
+## Simple Threshold Surfer
+The [simple threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/simple-threshold.ts) is the first example iteration and uses the difference between the current price and 24-hour average price.
+
+Buy and sell thresholds are set manually as a percentage difference from the 24-hour average price.
+
+The idea is to buy and sell when an unusal drop or increase in price occurs (e.g. 5% above or below the 24-hour average).
+
+Please note that some products are more volatile than others - so choosing the right threshold percentages takes some experimentation.
+
+## AI Threshold Surfer
+The [AI threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/ai-threshold.ts) is the second example iteration and uses 7-day and 30-day high and low prices to determine it's own thresholds.
+
+The historical high and low prices are taken from the [Coinbase Pro API product candles](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductcandles).
+
+Rather than waiting for a sudden drop or rise in price - it waits for the price to hit historically low or high levels.
+
+Compared to the simple threshold method - it sets / adjusts itself and seems less risky with the potential for greater margins.
 
 # Features
 
@@ -50,26 +70,6 @@ The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) cont
 When a web socket feed is enabled (see [Setup](#setup)) - the app emits it's current state on each update interval.
 
 The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed.
-
-# Surfers
-
-## Simple Threshold Surfer
-The [simple threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/simple-threshold.ts) is the first example iteration and uses the difference between the current price and 24-hour average price.
-
-Buy and sell thresholds are set manually as a percentage difference from the 24-hour average price.
-
-The idea is to buy and sell when an unusal drop or increase in price occurs (e.g. 5% above or below the 24-hour average).
-
-Please note that some products are more volatile than others - so choosing the right threshold percentages takes some experimentation.
-
-## AI Threshold Surfer
-The [AI threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/ai-threshold.ts) is the second example iteration and uses 7-day and 30-day high and low prices to determine it's own thresholds.
-
-The historical high and low prices are taken from the [Coinbase Pro API product candles](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductcandles).
-
-Rather than waiting for a sudden drop or rise in price - it waits for the price to hit historically low or high levels.
-
-Compared to the simple threshold method - it sets / adjusts itself and seems less risky with the potential for greater margins.
 
 # Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
