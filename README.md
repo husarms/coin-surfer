@@ -19,6 +19,7 @@ Node.js app for automated cryptocurrency trading.
 - [TODO](#todo)
 
 ## Overview
+
 > If you don't find a way to make money while you sleep, you will work until you die.
 
 Coinsurfer is a tool for automated cryptocurrency trading. 
@@ -32,9 +33,11 @@ A few example surfers are provided - or you can write your own utilizing the fun
 ### Logging
 
 The current state of each surfer is logged to the console at each polling interval.
+
 ![log](docs/images/log.png)
 
 Logs for each product are kept in the "logs" folder if you wish to do historical analysis.
+
 ![historical-log](docs/images/historical-log.jpg)
 
 ### Notifications
