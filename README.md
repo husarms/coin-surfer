@@ -1,6 +1,6 @@
 ![logo](docs/images/logo.png)
 
-Node.js app for automated cryptocurrency trading.
+> If you don't find a way to make money while you sleep, you will work until you die.
 
 # Contents
 - [Overview](#overview)
@@ -17,8 +17,6 @@ Node.js app for automated cryptocurrency trading.
 - [TODO](#todo)
 
 # Overview
-
-> If you don't find a way to make money while you sleep, you will work until you die.
 
 Coinsurfer is a tool for automated cryptocurrency trading. 
 
