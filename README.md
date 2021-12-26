@@ -56,7 +56,7 @@ The included [Visualization App](https://github.com/husarms/coin-surfer/tree/mas
 # Surfers
 
 ## Simple Threshold Surfer
-The [simple threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/simple-threshold.ts) is the first iteration of this app and uses the difference between the 24-hour average price and current price.
+The [simple threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/simple-threshold.ts) is the first example iteration and uses the difference between the 24-hour average price and current price.
 
 Buy and sell thresholds are set manually as a percentage difference from the 24-hour average price.
 
@@ -65,7 +65,7 @@ The idea is to buy and sell when an unusal drop or increase in price occurs (e.g
 Please note that some products are more volatile than others - so choosing the right threshold percentages takes some experimentation.
 
 ## AI Threshold Surfer
-The [AI threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/ai-threshold.ts) is the second iteration of this app and uses 7-day and 30-day high and low prices to determine it's own thresholds.
+The [AI threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/ai-threshold.ts) is the second example iteration and uses 7-day and 30-day high and low prices to determine it's own thresholds.
 
 The historical high and low prices are taken from the [Coinbase Pro API product candles](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductcandles).
 
