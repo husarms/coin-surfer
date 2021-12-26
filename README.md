@@ -42,7 +42,7 @@ The historical high and low prices are taken from the [Coinbase Pro API product 
 
 Rather than waiting for a sudden drop or rise in price - it waits for the price to hit historically low or high levels.
 
-Compared to the simple threshold method - it sets / adjusts itself and seems less risky with the potential for greater margins.
+Compared to the simple threshold method - it sets / adjusts itself automatically and seems less risky with the potential for greater margins.
 
 # Features
 
