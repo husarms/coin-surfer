@@ -39,7 +39,7 @@ Please note that some products are more volatile than others - so choosing the r
 ## AI Threshold Surfer
 The [AI threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/ai-threshold.ts) is the second example iteration and uses 7-day and 30-day high and low prices to determine it's own thresholds.
 
-The historical high and low prices are taken from the [Coinbase Pro API product candles](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductcandles). Rather than waiting for a sudden drop or rise in price - it waits for prices to hit historically low or high levels.
+The historical high and low prices are taken from [product candles](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductcandles). Rather than waiting for a sudden drop or rise in price - it waits for prices to hit historically low or high levels.
 
 Compared to the simple threshold method - it sets / adjusts itself automatically and seems less risky with the potential for greater margins.
 
