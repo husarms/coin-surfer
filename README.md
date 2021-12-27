@@ -72,47 +72,16 @@ The included [Visualization App](https://github.com/husarms/coin-surfer/tree/mas
 # Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
 2. Optionally - a [SendGrid](https://sendgrid.com) account to send buy / sell notifications
-3. Configure your own "secrets.ts" file under the [config directory](https://github.com/husarms/coin-surfer/tree/master/config)
-```JavaScript
-export default {
-    CoinbaseConfiguration: {
-        key: "<Add your key here>",
-        secret: "<Add your secret here>",
-        passphrase: "<Add your passphrase here>",
-    },
-    SendGridConfiguration : {
-        apiKey: "<Add your api key here>",
-    },
-    Email: {
-        toAddress: "<Add your to address here>",
-        fromAddress: "<Add your from address here>",
-    },
-};
+3. Create a .env file under the root directory with the following environment variables
 ```
-4. Set your own parameters for cryptocurrency, buy / sell thresholds and budget in [index.ts](https://github.com/husarms/coin-surfer/blob/master/index.ts).
-```JavaScript
-(async () => {
-    await SimpleThresholdSurfer.surf({
-        fiatCurrency: Products.USDollar,
-        cryptoCurrency: Products.Etherium,
-        buyThresholdPercentage: 4,
-        sellThresholdPercentage: 4,
-        budget: 1000,
-        notificationsEnabled: true,
-        webSocketFeedEnabled: true,
-    });
-    await SimpleThresholdSurfer.surf({
-        fiatCurrency: Products.USDollar,
-        cryptoCurrency: Products.Bitcoin,
-        buyThresholdPercentage: 4,
-        sellThresholdPercentage: 4,
-        budget: 1000,
-        notificationsEnabled: true,
-        webSocketFeedEnabled: false,
-    });
-})();
+COINBASE_API_KEY=
+COINBASE_API_SECRET=
+COINBASE_API_PASSPHRASE=
+SENDGRID_API_KEY=
+SENDGRID_TO_ADDRESS=
+SENDGRID_FROM_ADDRESS=
 ```
-This example surfs both Bitcoin and Etherium
+4. Set your own surf parameters in [index.ts](https://github.com/husarms/coin-surfer/blob/master/index.ts).
 
 # How to Run
 Install depedencies
@@ -127,7 +96,7 @@ npm run start
 # TODO
 1. ~~**Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends~~
 2. Establish feedback loop for machine learning - after a buy and sell, replay time period to learn how it can be improved
-3. Move secrets to environment variables
+3. ~~Move secrets to environment variables~~
 4. Deploy to cloud (service and web app)
 5. Improve error handling (API errors)
 6. Add more unit tests
