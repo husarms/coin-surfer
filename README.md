@@ -27,11 +27,7 @@ This application is fully capable of making real trades, with real money. It can
 A few [example surfers](#surfers) are provided - or you can write your own utilizing the functions provided in the project.
 
 # Surfers
-The included example surfers all work on the same principal - monitor the current price and buy or sell when a threshold is hit.
-
-The challenge is deciding what those thresholds should be - and they each use different approaches for determining this.
-
-They also pull in additional data - account balances, previous orders, historical prices, etc. to decide what action to take.
+The included example surfers all work on the same principal - monitor the current price and buy or sell when a threshold is hit. The challenge is deciding what those thresholds should be - and they each use different approaches for determining this.
 
 ## Simple Threshold Surfer
 The [simple threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/simple-threshold.ts) is the first example iteration and uses the difference between the current price and 24-hour average price.
