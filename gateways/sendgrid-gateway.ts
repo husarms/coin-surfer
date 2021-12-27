@@ -1,12 +1,12 @@
 import * as SendGridMail from "@sendgrid/mail";
-import Secrets from "../config/secrets";
+import Configuration from "../config";
 
-SendGridMail.setApiKey(Secrets.SendGridConfiguration.apiKey);
+SendGridMail.setApiKey(Configuration.SendGrid.apiKey);
 
 export function sendEmail (subject: string, body: string) {
     const email = {
-        from: Secrets.Email.fromAddress,
-        to: Secrets.Email.toAddress,
+        from: Configuration.SendGrid.fromAddress,
+        to: Configuration.SendGrid.toAddress,
         subject,
         text: body,
     };

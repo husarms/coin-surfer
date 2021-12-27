@@ -6,12 +6,12 @@ import {
     WebSocketEvent,
     WebSocketTickerMessage,
 } from "coinbase-pro-node";
-import Secrets from "../config/secrets";
+import Configuration from "../config";
 
 const authorization = {
-    apiKey: Secrets.CoinbaseConfiguration.key,
-    apiSecret: Secrets.CoinbaseConfiguration.secret,
-    passphrase: Secrets.CoinbaseConfiguration.passphrase,
+    apiKey: Configuration.Coinbase.key,
+    apiSecret: Configuration.Coinbase.secret,
+    passphrase: Configuration.Coinbase.passphrase,
     // The Sandbox is for testing only and offers a subset of the products/assets:
     // https://docs.pro.coinbase.com/#sandbox
     useSandbox: false,
