@@ -81,7 +81,7 @@ SENDGRID_API_KEY=
 SENDGRID_TO_ADDRESS=
 SENDGRID_FROM_ADDRESS=
 ```
-4. Set your own surf parameters in [index.ts](https://github.com/husarms/coin-surfer/blob/master/index.ts).
+4. Set your own surf parameters in [index.ts](https://github.com/husarms/coin-surfer/blob/master/index.ts)
 
 # How to Run
 Install depedencies
