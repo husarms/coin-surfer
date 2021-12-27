@@ -126,9 +126,11 @@ npm run start
 
 # TODO
 1. ~~**Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends~~
-2. Improve error handling (API errors)
+2. Establish feedback loop for machine learning - after a buy and sell, replay time period to compare actual vs optimal trade
 3. Move secrets to environment variables
-4. Add more unit tests
-5. Visualization
+4. Deploy to cloud (service and web app)
+5. Improve error handling (API errors)
+6. Add more unit tests
+7. Visualization
     - Experiment with other chart packages
     - Add ability to hover over charts and get values
