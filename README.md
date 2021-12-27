@@ -72,7 +72,7 @@ The included [Visualization App](https://github.com/husarms/coin-surfer/tree/mas
 # Setup
 1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
 2. Optionally - a [SendGrid](https://sendgrid.com) account to send buy / sell notifications
-3. Create a .env file under the root directory with the following environment variables
+3. Create a ```.env``` file under the root directory with the following environment variables
 ```
 COINBASE_API_KEY=
 COINBASE_API_SECRET=
