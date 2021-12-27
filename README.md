@@ -27,7 +27,7 @@ This application is fully capable of making real trades, with real money. It can
 A few [example surfers](#surfers) are provided - or you can write your own utilizing the functions provided in the project.
 
 # Surfers
-The included example surfers all work on the same principal - monitor the current price and buy or sell when a threshold is hit. The challenge is deciding what those thresholds should be - and they each use different approaches for determining this.
+The included example surfers all work on the same principal - monitor the current price and buy or sell when a threshold is hit. The challenge is deciding what those thresholds should be - and they each use different approaches to determine this.
 
 ## Simple Threshold Surfer
 The [simple threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/simple-threshold.ts) is the first example iteration and uses the difference between the current price and 24-hour average price.
@@ -39,7 +39,7 @@ Please note that some products are more volatile than others - so choosing the r
 ## AI Threshold Surfer
 The [AI threshold surfer](https://github.com/husarms/coin-surfer/blob/master/surfers/ai-threshold.ts) is the second example iteration and uses 7-day and 30-day high and low prices to determine it's own thresholds.
 
-The historical high and low prices are taken from the [Coinbase Pro API product candles](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductcandles). Rather than waiting for a sudden drop or rise in price - it waits for the price to hit historically low or high levels.
+The historical high and low prices are taken from the [Coinbase Pro API product candles](https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getproductcandles). Rather than waiting for a sudden drop or rise in price - it waits for prices to hit historically low or high levels.
 
 Compared to the simple threshold method - it sets / adjusts itself automatically and seems less risky with the potential for greater margins.
 
