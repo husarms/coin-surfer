@@ -1,7 +1,8 @@
 import SurfParameters from "./interfaces/surf-parameters";
 import * as AiThresholdSurfer from "./surfers/ai-threshold";
 import { Products } from "./utils/enums";
-import * as WebSocketServer from "./web-socket/server";
+import * as WebSocketServer from "./servers/web-socket";
+import * as WebServer from "./servers/web";
 
 const parameters: SurfParameters[] = [
     {
@@ -41,6 +42,8 @@ const parameters: SurfParameters[] = [
         webSocketFeedEnabled: true,
     },
 ];
+
+WebServer.startWebServer(5000);
 
 (async () => {
     parameters.map((parameters) => {

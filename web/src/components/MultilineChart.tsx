@@ -29,7 +29,9 @@ interface ChartData {
 
 const MultilineChart = ({ data, dimensions }: MultilineChartProps) => {
     const svgRef = React.useRef(null);
-    const { width, height, margin } = dimensions;
+    let { width, height, margin } = dimensions;
+    width = window.innerWidth - (window.innerWidth * .05);
+    height = window.innerHeight - (window.innerHeight * .2);
     const svgWidth = width + margin.left + margin.right;
     const svgHeight = height + margin.top + margin.bottom;
 
@@ -41,8 +43,8 @@ const MultilineChart = ({ data, dimensions }: MultilineChartProps) => {
         const yScale = d3
             .scaleLinear()
             .domain([
-                d3.min(data[0].items, (d) => d.value) * 0.9,
-                d3.max(data[0].items, (d) => d.value) * 1.1,
+                d3.min([...data[0].items, ...data[1].items, ...data[2].items], (d) => d.value) * 0.95,
+                d3.max([...data[0].items, ...data[1].items, ...data[2].items], (d) => d.value) * 1.05,
             ])
             .range([height, 0]);
         // Create root container where we will append all other chart elements
@@ -97,7 +99,7 @@ const MultilineChart = ({ data, dimensions }: MultilineChartProps) => {
             .attr("d", (d) => line(d.items));
     }, [data]); // Redraw chart if data changes
 
-    return <svg ref={svgRef} width={svgWidth} height={svgHeight} />;
+    return <svg ref={svgRef} width={svgWidth} height={svgHeight} viewBox={`0 0 ${svgWidth} ${svgHeight}`} />;
 };
 
 export default MultilineChart;
