@@ -8,7 +8,7 @@ function AboutPage(): JSX.Element {
                 <p>Coin Surfer is an open-source project for automated cryptocurrency trading.</p>
                 <p>This site is a live demo version of the visualization app using the example "AI threshold" surfer included in the project.</p>
                 <p>The tab(s) above correspond with the product(s) that are currently being traded.</p>
-                <p>To learn more, check out the project on <a href="https://github.com/husarms/coin-surfer" target="_blank">GitHub</a>.</p>
+                <p>To learn more, check out the project on <a href="https://github.com/husarms/coin-surfer#readme" target="_blank">GitHub</a>.</p>
             </div>
             <div style={{ marginTop: '36px', fontSize: '14px', color: '#a0a0a0' }}>
                 <p>
