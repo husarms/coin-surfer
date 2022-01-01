@@ -11,12 +11,12 @@
 
 p.price-data {
     margin-top: 0;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 p.message {
     margin-top: 0;
-    font-size: 16px;
+    font-size: 14px;
     color: #C8CACC;
 }
 
@@ -26,6 +26,6 @@ span.price {
     filter: brightness(1.5);
 }
 
-span.price, span.average, span.threshold, span.seven-day-trend, span.thirty-day-trend {
-    margin-right: 24px;
+span.price, span.average, span.threshold, span.seven-day-trend, span.thirty-day-trend, span.sixty-day-trend, span.ninety-day-trend {
+    margin-right: 24px; 
 }

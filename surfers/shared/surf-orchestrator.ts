@@ -13,7 +13,7 @@ import {
 import { Logger } from "../../utils/logger";
 import { Actions } from "../../utils/enums";
 import * as Formatters from "../../utils/formatters";
-import * as WebSocketServer from "../../web-socket/server";
+import * as WebSocketServer from "../../servers/web-socket";
 import SurfState from "../../interfaces/surf-state";
 
 export async function handleBuy(state: SurfState): Promise<SurfState> {
@@ -120,7 +120,7 @@ export async function updateThresholdsWithAI(state: SurfState): Promise<SurfStat
 function getAiThresholds(state: SurfState): { buyThreshold: number, buyThresholdPercentage: number, sellThreshold: number, sellThresholdPercentage: number, } {
     const { price, trendAnalysis } = state;
     const { sevenDayLowPrice, sevenDayHighPrice, thirtyDayLowPrice, thirtyDayHighPrice } = trendAnalysis;
-    const smoothingPercentage = 1.25 / 100;
+    const smoothingPercentage = 2.5 / 100;
     const lowPriceAverage = (sevenDayLowPrice + thirtyDayLowPrice) / 2;
     const highPriceAverage = (sevenDayHighPrice + thirtyDayHighPrice) / 2;
     const lowPriceAverageWithSmoothing = lowPriceAverage + (lowPriceAverage * smoothingPercentage);
