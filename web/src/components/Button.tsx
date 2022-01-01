@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-// @ts-ignore
 import styles from "./Button.module.scss";
 
 const Button = (props) => {
