@@ -28,7 +28,7 @@
         "parse-logs": "ts-node parse-logs.ts",
         "start-server": "ts-node -r dotenv/config index.ts",
         "start": "cd web && npm install",
-        "heroku-postbuild": "npm run start-server"
+        "postdeploy": "npm run start-server"
     },
     "keywords": [],
     "author": "",
