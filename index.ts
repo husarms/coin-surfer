@@ -72,12 +72,3 @@ async function stopSurfing() {
 
 const webServer = WebServer.startWebServer(startSurfing, stopSurfing);
 WebSocketServer.startWebSocketServer(webServer);
-
-// (async () => {
-//     parameters.map((parameters) => {
-//         AiThresholdSurfer.surf(parameters);
-//     });
-//     if (parameters.find((p) => p.webSocketFeedEnabled)) {
-//         WebSocketServer.startWebSocketServer(8080);
-//     }
-// })();
