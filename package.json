@@ -28,9 +28,9 @@
         "parse-logs": "ts-node parse-logs.ts",
         "postinstall": "cd web && npm install",
         "build-client": "cd web && npm run build",
-        "start": "ts-node -r dotenv/config index.ts",
-        "start-all": "npm run build-client && npm run start",
-        "heroku-postbuild": "npm run start-all"
+        "start-server": "ts-node -r dotenv/config index.ts",
+        "start": "npm run build-client && npm run start-server",
+        "heroku-postbuild": "npm run start"
     },
     "keywords": [],
     "author": "",
