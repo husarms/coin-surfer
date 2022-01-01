@@ -56,7 +56,7 @@ function App() {
     const maxDataPoints = 100000;
     const initialMap = new Map<string, ProductPageProps>();
     const [productMap, setProductMap] = useState(initialMap);
-    useWebSocket((window as any).coinSurferWebSocketUrl, {
+    useWebSocket(location.origin.replace(/^http/, 'ws') + '/ws', {
         onMessage: (messageEvent: WebSocketEventMap["message"]) => {
             handleMessage(messageEvent);
         },

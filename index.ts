@@ -49,8 +49,8 @@ const startSurfing = () => {
     });
 }
 
-WebServer.startWebServer(startSurfing);
-WebSocketServer.startWebSocketServer(8080);
+const webServer = WebServer.startWebServer(startSurfing);
+WebSocketServer.startWebSocketServer(webServer);
 
 // (async () => {
 //     parameters.map((parameters) => {
