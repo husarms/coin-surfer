@@ -43,13 +43,20 @@ const parameters: SurfParameters[] = [
     },
 ];
 
-WebServer.startWebServer(5000);
-
-(async () => {
+const startSurfing = () => {
     parameters.map((parameters) => {
         AiThresholdSurfer.surf(parameters);
     });
-    if (parameters.find((p) => p.webSocketFeedEnabled)) {
-        WebSocketServer.startWebSocketServer(8080);
-    }
-})();
+}
+
+WebServer.startWebServer(startSurfing, 5000);
+WebSocketServer.startWebSocketServer(8080);
+
+// (async () => {
+//     parameters.map((parameters) => {
+//         AiThresholdSurfer.surf(parameters);
+//     });
+//     if (parameters.find((p) => p.webSocketFeedEnabled)) {
+//         WebSocketServer.startWebSocketServer(8080);
+//     }
+// })();
