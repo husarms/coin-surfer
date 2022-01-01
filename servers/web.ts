@@ -3,9 +3,9 @@ const path = require('path');
 
 let backgroundProcessRunning = false;
 
-export const startWebServer = (backgroundProcess: () => void, port?: string | number) => {
+export const startWebServer = (backgroundProcess: () => void) => {
     const app = express();
-    port = port ? port : process.env.PORT;
+    const port = process.env.PORT;
     app.use(express.static('web/dist'));
     app.get('/hello', function (req, res) {
         console.log("Received request to /hello");
