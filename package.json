@@ -8,6 +8,7 @@
         "coinbase-pro-node": "^3.0.8",
         "dotenv": "^10.0.0",
         "express": "^4.17.2",
+        "node-cron": "^3.0.0",
         "path": "^0.12.7",
         "ts-node": "^10.0.0",
         "winston": "^3.3.3",
@@ -26,9 +27,9 @@
     "scripts": {
         "test": "jest",
         "parse-logs": "ts-node parse-logs.ts",
+        "postinstall": "cd web && npm install",
         "start-server": "ts-node -r dotenv/config index.ts",
-        "start": "cd web && npm install",
-        "postdeploy": "npm run start-server"
+        "heroku-postbuild": "npm run start-server"
     },
     "keywords": [],
     "author": "",
