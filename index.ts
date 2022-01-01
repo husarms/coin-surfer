@@ -49,7 +49,7 @@ const startSurfing = () => {
     });
 }
 
-WebServer.startWebServer(startSurfing, 5000);
+WebServer.startWebServer(startSurfing);
 WebSocketServer.startWebSocketServer(8080);
 
 // (async () => {
