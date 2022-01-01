@@ -48,14 +48,14 @@ let surfIntervals: NodeJS.Timer[] = [];
 
 async function startSurfing() {
     if (surfIntervals.length > 0) {
-        console.log('Surfers already started, returning...');
+        console.log(`${surfIntervals.length} surfer(s) already running, returning...`);
         return;
     }
     parameters.map(async (parameters) => {
         let interval = await AiThresholdSurfer.surf(parameters);
         surfIntervals.push(interval);
+        console.log(`${surfIntervals.length} surfer(s) started`);
     });
-    console.log(`${surfIntervals.length} surfer(s) started`);
 }
 
 async function stopSurfing() {
