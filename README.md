@@ -1,6 +1,6 @@
 ![logo](docs/images/logo.png)
 
-"If you don't find a way to make money while you sleep, you will work until you die."
+[View live demo here](https://coin-surfer.herokuapp.com/){:target="_blank"}
 
 # Contents
 - [Overview](#overview)
@@ -98,7 +98,7 @@ npm run start
 1. ~~**Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends~~
 2. Establish feedback loop for machine learning - after a buy and sell, replay time period to learn how it can be improved
 3. ~~Move secrets to environment variables~~
-4. Deploy to cloud (service and web app)
+4. ~~Deploy to cloud (service and web app)~~
 5. Improve error handling (API errors)
 6. Add more unit tests
 7. Visualization

@@ -13,7 +13,7 @@ import { Actions } from "../utils/enums";
 import SurfParameters from "../interfaces/surf-parameters";
 import SurfState from "../interfaces/surf-state";
 
-export async function surf(parameters: SurfParameters) {
+export async function surf(parameters: SurfParameters): Promise<NodeJS.Timer> {
     let state = {} as SurfState;
     state.parameters = parameters;
     state.productId = `${state.parameters.cryptoCurrency}-${state.parameters.fiatCurrency}`;
@@ -22,7 +22,7 @@ export async function surf(parameters: SurfParameters) {
     state.action = state.cryptoBalance > 0.1 ? Actions.Sell : Actions.Buy;
 
     console.log(`Let's go AI threshold surfing with ${state.productId}...`);
-    setInterval(async function () {
+    return setInterval(async function () {
         state = await updateBalances(state);
         state = await updateFills(state);
         state = await updatePrices(state);
