@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
@@ -52,10 +52,22 @@ const formatRoughNumber = (number: number): string => {
     return number.toFixed(2);
 }
 
+const requestBackgroundProcessStart = () => {
+    const http = new XMLHttpRequest();
+    const url = `${location.origin}/start`;
+    http.open('GET', url);
+    http.send();
+}
+
 function App() {
     const maxDataPoints = 100000;
     const initialMap = new Map<string, ProductPageProps>();
     const [productMap, setProductMap] = useState(initialMap);
+
+    useEffect(() => {
+        requestBackgroundProcessStart();
+    }, []);
+
     useWebSocket(location.origin.replace(/^http/, 'ws') + '/ws', {
         onMessage: (messageEvent: WebSocketEventMap["message"]) => {
             handleMessage(messageEvent);
