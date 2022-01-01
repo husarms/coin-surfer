@@ -4,6 +4,10 @@
     "description": "",
     "main": "index.ts",
     "dependencies": {
+        "@sendgrid/mail": "^7.4.4",
+        "@types/express": "^4.17.13",
+        "@types/jest": "^27.0.2",
+        "@types/node": "^17.0.5",
         "axios": "^0.21.4",
         "coinbase-pro-node": "^3.0.8",
         "dotenv": "^10.0.0",
@@ -15,10 +19,6 @@
         "ws": "^8.2.2"
     },
     "devDependencies": {
-        "@sendgrid/mail": "^7.4.4",
-        "@types/express": "^4.17.13",
-        "@types/jest": "^27.0.2",
-        "@types/node": "^17.0.5",
         "jest": "^27.2.1",
         "ts-jest": "^27.0.5",
         "typescript": "^4.4.3"
