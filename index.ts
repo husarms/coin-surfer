@@ -3,7 +3,6 @@ import * as AiThresholdSurfer from "./surfers/ai-threshold";
 import { Products } from "./utils/enums";
 import * as WebSocketServer from "./servers/web-socket";
 import * as WebServer from "./servers/web";
-import * as cron from "node-cron";
 
 const parameters: SurfParameters[] = [
     {
@@ -45,20 +44,12 @@ const parameters: SurfParameters[] = [
 ];
 
 WebServer.startWebServer(5000);
-WebSocketServer.startWebSocketServer(8080);
 
-parameters.map((parameters) => {
-    console.log(`Let's go AI threshold surfing with ${parameters.cryptoCurrency}...`);
-    cron.schedule('*/10 * * * * *', async () => {
-        await AiThresholdSurfer.surf(parameters);
-    }); 
-});
-
-// (async () => {
-//     parameters.map((parameters) => {
-//         AiThresholdSurfer.surf(parameters);
-//     });
-//     if (parameters.find((p) => p.webSocketFeedEnabled)) {
-//         WebSocketServer.startWebSocketServer(8080);
-//     }
-// })();
+(async () => {
+    parameters.map((parameters) => {
+        AiThresholdSurfer.surf(parameters);
+    });
+    if (parameters.find((p) => p.webSocketFeedEnabled)) {
+        WebSocketServer.startWebSocketServer(8080);
+    }
+})();
