@@ -1,0 +1,17 @@
+.react-tabs {
+    padding: size('m') size('s');
+    min-width: 100vw;
+    min-height: 100vh;
+}
+
+.react-tabs__tab {
+    padding-left: size('xl');
+    padding-right: size('xl');
+    color: $light;
+}
+
+.react-tabs__tab.react-tabs__tab--selected {
+    color: $gray;
+    background-color: $light;
+    font-weight: bold;
+}

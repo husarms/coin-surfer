@@ -1,0 +1,32 @@
+@import '../../styles/colors/index';
+
+.card {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #32334a;
+    background-clip: border-box;
+    border: 1px solid #151623;
+    border-radius: 6px;
+}
+
+.borderPrimary {
+    border-color: $indigo;
+}
+
+.cardBody {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}

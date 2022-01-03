@@ -1,0 +1,18 @@
+//  COLOR UTILITIES
+//
+//  Note: these helper utility classes are meant to override inherited styling,
+//  therfore the !important rule is assigned to each class.
+
+//  generate color helper classes which can be used in markup to apply color and background color:
+//  e.g. .color-blue for 'color: $blue !important' (assign a color of blue)
+//  e.g. .bg-color-blue for 'background-color: $blue !important' (assign a background-color of blue)
+
+/* stylelint-disable declaration-no-important */
+@each $prop-abbr, $prop-value in $color-properties {
+    @each $color-abbr, $color-value in $colors {
+        .#{$prop-abbr}-#{$color-abbr} {
+            #{$prop-value}: #{$color-value} !important;
+        }
+    }
+}
+/* stylelint-enable declaration-no-important */

@@ -4,6 +4,7 @@ import { Products } from "./utils/enums";
 import * as WebSocketServer from "./servers/web-socket";
 import * as WebServer from "./servers/web";
 import { clearInterval } from "timers";
+import { start } from "repl";
 
 const parameters: SurfParameters[] = [
     {
@@ -72,3 +73,5 @@ async function stopSurfing() {
 
 const webServer = WebServer.startWebServer(startSurfing, stopSurfing);
 WebSocketServer.startWebSocketServer(webServer);
+
+if(process.env.ENVIRONMENT === 'development') startSurfing();

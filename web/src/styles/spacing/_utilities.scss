@@ -1,0 +1,34 @@
+//  SIZING AND SPACING UTILITIES
+//
+//  Note: these helper utility classes are meant to override inherited styling,
+//  therfore the !important rule is assigned to each class.
+
+//  generate spacing helper classes which can be used in markup to apply padding and/or margin values to each side (or to all sides) of a container:
+//  e.g. .m-0 for 'margin:0 !important' (assign a margin of zero)
+//  e.g. .p-l-xxl for 'padding-left: 3rem !important' (assign padding-left of size xxl)
+
+/* stylelint-disable declaration-no-important */
+@each $prop-abbr, $prop-value in $spacing-properties {
+    @each $interval-abbr, $interval-value in $spacing-intervals {
+        .#{$prop-abbr}-#{$interval-abbr} {
+            #{$prop-value}: #{$interval-value} !important;
+        }
+        @each $side-abbr, $side-value in $spacing-sides {
+            .#{$prop-abbr}-#{$side-abbr}-#{$interval-abbr} {
+                #{$prop-value}-#{$side-value}: #{$interval-value} !important;
+            }
+        }
+    }
+}
+
+//  generate spacing helper classes which apply a width or height value to a container:
+//  e.g. .w-s for for 'width: .5rem !important' (assign a width of one-half-rem)
+//  e.g. .h-xxl for 'height: 3rem !important' (assign a height of 3rem)
+@each $abbreviation, $property in $sizing-properties {
+    @each $key, $value in $spacing-intervals {
+        .#{$abbreviation}-#{$key} {
+            #{$property}: $value !important;
+        }
+    }
+}
+/* stylelint-enable declaration-no-important */
