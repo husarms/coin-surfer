@@ -5,12 +5,11 @@ import styles from "./Button.module.scss";
 interface ButtonProps {
     size?: 'small' | 'large';
     shadow?: boolean;
-    icon?: boolean;
     className?: string;
     onClick: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ size, shadow, icon, className, onClick, children }) => {
+const Button: React.FC<ButtonProps> = ({ size, shadow, className, onClick, children }) => {
     return (
         <button className={classNames(
             styles.btn,
@@ -24,11 +23,7 @@ const Button: React.FC<ButtonProps> = ({ size, shadow, icon, className, onClick,
             })}
             onClick={onClick}
         >
-            {
-                icon 
-                ? (<div style={{display: 'flex', alignItems: 'center'}}>{children}</div>) 
-                : children
-            }
+            {children}
         </button >
     );
 }
