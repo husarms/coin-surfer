@@ -1,0 +1,10 @@
+.iconBlock {
+    display: inline-block;
+}
+.iconContainer {
+    display: flex;
+    align-items: center;
+    svg {
+        margin-right: 12px;
+    }
+}
