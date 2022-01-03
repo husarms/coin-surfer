@@ -114,7 +114,7 @@ function ProductPage({
                     >
                         60-90-Day{": "}{ninetyDayTrend}
                     </span>
-                    <Button onClick={() => setShowTrend(false)}>Real Time Data</Button>
+                    <Button size='small' onClick={() => setShowTrend(false)}>Real Time Data</Button>
                 </p>
                 <MultilineChart
                     data={[
