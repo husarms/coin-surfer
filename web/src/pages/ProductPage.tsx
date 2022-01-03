@@ -1,8 +1,8 @@
 import React from "react";
 import TrendAnalysis from "../../../interfaces/trend-analysis";
-import MultilineChart from "../components/MultilineChart";
+import MultilineChart from "../components/chart/MultilineChart";
 import ChartData from "../interfaces/chart-data";
-import Button from "../components/Button";
+import Button from "../components/button/Button";
 import "./ProductPage.scss";
 
 const priceColor = "#5E4FA2";

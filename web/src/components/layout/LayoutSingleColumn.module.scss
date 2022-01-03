@@ -1,0 +1,10 @@
+.grid {
+    display: grid;
+    grid-template-columns: 1 auto;
+}
+
+.gridItem {
+    justify-self: center;
+    max-width: 720px;
+}
+

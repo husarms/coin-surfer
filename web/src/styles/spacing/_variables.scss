@@ -1,0 +1,32 @@
+$spacing-unit: 16px !default;
+
+$spacing-intervals: (
+    '0': 0,
+    'xxs': $spacing-unit * 0.125,
+    'xs': $spacing-unit * 0.25,
+    's': $spacing-unit * 0.5,
+    'm': $spacing-unit * 1,
+    'l': $spacing-unit * 1.5,
+    'xl': $spacing-unit * 2,
+    '2xl': $spacing-unit * 3,
+    '3xl': $spacing-unit * 4,
+    '4xl': $spacing-unit * 4.5,
+    '5xl': $spacing-unit * 6,
+) !default;
+
+$spacing-properties: (
+    'm': 'margin',
+    'p': 'padding',
+) !default;
+
+$spacing-sides: (
+    't': 'top',
+    'r': 'right',
+    'b': 'bottom',
+    'l': 'left',
+) !default;
+
+$sizing-properties: (
+    'w': 'width',
+    'h': 'height',
+) !default;

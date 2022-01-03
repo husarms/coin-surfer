@@ -1,0 +1,15 @@
+@import './variables';
+
+@function size($size) {
+    @if type-of($size) != string {
+        @error 'Argument $size: `#{$size}` must be of type "string".';
+        @return null;
+    }
+
+    @if map-has-key($spacing-intervals, $size) {
+        @return map-get($spacing-intervals, $size);
+    }
+
+    @error 'No argument $size: `#{$size}` found in $spacing-intervals map.';
+    @return null;
+}
