@@ -121,11 +121,8 @@ function ProductPage({
                         <td>60-90-Day</td>
                         <td>{ninetyDayTrend}</td>
                     </tr>
-                    <tr>
-                        <td>{lastTimestamp}</td>
-                        <td>{lastMessage}</td>
-                    </tr>
                 </table>
+                <p className="text-mono fine-print p-m m-b-l">{message}</p>
                 <Button onClick={() => setShowTrend(!showTrend)}>{showTrend ? 'Real Time Data' : 'Trend Analysis'}</Button>
             </div>
             <div className="chart-container">
