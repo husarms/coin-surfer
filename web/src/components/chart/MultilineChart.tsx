@@ -29,9 +29,7 @@ interface ChartData {
 
 const MultilineChart = ({ data, dimensions }: MultilineChartProps) => {
     const svgRef = React.useRef(null);
-    let { width, height, margin } = dimensions;
-    width = window.innerWidth - (window.innerWidth * .05);
-    height = window.innerHeight - (window.innerHeight * .2);
+    const { width, height, margin } = dimensions;
     const svgWidth = width + margin.left + margin.right;
     const svgHeight = height + margin.top + margin.bottom;
 
@@ -99,7 +97,7 @@ const MultilineChart = ({ data, dimensions }: MultilineChartProps) => {
             .attr("d", (d) => line(d.items));
     }, [data]); // Redraw chart if data changes
 
-    return <svg ref={svgRef} width={svgWidth} height={svgHeight} viewBox={`0 0 ${svgWidth} ${svgHeight}`} />;
+    return <svg ref={svgRef} height='100%' width='100%' viewBox={`0 0 ${svgWidth} ${svgHeight}`} />;
 };
 
 export default MultilineChart;
