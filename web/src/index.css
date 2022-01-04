@@ -33,3 +33,12 @@ main {
   justify-content: center;
   text-align: center;
 }
+
+svg {
+  overflow: hidden;
+  vertical-align: middle; 
+}
+
+table {
+  border-collapse: collapse; 
+}

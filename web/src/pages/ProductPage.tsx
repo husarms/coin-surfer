@@ -53,71 +53,81 @@ function ProductPage({
     message,
 }: ProductPageProps): JSX.Element {
     const [showTrend, setShowTrend] = React.useState(false);
-    if (showTrend) {
-        const now = new Date();
-        const sevenDaysAgo = new Date(now);
-        sevenDaysAgo.setDate(now.getDate() - 7);
-        const thirtyDaysAgo = new Date(now);
-        thirtyDaysAgo.setDate(now.getDate() - 30);
-        const sixtyDaysAgo = new Date(now);
-        sixtyDaysAgo.setDate(now.getDate() - 60);
-        const ninetyDaysAgo = new Date(now);
-        ninetyDaysAgo.setDate(now.getDate() - 90);
-        const trendAverageData: ChartData[] = [
-            {value: parseFloat(average), date: now}, 
-            {value: trendAnalysis.sevenDayAverage, date: sevenDaysAgo}, 
-            {value: trendAnalysis.thirtyDayAverage, date: thirtyDaysAgo},
-            {value: trendAnalysis.sixtyDayAverage, date: sixtyDaysAgo},
-            {value: trendAnalysis.ninetyDayAverage, date: ninetyDaysAgo}
-        ];
-        const trendLowData: ChartData[] = [
-            {value: trendAnalysis.sevenDayLowPrice, date: now}, 
-            {value: trendAnalysis.sevenDayLowPrice, date: sevenDaysAgo}, 
-            {value: trendAnalysis.thirtyDayLowPrice, date: thirtyDaysAgo},
-            {value: trendAnalysis.sixtyDayLowPrice, date: sixtyDaysAgo},
-            {value: trendAnalysis.ninetyDayLowPrice, date: ninetyDaysAgo},
-        ];
-        const trendHighData: ChartData[] = [
-            {value: trendAnalysis.sevenDayHighPrice, date: now}, 
-            {value: trendAnalysis.sevenDayHighPrice, date: sevenDaysAgo}, 
-            {value: trendAnalysis.thirtyDayHighPrice, date: thirtyDaysAgo},
-            {value: trendAnalysis.sixtyDayHighPrice, date: sixtyDaysAgo},
-            {value: trendAnalysis.ninetyDayHighPrice, date: ninetyDaysAgo},
-        ];
-        return (
-            <>
-                <p className="price-data text-mono">
-                    <span className="threshold" style={{ color: thresholdColor }}>
-                        <b>{trendPrediction}</b>
-                    </span>
-                    <span
-                        className="seven-day-trend"
-                        style={{ color: sevenDayTrendColor }}
-                    >
-                        7-Day{": "}{sevenDayTrend}
-                    </span>
-                    <span
-                        className="thirty-day-trend"
-                        style={{ color: thirtyDayTrendColor }}
-                    >
-                        30-Day{": "}{thirtyDayTrend}
-                    </span>
-                    <span
-                        className="sixty-day-trend"
-                        style={{ color: sixtyDayTrendColor }}
-                    >
-                        30-60-Day{": "}{sixtyDayTrend}
-                    </span>
-                    <span
-                        className="ninety-day-trend"
-                        style={{ color: ninetyDayTrendColor }}
-                    >
-                        60-90-Day{": "}{ninetyDayTrend}
-                    </span>
-                    <Button size='small' onClick={() => setShowTrend(false)}>Real Time Data</Button>
-                </p>
+    const now = new Date();
+    const sevenDaysAgo = new Date(now);
+    sevenDaysAgo.setDate(now.getDate() - 7);
+    const thirtyDaysAgo = new Date(now);
+    thirtyDaysAgo.setDate(now.getDate() - 30);
+    const sixtyDaysAgo = new Date(now);
+    sixtyDaysAgo.setDate(now.getDate() - 60);
+    const ninetyDaysAgo = new Date(now);
+    ninetyDaysAgo.setDate(now.getDate() - 90);
+    const trendAverageData: ChartData[] = [
+        { value: parseFloat(average), date: now },
+        { value: trendAnalysis.sevenDayAverage, date: sevenDaysAgo },
+        { value: trendAnalysis.thirtyDayAverage, date: thirtyDaysAgo },
+        { value: trendAnalysis.sixtyDayAverage, date: sixtyDaysAgo },
+        { value: trendAnalysis.ninetyDayAverage, date: ninetyDaysAgo },
+    ];
+    const trendLowData: ChartData[] = [
+        { value: trendAnalysis.sevenDayLowPrice, date: now },
+        { value: trendAnalysis.sevenDayLowPrice, date: sevenDaysAgo },
+        { value: trendAnalysis.thirtyDayLowPrice, date: thirtyDaysAgo },
+        { value: trendAnalysis.sixtyDayLowPrice, date: sixtyDaysAgo },
+        { value: trendAnalysis.ninetyDayLowPrice, date: ninetyDaysAgo },
+    ];
+    const trendHighData: ChartData[] = [
+        { value: trendAnalysis.sevenDayHighPrice, date: now },
+        { value: trendAnalysis.sevenDayHighPrice, date: sevenDaysAgo },
+        { value: trendAnalysis.thirtyDayHighPrice, date: thirtyDaysAgo },
+        { value: trendAnalysis.sixtyDayHighPrice, date: sixtyDaysAgo },
+        { value: trendAnalysis.ninetyDayHighPrice, date: ninetyDaysAgo },
+    ];
+    const lastTimestamp = message.split(',')[0];
+    const lastMessage = message.split(',')[5];
+    return (
+        <div className="grid-container m-t-2xl">
+            <div className="table-container p-t-xl p-l-s p-r-s">
+                <table className="table table-striped text-mono fine-print" style={{ textAlign: 'left' }}>
+                    <tr style={{ color: priceColor, filter: 'brightness(1.5)' }}>
+                        <td>Price</td>
+                        <td>${price}</td>
+                    </tr>
+                    <tr style={{ color: averageColor }}>
+                        <td>Average</td>
+                        <td>${average}</td>
+                    </tr>
+                    <tr style={{ color: thresholdColor }}>
+                        <td>Threshold</td>
+                        <td>{threshold}</td>
+                    </tr>
+                    <tr style={{ color: thresholdColor }}>
+                        <td>Trend</td>
+                        <td>{trendPrediction}</td>
+                    </tr>
+                    <tr style={{ color: sevenDayTrendColor }}>
+                        <td>7-Day</td>
+                        <td>{sevenDayTrend}</td>
+                    </tr>
+                    <tr style={{ color: thirtyDayTrendColor }}>
+                        <td>30-Day</td>
+                        <td>{thirtyDayTrend}</td>
+                    </tr>
+                    <tr style={{ color: sixtyDayTrendColor }}>
+                        <td>30-60-Day</td>
+                        <td>{sixtyDayTrend}</td>
+                    </tr>
+                    <tr style={{ color: ninetyDayTrendColor }}>
+                        <td>60-90-Day</td>
+                        <td>{ninetyDayTrend}</td>
+                    </tr>
+                </table>
+                <p className="text-mono fine-print m-b-l p-s">{message}</p>
+                <Button onClick={() => setShowTrend(!showTrend)}>{showTrend ? 'Real Time Data' : 'Trend Analysis'}</Button>
+            </div>
+            <div className="chart-container">
                 <MultilineChart
-                    data={[
+                    data={showTrend ? [
                         {
                             name: "Average",
                             color: averageColor,
@@ -138,10 +148,43 @@ function ProductPage({
                             strokeWidth: 2,
                             strokeDashArray: '2,5',
                         },
+                    ] : [
+                        {
+                            name: "Average",
+                            color: averageColor,
+                            items: averageData ? averageData : [],
+                            strokeWidth: 2,
+                        },
+                        {
+                            name: "Price",
+                            color: priceColor,
+                            items: priceData ? priceData : [],
+                            strokeWidth: 3,
+                        },
+                        {
+                            name: "Threshold",
+                            color: thresholdColor,
+                            items: thresholdData ? thresholdData : [],
+                            strokeWidth: 2,
+                        },
+                        {
+                            name: "SevenDayAverage",
+                            color: sevenDayTrendColor,
+                            items: sevenDayAverageData ? sevenDayAverageData : [],
+                            strokeWidth: 1,
+                            strokeDashArray: '2,5',
+                        },
+                        {
+                            name: "ThirtyDayAverage",
+                            color: thirtyDayTrendColor,
+                            items: thirtyDayAverageData ? thirtyDayAverageData : [],
+                            strokeWidth: 1,
+                            strokeDashArray: '2,5',
+                        },
                     ]}
                     dimensions={{
-                        width: 1800,
-                        height: 800,
+                        width: window.innerWidth * .75,
+                        height: window.innerHeight * .75,
                         margin: {
                             top: 20,
                             right: 30,
@@ -150,72 +193,8 @@ function ProductPage({
                         },
                     }}
                 />
-                <p className="message text-mono">{message}</p>
-            </>
-        )
-    }
-    return (
-        <>
-            <p className="price-data text-mono">
-                <span className="price" style={{ color: priceColor }}>
-                    Price{": "}${price}
-                </span>
-                <span className="average" style={{ color: averageColor }}>
-                    Average{": "}${average}
-                </span>
-                <span className="threshold" style={{ color: thresholdColor }}>
-                    Threshold{": "}{threshold}
-                </span>
-                <Button onClick={() => setShowTrend(true)}>Trend Analysis</Button>
-            </p>
-            <MultilineChart
-                data={[
-                    {
-                        name: "Average",
-                        color: averageColor,
-                        items: averageData ? averageData : [],
-                        strokeWidth: 2,
-                    },
-                    {
-                        name: "Price",
-                        color: priceColor,
-                        items: priceData ? priceData : [],
-                        strokeWidth: 3,
-                    },
-                    {
-                        name: "Threshold",
-                        color: thresholdColor,
-                        items: thresholdData ? thresholdData : [],
-                        strokeWidth: 2,
-                    },
-                    {
-                        name: "SevenDayAverage",
-                        color: sevenDayTrendColor,
-                        items: sevenDayAverageData ? sevenDayAverageData : [],
-                        strokeWidth: 1,
-                        strokeDashArray: '2,5',
-                    },
-                    {
-                        name: "ThirtyDayAverage",
-                        color: thirtyDayTrendColor,
-                        items: thirtyDayAverageData ? thirtyDayAverageData : [],
-                        strokeWidth: 1,
-                        strokeDashArray: '2,5',
-                    },
-                ]}
-                dimensions={{
-                    width: 1800,
-                    height: 800,
-                    margin: {
-                        top: 20,
-                        right: 30,
-                        bottom: 20,
-                        left: 50,
-                    },
-                }}
-            />
-            <p className="message text-mono">{message}</p>
-        </>
+            </div>
+        </div>
     );
 }
 
