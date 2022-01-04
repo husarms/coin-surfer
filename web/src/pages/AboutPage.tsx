@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Card, IconContainer, LayoutSingleColumn } from "../components";
-import { FaGithub, FaCoins } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 
 
 function AboutPage(): JSX.Element {
