@@ -86,8 +86,8 @@ function ProductPage({
     const lastTimestamp = message.split(',')[0];
     const lastMessage = message.split(',')[5];
     return (
-        <div className="grid-container p-t-2xl">
-            <div className="table-container p-t-xl">
+        <div className="grid-container m-t-2xl">
+            <div className="table-container p-t-xl p-l-s p-r-s">
                 <table className="table table-striped text-mono fine-print" style={{ textAlign: 'left' }}>
                     <tr style={{ color: priceColor, filter: 'brightness(1.5)' }}>
                         <td>Price</td>
@@ -122,7 +122,7 @@ function ProductPage({
                         <td>{ninetyDayTrend}</td>
                     </tr>
                 </table>
-                <p className="text-mono fine-print p-m m-b-l">{message}</p>
+                <p className="text-mono fine-print m-b-l p-s">{message}</p>
                 <Button onClick={() => setShowTrend(!showTrend)}>{showTrend ? 'Real Time Data' : 'Trend Analysis'}</Button>
             </div>
             <div className="chart-container">
