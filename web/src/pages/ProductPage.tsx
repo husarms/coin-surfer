@@ -87,8 +87,8 @@ function ProductPage({
     const lastMessage = message.split(',')[5];
     return (
         <div className="grid-container m-t-2xl">
-            <div className="table-container p-t-xl p-l-s p-r-s">
-                <table className="table table-striped text-mono fine-print" style={{ textAlign: 'left' }}>
+            <div className="table-container p-t-xl p-b-xl p-l-s p-r-s">
+                <table className="table table-striped text-mono fine-print">
                     <tr style={{ color: priceColor, filter: 'brightness(1.5)' }}>
                         <td>Price</td>
                         <td>${price}</td>

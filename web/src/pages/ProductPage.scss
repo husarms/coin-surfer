@@ -9,6 +9,12 @@
     grid-area: table;
     border: 1px solid;
     border-color: gray;
+    td:nth-child(1) {
+        text-align: right;
+    }
+    td:nth-child(2) {
+        text-align: left;
+    }
 }
 
 .chart-container {
@@ -16,4 +22,20 @@
     background-color: rgb(0, 0, 0, 0.8);
     border: 1px solid;
     border-color: gray;
+}
+
+@media screen and (max-width: 1200px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+        grid-template-areas: "table"
+                            "chart";
+    }
+    .table-container {
+        td:nth-child(1) {
+            text-align: center;
+        }
+        td:nth-child(2) {
+            text-align: center;
+        }
+    }
 }
