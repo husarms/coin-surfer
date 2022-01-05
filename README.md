@@ -2,7 +2,7 @@
 
 ### [View live demo here](https://coin-surfer.herokuapp.com/)
 
-![about-page](docs/images/screenshot-about.png)
+![home-page](docs/images/screenshot-home.png)
 
 # Contents
 - [Overview](#overview)
