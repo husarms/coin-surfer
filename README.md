@@ -2,7 +2,7 @@
 
 ### [View live demo here](https://coin-surfer.herokuapp.com/)
 
-![home-page](docs/images/screenshot-about.png)
+![about-page](docs/images/screenshot-about.png)
 
 # Contents
 - [Overview](#overview)
@@ -66,7 +66,7 @@ Optional text or email notifications can be sent on buy / sell actions.
 ## Visualization
 The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs.
 
-![visualization](docs/images/coin-surfer-screenshot-1.png)
+![chart](docs/images/screenshot-chart.png)
 
 ## Web Socket Feed
 When a web socket feed is enabled (see [Setup](#setup)) - the app emits it's current state on each update interval.
