@@ -1,8 +1,6 @@
-![logo](docs/images/logo.png)
+![logo](docs/images/logo-3.png)
 
 ### [View live demo here](https://coin-surfer.herokuapp.com/)
-
-![home-page](docs/images/screenshot-home.png)
 
 # Contents
 - [Overview](#overview)
