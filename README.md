@@ -1,6 +1,6 @@
 ![logo](docs/images/logo-3.png)
 
-## [View Live Demo](https://coin-surfer.herokuapp.com/)
+## [Click Here to View Live Demo](https://coin-surfer.herokuapp.com/)
 
 # Contents
 - [Overview](#overview)
