@@ -3,7 +3,7 @@ This web app allows you to visualize Coin Surfer as it runs
 
 It displays the current price, average and threshold over time - as well as status messages
 
-![visualization](../docs/images/visualization.png)
+![visualization](../docs/images/screenshot-graph.png)
 
 ## How to run
 1. Enable at least one web socket feed in Coin Surfer via [Surf Parameters](https://github.com/husarms/coin-surfer/blob/master/interfaces/surf-parameters.ts#L8)

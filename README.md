@@ -2,6 +2,8 @@
 
 ### [View live demo here](https://coin-surfer.herokuapp.com/)
 
+![home-page](docs/images/screenshot-about.png)
+
 # Contents
 - [Overview](#overview)
 - [Surfers](#surfers)
@@ -14,6 +16,7 @@
     - [Web Socket Feed](#web-socket-feed)
 - [Setup](#setup)
 - [How to Run](#how-to-run)
+- [Deployment](#deployment)
 - [TODO](#todo)
 
 # Overview
@@ -63,7 +66,7 @@ Optional text or email notifications can be sent on buy / sell actions.
 ## Visualization
 The [web directory](https://github.com/husarms/coin-surfer/tree/master/web) contains a React app for visualizing Coin Surfer as it runs.
 
-![visualization](docs/images/visualization-2.png)
+![visualization](docs/images/coin-surfer-screenshot-1.png)
 
 ## Web Socket Feed
 When a web socket feed is enabled (see [Setup](#setup)) - the app emits it's current state on each update interval.
@@ -93,6 +96,13 @@ Run
 ```bash
 npm run start
 ```
+
+# Deployment
+The [live demo site](https://coin-surfer.herokuapp.com) is hosted in [Heroku](https://heroku.com).
+
+Deploying your own instance should be straightforward using their [Node.js getting started guide](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
+
+Remember to define the environment variables mentioned in [setup](#setup) in Heroku's "config vars".
 
 # TODO
 1. ~~**Implement some basic AI** - use historical data to automatically adjust and optimize thresholds based on market trends~~
