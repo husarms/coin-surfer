@@ -1,4 +1,7 @@
 export default interface TrendAnalysis {
+    oneTwentyDayAverage: number;
+    oneTwentyDayLowPrice: number;
+    oneTwentyDayHighPrice: number;
     ninetyDayAverage: number;
     ninetyDayLowPrice: number;
     ninetyDayHighPrice: number;

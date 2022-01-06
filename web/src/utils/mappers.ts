@@ -9,7 +9,13 @@ export function MapSurfStatesToProductMap(productMap: Map<string, ProductPagePro
     let map = productMap;
     for (let surfState of surfStates) {
         const { parameters, timestamp, price, averagePrice, trendAnalysis, buyThreshold, sellThreshold, statusMessage, action } = surfState;
-        const { ninetyDayAverage, ninetyDayLowPrice, ninetyDayHighPrice, sixtyDayAverage, sixtyDayLowPrice, sixtyDayHighPrice, thirtyDayAverage, thirtyDayLowPrice, thirtyDayHighPrice, sevenDayAverage, sevenDayLowPrice, sevenDayHighPrice } = trendAnalysis;
+        const { 
+            oneTwentyDayAverage, oneTwentyDayLowPrice, oneTwentyDayHighPrice, 
+            ninetyDayAverage, ninetyDayLowPrice, ninetyDayHighPrice, 
+            sixtyDayAverage, sixtyDayLowPrice, sixtyDayHighPrice, 
+            thirtyDayAverage, thirtyDayLowPrice, thirtyDayHighPrice, 
+            sevenDayAverage, sevenDayLowPrice, sevenDayHighPrice 
+        } = trendAnalysis;
         const product = parameters.cryptoCurrency;
         const threshold = action === Actions.Buy ? buyThreshold : sellThreshold;
         let value = map.get(product);
@@ -52,6 +58,7 @@ export function MapSurfStatesToProductMap(productMap: Map<string, ProductPagePro
         const thirtyDayTrend = formatTrendAnalysis(thirtyDayAverage, thirtyDayLowPrice, thirtyDayHighPrice);
         const sixtyDayTrend = formatTrendAnalysis(sixtyDayAverage, sixtyDayLowPrice, sixtyDayHighPrice);
         const ninetyDayTrend = formatTrendAnalysis(ninetyDayAverage, ninetyDayLowPrice, ninetyDayHighPrice);
+        const oneTwentyDayTrend = formatTrendAnalysis(oneTwentyDayAverage, oneTwentyDayLowPrice, oneTwentyDayHighPrice);
         const thresholdMargin = Math.abs(((sellThreshold - buyThreshold) / sellThreshold) * 100);
         const thresholdSummary = `$${formatRoughNumber(buyThreshold)} - $${formatRoughNumber(sellThreshold)} (${formatNumber(thresholdMargin)}%)`;
         const trendPrediction = getTrendPrediction(sevenDayAverage, thirtyDayAverage, sixtyDayAverage, ninetyDayAverage);
@@ -72,6 +79,7 @@ export function MapSurfStatesToProductMap(productMap: Map<string, ProductPagePro
             thirtyDayTrend,
             sixtyDayTrend,
             ninetyDayTrend,
+            oneTwentyDayTrend,
             trendPrediction,
             trendAnalysis,
             message: statusMessage,
