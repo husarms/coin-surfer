@@ -62,6 +62,7 @@ function App() {
                             thirtyDayTrend={value.thirtyDayTrend}
                             sixtyDayTrend={value.sixtyDayTrend}
                             ninetyDayTrend={value.ninetyDayTrend}
+                            oneTwentyDayTrend={value.oneTwentyDayTrend}
                             trendPrediction={value.trendPrediction}
                             trendAnalysis={value.trendAnalysis}
                             message={value.message}

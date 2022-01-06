@@ -11,7 +11,8 @@ const thresholdColor = "#A8DF53";
 const sevenDayTrendColor = "#C7BA00";
 const thirtyDayTrendColor = "#C98C3C";
 const sixtyDayTrendColor = "#C97632";
-const ninetyDayTrendColor = "#A14E43";
+const ninetyDayTrendColor = "#BA493A";
+const oneTwentyDayTrendColor = "#9C3022";
 
 export interface ProductPageProps {
     product: string;
@@ -30,6 +31,7 @@ export interface ProductPageProps {
     thirtyDayTrend: string;
     sixtyDayTrend: string;
     ninetyDayTrend: string;
+    oneTwentyDayTrend: string;
     trendPrediction: string;
     trendAnalysis: TrendAnalysis;
     message: string;
@@ -48,6 +50,7 @@ function ProductPage({
     thirtyDayTrend,
     sixtyDayTrend,
     ninetyDayTrend,
+    oneTwentyDayTrend,
     trendPrediction,
     trendAnalysis,
     message,
@@ -62,12 +65,15 @@ function ProductPage({
     sixtyDaysAgo.setDate(now.getDate() - 60);
     const ninetyDaysAgo = new Date(now);
     ninetyDaysAgo.setDate(now.getDate() - 90);
+    const oneTwentyDaysAgo = new Date(now);
+    oneTwentyDaysAgo.setDate(now.getDate() - 120);
     const trendAverageData: ChartData[] = [
         { value: parseFloat(average), date: now },
         { value: trendAnalysis.sevenDayAverage, date: sevenDaysAgo },
         { value: trendAnalysis.thirtyDayAverage, date: thirtyDaysAgo },
         { value: trendAnalysis.sixtyDayAverage, date: sixtyDaysAgo },
         { value: trendAnalysis.ninetyDayAverage, date: ninetyDaysAgo },
+        { value: trendAnalysis.oneTwentyDayAverage, date: oneTwentyDaysAgo },
     ];
     const trendLowData: ChartData[] = [
         { value: trendAnalysis.sevenDayLowPrice, date: now },
@@ -75,6 +81,7 @@ function ProductPage({
         { value: trendAnalysis.thirtyDayLowPrice, date: thirtyDaysAgo },
         { value: trendAnalysis.sixtyDayLowPrice, date: sixtyDaysAgo },
         { value: trendAnalysis.ninetyDayLowPrice, date: ninetyDaysAgo },
+        { value: trendAnalysis.oneTwentyDayLowPrice, date: oneTwentyDaysAgo },
     ];
     const trendHighData: ChartData[] = [
         { value: trendAnalysis.sevenDayHighPrice, date: now },
@@ -82,6 +89,7 @@ function ProductPage({
         { value: trendAnalysis.thirtyDayHighPrice, date: thirtyDaysAgo },
         { value: trendAnalysis.sixtyDayHighPrice, date: sixtyDaysAgo },
         { value: trendAnalysis.ninetyDayHighPrice, date: ninetyDaysAgo },
+        { value: trendAnalysis.oneTwentyDayHighPrice, date: oneTwentyDaysAgo },
     ];
     const lastTimestamp = message.split(',')[0];
     const lastMessage = message.split(',')[5];
@@ -106,20 +114,24 @@ function ProductPage({
                         <td>{trendPrediction}</td>
                     </tr>
                     <tr style={{ color: sevenDayTrendColor }}>
-                        <td>7-Day</td>
+                        <td>0-7 Day</td>
                         <td>{sevenDayTrend}</td>
                     </tr>
                     <tr style={{ color: thirtyDayTrendColor }}>
-                        <td>30-Day</td>
+                        <td>7-30 Day</td>
                         <td>{thirtyDayTrend}</td>
                     </tr>
                     <tr style={{ color: sixtyDayTrendColor }}>
-                        <td>30-60-Day</td>
+                        <td>30-60 Day</td>
                         <td>{sixtyDayTrend}</td>
                     </tr>
                     <tr style={{ color: ninetyDayTrendColor }}>
-                        <td>60-90-Day</td>
+                        <td>60-90 Day</td>
                         <td>{ninetyDayTrend}</td>
+                    </tr>
+                    <tr style={{ color: oneTwentyDayTrendColor }}>
+                        <td>90-120 Day</td>
+                        <td>{oneTwentyDayTrend}</td>
                     </tr>
                 </table>
                 <p className="text-mono fine-print m-b-l p-s">{message}</p>

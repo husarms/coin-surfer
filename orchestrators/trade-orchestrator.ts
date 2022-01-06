@@ -115,20 +115,24 @@ export async function get24HrAveragePrice(
     return average;
 }
 
-async function getNinetyDayCandles(
+async function getOneTwentyDayCandles(
     productId: string,
 ): Promise<Candle[]> {
     const now = new Date();
-    const ninetyDaysAgo = new Date(now);
-    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-    const lastThirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, 86400, ninetyDaysAgo, now)) as Candle[];
+    const oneTwentyDaysAgo = new Date(now);
+    oneTwentyDaysAgo.setDate(oneTwentyDaysAgo.getDate() - 120);
+    const lastThirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, 86400, oneTwentyDaysAgo, now)) as Candle[];
     return lastThirtyDayCandles;
 }
 
 export async function getTrendAnalysis(
     productId: string,
 ): Promise<TrendAnalysis> {
-    const ninetyDayCandles = await getNinetyDayCandles(productId);
+    const oneTwentyDayCandles = await getOneTwentyDayCandles(productId);
+    let oneTwentyDayAverage = 0;
+    let oneTwentyDayLowPrice = Number.MAX_SAFE_INTEGER;
+    let oneTwentyDayHighPrice = 0;
+    let oneTwentyDayRunningAverage = 0;
     let ninetyDayAverage = 0;
     let ninetyDayLowPrice = Number.MAX_SAFE_INTEGER;
     let ninetyDayHighPrice = 0;
@@ -145,34 +149,43 @@ export async function getTrendAnalysis(
     let sevenDayLowPrice = Number.MAX_SAFE_INTEGER;
     let sevenDayHighPrice = 0;
     let sevenDayRunningAverage = 0;
-    for (const [index, value] of ninetyDayCandles.entries()) {
+    for (const [index, value] of oneTwentyDayCandles.entries()) {
         const average = (value.close + value.open) / 2;
-        if (index <= (ninetyDayCandles.length - 60)) { //60-90
+        if (index < (oneTwentyDayCandles.length - 90)) { //90-120
+            if (value.low < oneTwentyDayLowPrice) oneTwentyDayLowPrice = value.low;
+            if (value.high > oneTwentyDayHighPrice) oneTwentyDayHighPrice = value.high;
+            oneTwentyDayRunningAverage += average;
+            oneTwentyDayAverage = oneTwentyDayRunningAverage / (index + 1);
+        }
+        if (index < (oneTwentyDayCandles.length - 60) && index >= (oneTwentyDayCandles.length - 90)) { //60-90
             if (value.low < ninetyDayLowPrice) ninetyDayLowPrice = value.low;
             if (value.high > ninetyDayHighPrice) ninetyDayHighPrice = value.high;
             ninetyDayRunningAverage += average;
-            ninetyDayAverage = ninetyDayRunningAverage / ((index + 1));
+            ninetyDayAverage = ninetyDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 90));
         }
-        if (index <= (ninetyDayCandles.length - 30) && index >= (ninetyDayCandles.length - 60)) { //30-60
+        if (index < (oneTwentyDayCandles.length - 30) && index >= (oneTwentyDayCandles.length - 60)) { //30-60
             if (value.low < sixtyDayLowPrice) sixtyDayLowPrice = value.low; 
             if (value.high > sixtyDayHighPrice) sixtyDayHighPrice = value.high;
             sixtyDayRunningAverage += average;
-            sixtyDayAverage = sixtyDayRunningAverage / ((index + 1) - (ninetyDayCandles.length - 60));
+            sixtyDayAverage = sixtyDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 60));
         }
-        if (index >= (ninetyDayCandles.length - 30)) { //0-30
+        if (index < (oneTwentyDayCandles.length - 7) && index >= (oneTwentyDayCandles.length - 30)) { //7-30
             if (value.low < thirtyDayLowPrice) thirtyDayLowPrice = value.low;
             if (value.high > thirtyDayHighPrice) thirtyDayHighPrice = value.high;
             thirtyDayRunningAverage += average;
-            thirtyDayAverage = thirtyDayRunningAverage / ((index + 1) - (ninetyDayCandles.length - 30));
+            thirtyDayAverage = thirtyDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 30));
         }
-        if (index >= (ninetyDayCandles.length - 7)) { //0-7
+        if (index >= (oneTwentyDayCandles.length - 7)) { //0-7
             if (value.low < sevenDayLowPrice) sevenDayLowPrice = value.low;
             if (value.high > sevenDayHighPrice) sevenDayHighPrice = value.high;
             sevenDayRunningAverage += average;
-            sevenDayAverage = sevenDayRunningAverage / ((index + 1) - (ninetyDayCandles.length - 7));
+            sevenDayAverage = sevenDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 7));
         }
     }
     return {
+        oneTwentyDayAverage,
+        oneTwentyDayLowPrice,
+        oneTwentyDayHighPrice,
         ninetyDayAverage,
         ninetyDayLowPrice,
         ninetyDayHighPrice,
