@@ -76,9 +76,12 @@ The included [Visualization App](https://github.com/husarms/coin-surfer/tree/mas
 2. Optionally - a [SendGrid](https://sendgrid.com) account to send buy / sell notifications
 3. Create a ```.env``` file under the root directory with the following environment variables
 ```
+BASE_ADDRESS=localhost
 COINBASE_API_KEY=
 COINBASE_API_SECRET=
 COINBASE_API_PASSPHRASE=
+ENVIRONMENT=development
+PORT=5000
 SENDGRID_API_KEY=
 SENDGRID_TO_ADDRESS=
 SENDGRID_FROM_ADDRESS=
