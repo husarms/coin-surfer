@@ -15,7 +15,7 @@ export function getCurrentPercentage(
 ): number {
     let currentPercentage = Math.abs(
         Formatters.roundDownToTwoDecimals(
-            ((averagePrice - price) / averagePrice) * 100
+            ((price - averagePrice) / price) * 100
         )
     );
     if (price < averagePrice) currentPercentage *= -1;
