@@ -73,7 +73,7 @@ async function stopSurfing() {
 
 function keepAlive() {
     const thirtyMinutes = 1800000;
-    const requestUrl = process.env.BASE_ADDRESS;
+    const requestUrl = `https://${process.env.BASE_ADDRESS}`;
     setInterval(() => {
         console.log(`Keep alive pinging ${requestUrl}`)
         https.get(requestUrl);
