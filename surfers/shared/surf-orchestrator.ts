@@ -126,8 +126,8 @@ function getAiThresholds(state: SurfState): { buyThreshold: number, buyThreshold
     const lowPriceAverageWithSmoothing = lowPriceAverage + (lowPriceAverage * smoothingPercentage);
     const highPriceAverageWithSmoothing = highPriceAverage - (highPriceAverage * smoothingPercentage);
     const buyThreshold = Formatters.roundDownToTwoDecimals(lowPriceAverageWithSmoothing);
-    const buyThresholdPercentage = Formatters.roundDownToOneDecimal(Math.abs(((price - buyThreshold) / buyThreshold) * 100));
+    const buyThresholdPercentage = Formatters.roundDownToOneDecimal(Math.abs(((price - buyThreshold) / price) * 100));
     const sellThreshold = Formatters.roundDownToTwoDecimals(highPriceAverageWithSmoothing);
-    const sellThresholdPercentage = Formatters.roundDownToOneDecimal(Math.abs(((price - sellThreshold) / sellThreshold) * 100));
+    const sellThresholdPercentage = Formatters.roundDownToOneDecimal(Math.abs(((price - sellThreshold) / price) * 100));
     return { buyThreshold, buyThresholdPercentage, sellThreshold, sellThresholdPercentage };
 }

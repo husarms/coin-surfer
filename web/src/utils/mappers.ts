@@ -59,7 +59,7 @@ export function MapSurfStatesToProductMap(productMap: Map<string, ProductPagePro
         const sixtyDayTrend = formatTrendAnalysis(sixtyDayAverage, sixtyDayLowPrice, sixtyDayHighPrice);
         const ninetyDayTrend = formatTrendAnalysis(ninetyDayAverage, ninetyDayLowPrice, ninetyDayHighPrice);
         const oneTwentyDayTrend = formatTrendAnalysis(oneTwentyDayAverage, oneTwentyDayLowPrice, oneTwentyDayHighPrice);
-        const thresholdMargin = Math.abs(((sellThreshold - buyThreshold) / sellThreshold) * 100);
+        const thresholdMargin = Math.abs(((sellThreshold - buyThreshold) / buyThreshold) * 100);
         const thresholdSummary = `$${formatRoughNumber(buyThreshold)} - $${formatRoughNumber(sellThreshold)} (${formatNumber(thresholdMargin)}%)`;
         const trendPrediction = getTrendPrediction(sevenDayAverage, thirtyDayAverage, sixtyDayAverage, ninetyDayAverage);
         map.set(product, {
