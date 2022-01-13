@@ -71,16 +71,22 @@ async function stopSurfing() {
     surfIntervals = [];
 }
 
-function keepWebsiteAlive() {
+function keepAlive() {
     const thirtyMinutes = 1800000;
+    const requestUrl = process.env.BASE_ADDRESS;
     setInterval(() => {
-        https.get(process.env.BASE_ADDRESS)
+        console.log(`Keep alive pinging ${requestUrl}`)
+        https.get(requestUrl);
     }, thirtyMinutes);
 }
 
 const webServer = WebServer.startWebServer(startSurfing, stopSurfing);
 WebSocketServer.startWebSocketServer(webServer);
 
-if(process.env.ENVIRONMENT === 'development') startSurfing();
+const isLocal = process.env.ENVIRONMENT === 'development';
 
-keepWebsiteAlive();
+if (isLocal) {
+    startSurfing();
+} else {
+    keepAlive();
+}
