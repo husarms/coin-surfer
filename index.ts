@@ -4,7 +4,8 @@ import { Products } from "./utils/enums";
 import * as WebSocketServer from "./servers/web-socket";
 import * as WebServer from "./servers/web";
 import { clearInterval } from "timers";
-const https = require('https');
+
+const isLocal = process.env.ENVIRONMENT === 'development';
 
 const parameters: SurfParameters[] = [
     {
@@ -71,22 +72,9 @@ async function stopSurfing() {
     surfIntervals = [];
 }
 
-function keepAlive() {
-    const thirtyMinutes = 1800000;
-    const requestUrl = `https://${process.env.BASE_ADDRESS}`;
-    setInterval(() => {
-        console.log(`Keep alive pinging ${requestUrl}`)
-        https.get(requestUrl);
-    }, thirtyMinutes);
-}
-
 const webServer = WebServer.startWebServer(startSurfing, stopSurfing);
 WebSocketServer.startWebSocketServer(webServer);
 
-const isLocal = process.env.ENVIRONMENT === 'development';
-
 if (isLocal) {
     startSurfing();
-} else {
-    keepAlive();
 }
