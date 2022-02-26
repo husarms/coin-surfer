@@ -1,7 +1,16 @@
 const express = require('express');
 const path = require('path');
 import * as WebSocket from './web-socket';
+import rateLimit from 'express-rate-limit';
+
 const port = process.env.PORT;
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 function requireHTTPS(req, res, next) {
     // The 'x-forwarded-proto' check is for Heroku
@@ -11,19 +20,20 @@ function requireHTTPS(req, res, next) {
     next();
 }
 
-export function startWebServer (startBackgroundProcess: () => void, stopBackgroundProcess:() => void) : any {
+export function startWebServer(startBackgroundProcess: () => void, stopBackgroundProcess: () => void): any {
     return express()
         .use(express.static('web/dist'))
         .use(requireHTTPS)
-        .get('/start',  (req, res) => {
+        .use(limiter)
+        .get('/start', (req, res) => {
             startBackgroundProcess();
             res.send(`Background process started`);
         })
-        .get('/stop',  (req, res) => {
+        .get('/stop', (req, res) => {
             stopBackgroundProcess();
             res.send(`Background process stopped`);
         })
-        .get('/messages',  (req, res) => {
+        .get('/messages', (req, res) => {
             const messages = WebSocket.getMessages();
             res.json(messages);
         })
