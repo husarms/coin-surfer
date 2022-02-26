@@ -1,13 +1,15 @@
 const express = require('express');
 const path = require('path');
 import * as WebSocket from './web-socket';
+import rateLimit from 'express-rate-limit';
 
 const port = process.env.PORT;
 
-const RateLimit = require('express-rate-limit');
-const limiter = new RateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 10
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
 function requireHTTPS(req, res, next) {
