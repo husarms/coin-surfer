@@ -77,4 +77,6 @@ WebSocketServer.startWebSocketServer(webServer);
 
 if (isLocal) {
     startSurfing();
+} else {
+    setTimeout(() => startSurfing(), 5000);
 }
