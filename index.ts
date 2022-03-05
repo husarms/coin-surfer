@@ -48,7 +48,7 @@ const parameters: SurfParameters[] = [
 
 let surfIntervals: NodeJS.Timer[] = [];
 
-async function startSurfing() {
+export async function startSurfing() {
     if (surfIntervals.length > 0) {
         console.log(`${surfIntervals.length} surfer(s) already running, returning...`);
         return;
@@ -60,7 +60,7 @@ async function startSurfing() {
     });
 }
 
-async function stopSurfing() {
+export async function stopSurfing() {
     if (surfIntervals.length <= 0) {
         console.log('No surfers to stop, returning...');
         return;
@@ -77,6 +77,4 @@ WebSocketServer.startWebSocketServer(webServer);
 
 if (isLocal) {
     startSurfing();
-} else {
-    setTimeout(() => startSurfing(), 5000);
 }
