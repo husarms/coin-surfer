@@ -13,6 +13,7 @@
         "dotenv": "^10.0.0",
         "express": "^4.17.2",
         "express-rate-limit": "^6.3.0",
+        "newrelic": "^8.8.0",
         "path": "^0.12.7",
         "ts-node": "^10.0.0",
         "winston": "^3.3.3",
