@@ -1,4 +1,3 @@
-require ("newrelic");
 import SurfParameters from "./interfaces/surf-parameters";
 import * as AiThresholdSurfer from "./surfers/ai-threshold";
 import { Products } from "./utils/enums";

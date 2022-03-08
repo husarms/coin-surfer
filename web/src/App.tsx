@@ -41,7 +41,7 @@ function App() {
                     ))}
                 </TabList>
                 <TabPanel key="about">
-                    <AboutPage />
+                    <AboutPage isLoading={productMap.size <= 0} />
                 </TabPanel>
                 {[...productMap].map(([key, value]) => (
                     <TabPanel key={key}>
