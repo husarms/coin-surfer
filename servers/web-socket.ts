@@ -8,9 +8,12 @@ export const startWebSocketServer = (server: any) => {
     const wss = new Server({ server });
     wss.on("connection", (socket) => {
         sockets.push(socket);
+        console.log(`Web socket connection added (${sockets.length} total)`);
         socket.send(JSON.stringify(messages));
+        console.log(`Sent ${messages.length} message(s) to new connection`);
         socket.on("close", () => {
             sockets = sockets.filter((s) => s !== socket);
+            console.log(`Web socket connection closed (${sockets.length} total)`);
         });
     });
     console.log(`Web socket server started`);
