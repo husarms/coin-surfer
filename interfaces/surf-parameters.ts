@@ -6,4 +6,5 @@ export default interface SurfParameters {
     budget: number;
     notificationsEnabled: boolean;
     webSocketFeedEnabled: boolean;
+    isLocal: boolean;
 }

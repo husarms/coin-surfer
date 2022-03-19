@@ -16,6 +16,7 @@ const parameters: SurfParameters[] = [
         budget: 50000,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
+        isLocal,
     },
     {
         fiatCurrency: Products.USDollar,
@@ -25,6 +26,7 @@ const parameters: SurfParameters[] = [
         budget: 50000,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
+        isLocal,
     },
     {
         fiatCurrency: Products.USDollar,
@@ -34,6 +36,7 @@ const parameters: SurfParameters[] = [
         budget: 50000,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
+        isLocal,
     },
     {
         fiatCurrency: Products.USDollar,
@@ -43,6 +46,7 @@ const parameters: SurfParameters[] = [
         budget: 50000,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
+        isLocal,
     },
 ];
 

@@ -9,12 +9,17 @@ import {
     getThresholds,
     getTrendAnalysis,
     getLastFills,
+    uploadLogs,
 } from "./functions";
 import { Logger } from "../../utils/logger";
 import { Actions } from "../../utils/enums";
 import * as Formatters from "../../utils/formatters";
 import * as WebSocketServer from "../../servers/web-socket";
 import SurfState from "../../interfaces/surf-state";
+
+export function updateLogs(logger: Logger) {
+    uploadLogs(logger);
+}
 
 export async function handleBuy(state: SurfState): Promise<SurfState> {
     const { parameters, price, buyThreshold } = state;
@@ -47,13 +52,12 @@ export async function handleSell(state: SurfState): Promise<SurfState> {
 
 export function updateStatus(state: SurfState, logger: Logger): SurfState {
     const { parameters } = state;
-    const { webSocketFeedEnabled } = parameters;
+    const { isLocal, webSocketFeedEnabled } = parameters;
     state.statusMessage = getStatusMessage(state);
     state.timestamp = new Date();
     logger.log(state.statusMessage);
-    if (webSocketFeedEnabled) {
-        WebSocketServer.emitMessage(state);
-    }
+    if (webSocketFeedEnabled) WebSocketServer.emitMessage(state);
+    if (!isLocal) uploadLogs(logger);
     return state;
 }
 
