@@ -8,15 +8,18 @@ export class Logger {
     private myFormat = Winston.format.printf(({ message }) => {
         return `${message}`;
     });
+    private fileNames: string[] = [];
 
     constructor(logLabel: string) {
         const timestamp = Formatters.getDateyyyyMMddHHmmss();
+        const csvFileName = `logs/${timestamp}-${logLabel}.csv`;
+        const jsonFileName = `logs/json/${timestamp}-${logLabel}.json`
         this.logger = Winston.createLogger({
             transports: [
                 new Winston.transports.Console({ format: this.myFormat }),
                 new Winston.transports.File({
                     format: this.myFormat,
-                    filename: `logs/${timestamp}-${logLabel}.csv`,
+                    filename: csvFileName,
                 }),
             ],
         });
@@ -24,10 +27,15 @@ export class Logger {
             transports: [
                 new Winston.transports.File({
                     format: this.myFormat,
-                    filename: `logs/json/${timestamp}-${logLabel}.json`,
+                    filename: jsonFileName,
                 }),
             ],
         });
+        this.fileNames.push(csvFileName);
+    }
+
+    public getFileNames(): string[] {
+        return this.fileNames;
     }
 
     public log(message: string, level: string = "info") {

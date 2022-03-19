@@ -1,13 +1,19 @@
-import * as TradeOrchestrator from "../../orchestrators/trade-orchestrator";
+import * as LogOrchestrator from "../../orchestrators/log-orchestrator";
 import * as NotificationOrchestrator from "../../orchestrators/notification-orchestrator";
+import * as TradeOrchestrator from "../../orchestrators/trade-orchestrator";
 import { PendingOrder } from "coinbase-pro-node";
 import Fill from "../../interfaces/fill";
 import { Actions } from "../../utils/enums";
+import { Logger } from "../../utils/logger";
 import * as Formatters from "../../utils/formatters";
 import Prices from "../../interfaces/prices";
 import Balances from "../../interfaces/balances";
 import SurfState from "../../interfaces/surf-state";
 import TrendAnalysis from "../../interfaces/trend-analysis";
+
+export function uploadLogs(logger: Logger) {
+    LogOrchestrator.uploadLogFiles(logger);
+}
 
 export function getCurrentPercentage(
     price: number,
