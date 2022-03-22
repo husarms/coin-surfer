@@ -62,6 +62,28 @@ export function getStatusMessage(state: SurfState): string {
     return `${formattedDate}, ${cryptoCurrency}, ${formattedAveragePrice}, ${formattedPrice}, ${threshold}, ${message}; current price = $${formattedPrice} (${plusMinus}${currentPercentage}%)`;
 }
 
+export function getDataMessage(state: SurfState): string {
+    const {
+        parameters,
+        action,
+        price,
+        averagePrice,
+        cryptoBalance,
+        fiatBalance,
+        lastBuyPrice,
+        trendAnalysis,
+    } = state;
+    const {
+        budget,
+        cryptoCurrency,
+    } = parameters;
+    const formattedDate = Formatters.getDateMMddyyyyHHmmss();
+    const currentPercentage = getCurrentPercentage(price, averagePrice);
+    const formattedPrice = price.toFixed(2);
+    const formattedAveragePrice = averagePrice.toFixed(2);
+    return `${formattedDate}, ${cryptoCurrency}, ${formattedAveragePrice}, ${formattedPrice},`;
+}
+
 export async function getBalance(currency: string): Promise<number> {
     return await TradeOrchestrator.getAccountBalance(currency);
 }

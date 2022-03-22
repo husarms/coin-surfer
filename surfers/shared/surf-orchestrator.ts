@@ -123,10 +123,19 @@ export async function updateThresholdsWithAI(state: SurfState): Promise<SurfStat
 
 function getAiThresholds(state: SurfState): { buyThreshold: number, buyThresholdPercentage: number, sellThreshold: number, sellThresholdPercentage: number, } {
     const { price, trendAnalysis } = state;
-    const { sevenDayLowPrice, sevenDayHighPrice, thirtyDayLowPrice, thirtyDayHighPrice, sixtyDayLowPrice, sixtyDayHighPrice } = trendAnalysis;
+    const { 
+        sevenDayLowPrice, 
+        sevenDayHighPrice, 
+        thirtyDayLowPrice, 
+        thirtyDayHighPrice, 
+        sixtyDayLowPrice, 
+        sixtyDayHighPrice, 
+        ninetyDayLowPrice, 
+        ninetyDayHighPrice, 
+    } = trendAnalysis;
     const smoothingPercentage = 1 / 100;
-    const lowPriceAverage = (sevenDayLowPrice + thirtyDayLowPrice + sixtyDayLowPrice) / 3;
-    const highPriceAverage = (sevenDayHighPrice + thirtyDayHighPrice + sixtyDayHighPrice) / 3;
+    const lowPriceAverage = (sevenDayLowPrice + thirtyDayLowPrice + sixtyDayLowPrice + ninetyDayLowPrice) / 4;
+    const highPriceAverage = (sevenDayHighPrice + thirtyDayHighPrice + sixtyDayHighPrice + ninetyDayHighPrice) / 4;
     const lowPriceAverageWithSmoothing = lowPriceAverage + (lowPriceAverage * smoothingPercentage);
     const highPriceAverageWithSmoothing = highPriceAverage - (highPriceAverage * smoothingPercentage);
     const buyThreshold = Formatters.roundDownToTwoDecimals(lowPriceAverageWithSmoothing);

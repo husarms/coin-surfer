@@ -58,7 +58,7 @@ async function startSurfing() {
         return;
     }
     parameters.map(async (parameters) => {
-        let interval = await AiThresholdSurfer.surf(parameters);
+        let interval = await AiThresholdSurfer.startSurfing(parameters);
         surfIntervals.push(interval);
         console.log(`${surfIntervals.length} surfer(s) started`);
     });
