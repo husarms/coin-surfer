@@ -10,6 +10,7 @@ import {
     getTrendAnalysis,
     getLastFills,
     uploadLogs,
+    getDataMessage,
 } from "./functions";
 import { Logger } from "../../utils/logger";
 import { Actions } from "../../utils/enums";
@@ -55,7 +56,9 @@ export function updateStatus(state: SurfState, logger: Logger): SurfState {
     const { isLocal, webSocketFeedEnabled } = parameters;
     state.statusMessage = getStatusMessage(state);
     state.timestamp = new Date();
-    logger.log(state.statusMessage);
+    const dataMessage = getDataMessage(state);
+    logger.logToConsole(state.statusMessage);
+    logger.logToCsvFile(dataMessage);
     if (webSocketFeedEnabled) WebSocketServer.emitMessage(state);
     if (!isLocal) uploadLogs(logger);
     return state;
