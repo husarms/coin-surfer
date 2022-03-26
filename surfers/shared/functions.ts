@@ -57,31 +57,40 @@ export function getStatusMessage(state: SurfState): string {
             ? `looking to sell ${cryptoBalance} ${cryptoCurrency} at $${threshold} (+${sellThresholdPercentage}%) (bought at $${lastBuyPrice}, profit $${profitWithFees})`
             : `looking to buy $${buyBudget} worth of ${cryptoCurrency} at $${threshold} (-${buyThresholdPercentage}%)`;
     const formattedPrice = price.toFixed(2);
-    const formattedAveragePrice = averagePrice.toFixed(2);
     const plusMinus = currentPercentage > 0 ? "+" : "";
-    return `${formattedDate}, ${cryptoCurrency}, ${formattedAveragePrice}, ${formattedPrice}, ${threshold}, ${message}; current price = $${formattedPrice} (${plusMinus}${currentPercentage}%)`;
+    return `${formattedDate}, ${cryptoCurrency}, ${message}; current price = $${formattedPrice} (${plusMinus}${currentPercentage}%)`;
 }
 
 export function getDataMessage(state: SurfState): string {
     const {
-        parameters,
-        action,
-        price,
-        averagePrice,
-        cryptoBalance,
-        fiatBalance,
-        lastBuyPrice,
-        trendAnalysis,
+        parameters, action, price,
+        averagePrice, cryptoBalance, fiatBalance,
+        lastBuyPrice, trendAnalysis,
     } = state;
+    const { budget, cryptoCurrency } = parameters;
     const {
-        budget,
-        cryptoCurrency,
-    } = parameters;
+        sevenDayAverage, sevenDayHighPrice, sevenDayLowPrice,
+        thirtyDayAverage, thirtyDayHighPrice, thirtyDayLowPrice,
+        sixtyDayAverage, sixtyDayHighPrice, sixtyDayLowPrice,
+        ninetyDayAverage, ninetyDayHighPrice, ninetyDayLowPrice,
+        oneTwentyDayAverage, oneTwentyDayHighPrice, oneTwentyDayLowPrice 
+    } = trendAnalysis;
+    let prices = [
+        price, averagePrice, cryptoBalance, fiatBalance, lastBuyPrice, budget, 
+        sevenDayAverage, sevenDayHighPrice, sevenDayLowPrice,
+        thirtyDayAverage, thirtyDayHighPrice, thirtyDayLowPrice,
+        sixtyDayAverage, sixtyDayHighPrice, sixtyDayLowPrice,
+        ninetyDayAverage, ninetyDayHighPrice, ninetyDayLowPrice,
+        oneTwentyDayAverage, oneTwentyDayHighPrice, oneTwentyDayLowPrice
+    ];
+    const formattedPrices = formatPrices(prices);
     const formattedDate = Formatters.getDateMMddyyyyHHmmss();
-    const currentPercentage = getCurrentPercentage(price, averagePrice);
-    const formattedPrice = price.toFixed(2);
-    const formattedAveragePrice = averagePrice.toFixed(2);
-    return `${formattedDate}, ${cryptoCurrency}, ${formattedAveragePrice}, ${formattedPrice},`;
+    return `${formattedDate}, ${cryptoCurrency}, ${action}, ${formattedPrices}`;
+}
+
+function formatPrices(prices: number[]): string {
+    const formattedPrices = prices.map(price => price.toFixed(2));
+    return formattedPrices.join(", ");
 }
 
 export async function getBalance(currency: string): Promise<number> {
