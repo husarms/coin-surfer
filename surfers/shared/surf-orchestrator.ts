@@ -4,7 +4,7 @@ import {
     sendSellNotification,
     buy,
     sell,
-    getBalances,
+    getBalance,
     getPrices,
     getThresholds,
     getTrendAnalysis,
@@ -66,9 +66,10 @@ export function updateStatus(state: SurfState, logger: Logger): SurfState {
 
 export async function updateBalances(state: SurfState): Promise<SurfState> {
     const { fiatCurrency, cryptoCurrency } = state.parameters;
-    const balances = await getBalances(fiatCurrency, cryptoCurrency);
-    state.cryptoBalance = balances.cryptoBalance;
-    state.fiatBalance = balances.fiatBalance;
+    const fiatBalance = await getBalance(fiatCurrency);
+    const cryptoBalance = await getBalance(cryptoCurrency);
+    state.cryptoBalance = cryptoBalance;
+    state.fiatBalance = fiatBalance;
     return state;
 }
 
@@ -135,10 +136,12 @@ function getAiThresholds(state: SurfState): { buyThreshold: number, buyThreshold
         sixtyDayHighPrice, 
         ninetyDayLowPrice, 
         ninetyDayHighPrice, 
+        oneTwentyDayLowPrice,
+        oneTwentyDayHighPrice,
     } = trendAnalysis;
     const smoothingPercentage = 1 / 100;
-    const lowPriceAverage = (sevenDayLowPrice + thirtyDayLowPrice + sixtyDayLowPrice + ninetyDayLowPrice) / 4;
-    const highPriceAverage = (sevenDayHighPrice + thirtyDayHighPrice + sixtyDayHighPrice + ninetyDayHighPrice) / 4;
+    const lowPriceAverage = (sevenDayLowPrice + thirtyDayLowPrice + sixtyDayLowPrice + ninetyDayLowPrice + oneTwentyDayLowPrice) / 5;
+    const highPriceAverage = (sevenDayHighPrice + thirtyDayHighPrice + sixtyDayHighPrice + ninetyDayHighPrice + oneTwentyDayHighPrice) / 5;
     const lowPriceAverageWithSmoothing = lowPriceAverage + (lowPriceAverage * smoothingPercentage);
     const highPriceAverageWithSmoothing = highPriceAverage - (highPriceAverage * smoothingPercentage);
     const buyThreshold = Formatters.roundDownToTwoDecimals(lowPriceAverageWithSmoothing);

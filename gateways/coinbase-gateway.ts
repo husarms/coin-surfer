@@ -1,7 +1,14 @@
 import {
+    Account,
+    Candle,
     CoinbasePro,
+    Fill,
+    Order,
     OrderSide,
     OrderType,
+    PaginatedData,
+    ProductStats,
+    ProductTicker,
     WebSocketChannelName,
     WebSocketEvent,
     WebSocketTickerMessage,
@@ -43,10 +50,10 @@ export function listenToTickerFeed(
     coinbaseClient.ws.connect({ debug: false });
 }
 
-export async function getProductTicker(product_id: string) {
+export async function getProductTicker(product_id: string): Promise<ProductTicker | void> {
     return coinbaseClient.rest.product
         .getProductTicker(product_id)
-        .then((data) => {
+        .then((data: ProductTicker) => {
             return data;
         })
         .catch((error) => {
@@ -54,10 +61,10 @@ export async function getProductTicker(product_id: string) {
         });
 }
 
-export async function getProduct24HrStats(product: string) {
+export async function getProduct24HrStats(product: string): Promise<ProductStats | void> {
     return coinbaseClient.rest.product
         .getProductStats(product)
-        .then((data) => {
+        .then((data: ProductStats) => {
             return data;
         })
         .catch((error) => {
@@ -65,10 +72,12 @@ export async function getProduct24HrStats(product: string) {
         });
 }
 
-export async function getProductCandles(product: string, granularity: 60 | 300 | 900 | 3600 | 21600 | 86400 = 86400, start: Date, end: Date) {
+export async function getProductCandles(
+    product: string, granularity: 60 | 300 | 900 | 3600 | 21600 | 86400 = 86400, start: Date, end: Date)
+    : Promise<Candle[] | void> {
     return coinbaseClient.rest.product
         .getCandles(product, { granularity, start: start.toUTCString(), end: end.toUTCString() })
-        .then((data) => {
+        .then((data: Candle[]) => {
             return data;
         })
         .catch((error) => {
@@ -76,21 +85,10 @@ export async function getProductCandles(product: string, granularity: 60 | 300 |
         });
 }
 
-export async function getAccount(account_id: string) {
-    return coinbaseClient.rest.account
-        .getAccount(account_id)
-        .then((data) => {
-            return data;
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
-
-export async function getAccounts() {
+export async function getAccounts(): Promise<Account[] | void> {
     return coinbaseClient.rest.account
         .listAccounts()
-        .then((data) => {
+        .then((data: Account[]) => {
             return data;
         })
         .catch((error) => {
@@ -98,42 +96,10 @@ export async function getAccounts() {
         });
 }
 
-export async function getCoinbaseAccounts() {
-    return coinbaseClient.rest.account
-        .listCoinbaseAccounts()
-        .then((data) => {
-            return data;
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
-
-export async function getFills(productId: string) {
+export async function getFills(productId: string): Promise<PaginatedData<Fill> | void> {
     return coinbaseClient.rest.fill
         .getFillsByProductId(productId)
-        .then((data) => {
-            return data;
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
-
-export async function limitBuy(
-    price: string,
-    size: string,
-    product_id: string
-) {
-    return coinbaseClient.rest.order
-        .placeOrder({
-            side: OrderSide.BUY,
-            type: OrderType.LIMIT,
-            price,
-            size,
-            product_id,
-        })
-        .then((data) => {
+        .then((data: PaginatedData<Fill>) => {
             return data;
         })
         .catch((error) => {
@@ -145,7 +111,7 @@ export async function marketBuy(
     funds: string,
     size: string,
     product_id: string
-) {
+): Promise<Order | void> {
     return coinbaseClient.rest.order
         .placeOrder({
             side: OrderSide.BUY,
@@ -154,7 +120,7 @@ export async function marketBuy(
             size,
             product_id,
         })
-        .then((data) => {
+        .then((data: Order) => {
             return data;
         })
         .catch((error) => {
@@ -162,28 +128,7 @@ export async function marketBuy(
         });
 }
 
-export async function limitSell(
-    price: string,
-    size: string,
-    product_id: string
-) {
-    return coinbaseClient.rest.order
-        .placeOrder({
-            side: OrderSide.SELL,
-            type: OrderType.LIMIT,
-            price,
-            size,
-            product_id,
-        })
-        .then((data) => {
-            return data;
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
-
-export async function marketSell(size: string, product_id: string) {
+export async function marketSell(size: string, product_id: string): Promise<Order | void> {
     return coinbaseClient.rest.order
         .placeOrder({
             side: OrderSide.SELL,
@@ -191,20 +136,7 @@ export async function marketSell(size: string, product_id: string) {
             size,
             product_id,
         })
-        .then((data) => {
-            return data;
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
-
-export async function getHistoricRates(product_id: string, startDate: Date, endDate: Date) {
-    const start = startDate.toISOString();
-    const end = endDate.toISOString();
-    return coinbaseClient.rest.product
-        .getCandles(product_id, { start, end, granularity: 300 })
-        .then((data) => {
+        .then((data: Order) => {
             return data;
         })
         .catch((error) => {

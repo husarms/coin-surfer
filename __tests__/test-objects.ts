@@ -1,3 +1,4 @@
+import { Fill, OrderSide, PaginatedData } from "coinbase-pro-node";
 import SurfParameters from "../interfaces/surf-parameters";
 import SurfState from "../interfaces/surf-state";
 import TrendAnalysis from "../interfaces/trend-analysis";
@@ -33,6 +34,43 @@ const trendAnalysis: TrendAnalysis = {
     oneTwentyDayLowPrice: 43000,
 }
 
+const fills : PaginatedData<Fill> = {
+    data: [{
+        created_at: '',
+        fee: '',
+        liquidity: null,
+        order_id: '',
+        price: '',
+        product_id: '',
+        profile_id: '',
+        settled: true,
+        side: OrderSide.BUY,
+        size: '',
+        trade_id: 0,
+        usd_volume: '',
+        user_id: '',
+    },
+    {
+        created_at: '',
+        fee: '',
+        liquidity: null,
+        order_id: '',
+        price: '',
+        product_id: '',
+        profile_id: '',
+        settled: true,
+        side: OrderSide.SELL,
+        size: '',
+        trade_id: 0,
+        usd_volume: '',
+        user_id: '',
+    }],
+    pagination: {
+        after: '',
+        before: ''
+    }
+};
+
 const surfState : SurfState = {
     parameters: surfParameters,
     productId: 'BTC-USD',
@@ -53,4 +91,4 @@ const surfState : SurfState = {
     timestamp: new Date()
 }
 
-export default { surfParameters, surfState, trendAnalysis }
+export default { fills, surfParameters, surfState, trendAnalysis }
