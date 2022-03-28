@@ -97,18 +97,6 @@ export async function getBalance(currency: string): Promise<number> {
     return await TradeOrchestrator.getAccountBalance(currency);
 }
 
-export async function getBalances(
-    fiatCurrency: string,
-    cryptoCurrency: string
-): Promise<Balances> {
-    const { fiatBalance, cryptoBalance } =
-        await TradeOrchestrator.getAccountBalances(
-            fiatCurrency,
-            cryptoCurrency
-        );
-    return { fiatBalance, cryptoBalance };
-}
-
 export async function sendBuyNotification(state: SurfState, size: string) {
     const { parameters, price } = state;
     const { cryptoCurrency, fiatCurrency } = parameters;
@@ -138,14 +126,14 @@ export async function buy(state: SurfState): Promise<any> {
         console.log(`Skipping buy. Balance ${fiatBalance} < 1`);
         return { isComplete: false, size: 0 };
     }
-    const { status, size } = await TradeOrchestrator.buyAtMarketValue(
+    const orderSize = await TradeOrchestrator.buyAtMarketValue(
         fiatBalance,
         budget,
         price,
         productId
     );
-    console.log(`Buy complete. Status = ${status} Size = ${size}`);
-    return { isComplete: true, size: size.toString() };
+    console.log(`Buy complete. Size = ${orderSize}`);
+    return { isComplete: true, size: orderSize.toString() };
 }
 
 export async function sell(state: SurfState): Promise<any> {
@@ -155,11 +143,11 @@ export async function sell(state: SurfState): Promise<any> {
         console.log(`Skipping sell. Size ${size} < 0.01`);
         return { isComplete: false, size: size.toString() };
     }
-    const { status } = (await TradeOrchestrator.sellAtMarketValue(
+    const orderSize = await TradeOrchestrator.sellAtMarketValue(
         productId,
         size.toString()
-    )) as PendingOrder;
-    console.log(`Sell complete. Status = ${status} Size = ${size}`);
+    )
+    console.log(`Sell complete. Size = ${orderSize}`);
     return { isComplete: true, size: size.toString() };
 }
 

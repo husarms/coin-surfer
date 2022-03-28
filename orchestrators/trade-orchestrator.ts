@@ -1,6 +1,8 @@
 import {
     Candle,
     Fill,
+    Order,
+    OrderStatus,
     PaginatedData,
     PendingOrder,
     ProductStats,
@@ -83,18 +85,6 @@ export async function getAccountBalance(currency: string): Promise<number> {
         return balance;
     }
     return 0;
-}
-
-export async function getAccountBalances(
-    fiatCurrency: string,
-    cryptoCurrency: string
-): Promise<{ fiatBalance: number; cryptoBalance: number; }> {
-    const fiatBalance = await getAccountBalance(fiatCurrency);
-    const cryptoBalance = await getAccountBalance(cryptoCurrency);
-    return {
-        fiatBalance,
-        cryptoBalance,
-    };
 }
 
 export async function getFills(
@@ -210,27 +200,27 @@ export async function getProductPrice(
     return parseFloat(productTicker.price);
 }
 
-export async function marketSell(
+async function marketSell(
     size: string,
     productId: string,
-) {
+): Promise<void | Order> {
     return await CoinbaseGateway.marketSell(size, productId);
 }
 
-export async function marketBuy(
+async function marketBuy(
     price: string,
     size: string,
     productId: string,
-) {
+): Promise<void | Order> {
     return await CoinbaseGateway.marketBuy(price, size, productId);
 }
 
 export async function sellAtMarketValue(
     productId: string,
     size: string,
-) {
-    const sellResponse = await marketSell(size, productId);
-    return sellResponse;
+): Promise<number> {
+    await marketSell(size, productId) as PendingOrder;
+    return parseFloat(size);
 }
 
 export async function buyAtMarketValue(
@@ -238,13 +228,12 @@ export async function buyAtMarketValue(
     budget: number,
     price: number,
     productId: string,
-) {
+): Promise<number> {
     const size = getBuySize(fiatBalance, budget, price);
-    const buyResponse = await marketBuy(
+    await marketBuy(
         fiatBalance.toString(),
         size.toString(),
         productId
     ) as PendingOrder;
-    const { status } = buyResponse;
-    return { status, size };
+    return size;
 }
