@@ -115,6 +115,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-log-file*
+# App output, logs, data
+__tests__/replay-data/data*
 logs*
 web/public*
