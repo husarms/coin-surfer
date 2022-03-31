@@ -118,3 +118,4 @@ dist
 log-file*
 logs*
 web/public*
+__tests__/replay-data/data*
