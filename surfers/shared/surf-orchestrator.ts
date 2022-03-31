@@ -4,7 +4,7 @@ import {
     sendSellNotification,
     buy,
     sell,
-    getBalance,
+    getBalances,
     getPrices,
     getThresholds,
     getTrendAnalysis,
@@ -66,8 +66,7 @@ export function updateStatus(state: SurfState, logger: Logger): SurfState {
 
 export async function updateBalances(state: SurfState): Promise<SurfState> {
     const { fiatCurrency, cryptoCurrency } = state.parameters;
-    const fiatBalance = await getBalance(fiatCurrency);
-    const cryptoBalance = await getBalance(cryptoCurrency);
+    const { fiatBalance, cryptoBalance } = await getBalances(fiatCurrency, cryptoCurrency);
     state.cryptoBalance = cryptoBalance;
     state.fiatBalance = fiatBalance;
     return state;

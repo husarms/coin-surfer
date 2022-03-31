@@ -2,7 +2,6 @@ import {
     Candle,
     Fill,
     Order,
-    OrderStatus,
     PaginatedData,
     PendingOrder,
     ProductStats,
@@ -72,7 +71,13 @@ export function getBuySize(
     return formatters.roundDownToFourDecimals(amount / productPrice);
 }
 
-export async function getAccountBalance(currency: string): Promise<number> {
+export async function getAccountBalances(fiatCurrency: string, cryptoCurrency: string): Promise<{ fiatBalance: number, cryptoBalance: number }> {
+    const fiatBalance = await getAccountBalance(fiatCurrency);
+    const cryptoBalance = await getAccountBalance(cryptoCurrency);
+    return { fiatBalance, cryptoBalance };
+}
+
+async function getAccountBalance(currency: string): Promise<number> {
     var accounts = await CoinbaseGateway.getAccounts();
     if (accounts) {
         var account = accounts.find((a) => a.currency === currency);
@@ -154,7 +159,7 @@ export async function getTrendAnalysis(
             ninetyDayAverage = ninetyDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 90));
         }
         if (index < (oneTwentyDayCandles.length - 30) && index >= (oneTwentyDayCandles.length - 60)) { //30-60
-            if (value.low < sixtyDayLowPrice) sixtyDayLowPrice = value.low; 
+            if (value.low < sixtyDayLowPrice) sixtyDayLowPrice = value.low;
             if (value.high > sixtyDayHighPrice) sixtyDayHighPrice = value.high;
             sixtyDayRunningAverage += average;
             sixtyDayAverage = sixtyDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 60));

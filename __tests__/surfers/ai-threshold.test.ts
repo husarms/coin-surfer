@@ -1,77 +1,52 @@
-import { mocked } from 'ts-jest/utils';
 import * as AIThreshold from '../../surfers/ai-threshold';
 import testObjects from '../test-objects';
-import { 
-    getAccountBalance, 
-    getFills, 
-    get24HrAveragePrice, 
-    getTrendAnalysis, 
-    getProductPrice, 
-    sellAtMarketValue, 
-    buyAtMarketValue
-} from '../../orchestrators/trade-orchestrator';
-import {
-    Fill,
-    OrderSide,
-    PaginatedData,
-} from "coinbase-pro-node";
-import TrendAnalysis from '../../interfaces/trend-analysis';
+import * as TradeOrchestrator from '../../orchestrators/trade-orchestrator';
 import { Logger } from '../../utils/logger';
-import DataModel from '../data/data-model';
+import { loadReplayData } from '../replay-data/replay-data-parser';
+import SurfState from '../../interfaces/surf-state';
+import ReplayData from '../replay-data/replay-data';
 
-let fills = testObjects.fills;
-let trendAnalysis = testObjects.trendAnalysis;
+jest.mock("../../gateways/sendgrid-gateway", () => {
+    return;
+});
 
-jest.mock("../orchestrators/trade-orchestrator", () => ({
-    ...jest.requireActual('../orchestrators/trader-orchestrator') as {},
-    getAccountBalance: (currency: string): Promise<number> => {
-        return Promise.resolve(1);
-    },
-    getFills: (productId: string): Promise<PaginatedData<Fill>> => {
-        return Promise.resolve(fills);
-    },
-    get24HrAveragePrice: (productId: string): Promise<number> => {
-        return Promise.resolve(1);
-    },
-    getTrendAnalysis: (productId: string): Promise<TrendAnalysis> => {
-        return Promise.resolve(trendAnalysis);
-    },
-    getProductPrice: (productId: string): Promise<number> => {
-        return Promise.resolve(1);
-    },
-    sellAtMarketValue: (productId: string, size: string): Promise<number> => {
-        return Promise.resolve(1);
-    },
-    buyAtMarketValue: (fiatBalance: number, budget: number, price: number, productId: string): Promise<number> => {
-        return Promise.resolve(1);
-    },
+jest.mock("../../orchestrators/trade-orchestrator", () => ({
+    ...jest.requireActual('../../orchestrators/trade-orchestrator') as {},
+    getAccountBalances: jest.fn(() => Promise.resolve({ fiatBalance: 1, cryptoBalance: 1 })),
+    getFills: jest.fn(() => Promise.resolve(testObjects.fills)),
+    get24HrAveragePrice: jest.fn(() => Promise.resolve(1)),
+    getTrendAnalysis: jest.fn(() => Promise.resolve(testObjects.trendAnalysis)),
+    getProductPrice: jest.fn(() => Promise.resolve(1)),
+    sellAtMarketValue: jest.fn(() => Promise.resolve(1)),
+    buyAtMarketValue: jest.fn(() => Promise.resolve(1)),
 }));
 
-function loadReplayData(): DataModel[] {
-    let data: DataModel[] = [];
-
-    return data;
+async function SurfReplayData(state: SurfState, logger: Logger, replayData: ReplayData[]): Promise<SurfState> {
+    for (let data of replayData) {
+        // Pass data to mocks
+        (TradeOrchestrator.getAccountBalances as jest.Mock).mockResolvedValueOnce({ fiatBalance: data.fiatBalance, cryptoBalance: data.cryptoBalance });
+        (TradeOrchestrator.getFills as jest.Mock).mockResolvedValueOnce(data.fills);
+        (TradeOrchestrator.getProductPrice as jest.Mock).mockResolvedValueOnce(data.price);
+        (TradeOrchestrator.get24HrAveragePrice as jest.Mock).mockResolvedValueOnce(data.averagePrice);
+        (TradeOrchestrator.getTrendAnalysis as jest.Mock).mockResolvedValueOnce(data.trendAnalysis);
+        // Run surf function
+        state = await AIThreshold.surf(state, logger);
+    }
+    return state;
 }
 
 test('Surf replay', async () => {
     // Load replay data
-    const replayData = loadReplayData();
+    const replayData = await loadReplayData();
+    console.log(`Replay data length = ${replayData.length}`);
+    // Set parameters
+    let parameters = testObjects.surfParameters;
+    const cryptoCurrency = replayData[0].productId;
+    parameters.cryptoCurrency = cryptoCurrency;
     // Initialize surfer
-    let state = await AIThreshold.initializeState(testObjects.surfParameters);
+    let state = await AIThreshold.initializeState(parameters);
     let logger = new Logger(state.productId);
-    // Loop through saved data
-    for(let data of replayData) {
-        // Get values at current index
-
-        // Pass to mocks
-        mocked(getAccountBalance).mockResolvedValueOnce(data.fiatBalance);
-        mocked(getFills).mockResolvedValueOnce(fills);
-        mocked(getProductPrice).mockResolvedValueOnce(data.price);
-        mocked(get24HrAveragePrice).mockResolvedValueOnce(data.averagePrice);
-        mocked(getTrendAnalysis).mockResolvedValueOnce(trendAnalysis);
-        // Run surf function
-        state = await AIThreshold.surf(state, logger); 
-    }
+    state = await SurfReplayData(state, logger, replayData);
 });
 
 
