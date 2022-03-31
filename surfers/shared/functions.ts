@@ -1,13 +1,11 @@
 import * as LogOrchestrator from "../../orchestrators/log-orchestrator";
 import * as NotificationOrchestrator from "../../orchestrators/notification-orchestrator";
 import * as TradeOrchestrator from "../../orchestrators/trade-orchestrator";
-import { PendingOrder } from "coinbase-pro-node";
 import Fill from "../../interfaces/fill";
 import { Actions } from "../../utils/enums";
 import { Logger } from "../../utils/logger";
 import * as Formatters from "../../utils/formatters";
 import Prices from "../../interfaces/prices";
-import Balances from "../../interfaces/balances";
 import SurfState from "../../interfaces/surf-state";
 import TrendAnalysis from "../../interfaces/trend-analysis";
 
@@ -73,10 +71,10 @@ export function getDataMessage(state: SurfState): string {
         thirtyDayAverage, thirtyDayHighPrice, thirtyDayLowPrice,
         sixtyDayAverage, sixtyDayHighPrice, sixtyDayLowPrice,
         ninetyDayAverage, ninetyDayHighPrice, ninetyDayLowPrice,
-        oneTwentyDayAverage, oneTwentyDayHighPrice, oneTwentyDayLowPrice 
+        oneTwentyDayAverage, oneTwentyDayHighPrice, oneTwentyDayLowPrice
     } = trendAnalysis;
     let prices = [
-        price, averagePrice, cryptoBalance, fiatBalance, lastBuyPrice, budget, 
+        price, averagePrice, cryptoBalance, fiatBalance, lastBuyPrice, budget,
         sevenDayAverage, sevenDayHighPrice, sevenDayLowPrice,
         thirtyDayAverage, thirtyDayHighPrice, thirtyDayLowPrice,
         sixtyDayAverage, sixtyDayHighPrice, sixtyDayLowPrice,
@@ -93,8 +91,9 @@ function formatPrices(prices: number[]): string {
     return formattedPrices.join(", ");
 }
 
-export async function getBalance(currency: string): Promise<number> {
-    return await TradeOrchestrator.getAccountBalance(currency);
+export async function getBalances(fiatCurrency: string, cryptoCurrency: string): Promise<{ fiatBalance: number, cryptoBalance: number }> {
+    const { fiatBalance, cryptoBalance } = await TradeOrchestrator.getAccountBalances(fiatCurrency, cryptoCurrency);
+    return { fiatBalance, cryptoBalance };
 }
 
 export async function sendBuyNotification(state: SurfState, size: string) {
@@ -162,7 +161,7 @@ export async function getTrendAnalysis(productId: string): Promise<TrendAnalysis
     return trendAnalysis;
 }
 
-export async function getLastFills(productId: string) : Promise<{ lastBuyFill: Fill, lastSellFill: Fill}> {
+export async function getLastFills(productId: string): Promise<{ lastBuyFill: Fill, lastSellFill: Fill }> {
     const fills = await TradeOrchestrator.getFills(productId);
     const buyFill = fills.data.find((f) => f.side === "buy");
     const sellFill = fills.data.find((f) => f.side === "sell");
