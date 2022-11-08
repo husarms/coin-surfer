@@ -37,17 +37,7 @@ const parameters: SurfParameters[] = [
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
         isLocal,
-    },
-    {
-        fiatCurrency: Products.USDollar,
-        cryptoCurrency: Products.Cardano,
-        buyThresholdPercentage: 7,
-        sellThresholdPercentage: 7,
-        budget: 50000,
-        notificationsEnabled: true,
-        webSocketFeedEnabled: true,
-        isLocal,
-    },
+    }
 ];
 
 let surfIntervals: NodeJS.Timer[] = [];
