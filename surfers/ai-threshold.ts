@@ -17,7 +17,7 @@ export async function startSurfing(parameters: SurfParameters): Promise<NodeJS.T
     let state = await initializeState(parameters);
     const logger = new Logger(state.productId);
     console.log(`Let's go AI threshold surfing with ${state.productId}...`);
-    return setInterval(async function () {
+    return setInterval(async () => {
         state = await surf(state, logger);
     }, 10000);
 }
