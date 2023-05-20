@@ -11,8 +11,8 @@ const parameters: SurfParameters[] = [
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Bitcoin,
-        buyThresholdPercentage: 5,
-        sellThresholdPercentage: 5,
+        buyThresholdPercentage: 15,
+        sellThresholdPercentage: 15,
         budget: 50000,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
@@ -21,8 +21,8 @@ const parameters: SurfParameters[] = [
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Etherium,
-        buyThresholdPercentage: 6,
-        sellThresholdPercentage: 6,
+        buyThresholdPercentage: 15,
+        sellThresholdPercentage: 15,
         budget: 50000,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
@@ -31,8 +31,8 @@ const parameters: SurfParameters[] = [
     {
         fiatCurrency: Products.USDollar,
         cryptoCurrency: Products.Litecoin,
-        buyThresholdPercentage: 7,
-        sellThresholdPercentage: 7,
+        buyThresholdPercentage: 15,
+        sellThresholdPercentage: 15,
         budget: 50000,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
