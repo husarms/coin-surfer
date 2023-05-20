@@ -38,13 +38,14 @@ export async function surf(state: SurfState, logger: Logger): Promise<SurfState>
     state = await updateTrendAnalysis(state);
     state = await updateThresholdsWithAI(state);
     state = updateStatus(state, logger);
-    const { action, price, buyThreshold, sellThreshold } = state;
+    const { action, price, buyThreshold, sellThreshold, parameters } = state;
+    const { tradesEnabled } = parameters;
     if (action === Actions.Sell) {
-        if (price >= sellThreshold) {
+        if (price >= sellThreshold && tradesEnabled) {
             state = await handleSell(state);
         }
     } else {
-        if (price <= buyThreshold) {
+        if (price <= buyThreshold && tradesEnabled) {
             state = await handleBuy(state);
         }
     }
