@@ -24,8 +24,12 @@ export function updateLogs(logger: Logger) {
 
 export async function handleBuy(state: SurfState): Promise<SurfState> {
     const { parameters, price, buyThreshold } = state;
-    const { notificationsEnabled } = parameters;
+    const { notificationsEnabled, tradesEnabled } = parameters;
     console.log(`Buy threshold hit (${price} <= ${buyThreshold})`);
+    if (!tradesEnabled) {
+        console.log('Trades disabled via parameters');
+        return state;
+    }
     const { isComplete, size } = await buy(state);
     if (isComplete) {
         notificationsEnabled &&
@@ -39,8 +43,12 @@ export async function handleBuy(state: SurfState): Promise<SurfState> {
 
 export async function handleSell(state: SurfState): Promise<SurfState> {
     const { parameters, price, sellThreshold } = state;
-    const { notificationsEnabled } = parameters;
+    const { notificationsEnabled, tradesEnabled } = parameters;
     console.log(`Sell threshold hit (${price} >= ${sellThreshold})`);
+    if (!tradesEnabled) {
+        console.log('Trades disabled via parameters');
+        return state;
+    }
     const { isComplete, size } = await sell(state);
     if (isComplete) {
         notificationsEnabled &&
@@ -126,15 +134,15 @@ export async function updateThresholdsWithAI(state: SurfState): Promise<SurfStat
 
 function getAiThresholds(state: SurfState): { buyThreshold: number, buyThresholdPercentage: number, sellThreshold: number, sellThresholdPercentage: number, } {
     const { price, trendAnalysis } = state;
-    const { 
-        sevenDayLowPrice, 
-        sevenDayHighPrice, 
-        thirtyDayLowPrice, 
-        thirtyDayHighPrice, 
-        sixtyDayLowPrice, 
-        sixtyDayHighPrice, 
-        ninetyDayLowPrice, 
-        ninetyDayHighPrice, 
+    const {
+        sevenDayLowPrice,
+        sevenDayHighPrice,
+        thirtyDayLowPrice,
+        thirtyDayHighPrice,
+        sixtyDayLowPrice,
+        sixtyDayHighPrice,
+        ninetyDayLowPrice,
+        ninetyDayHighPrice,
         oneTwentyDayLowPrice,
         oneTwentyDayHighPrice,
     } = trendAnalysis;
