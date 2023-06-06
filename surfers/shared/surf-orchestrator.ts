@@ -146,7 +146,7 @@ function getAiThresholds(state: SurfState): { buyThreshold: number, buyThreshold
         oneTwentyDayLowPrice,
         oneTwentyDayHighPrice,
     } = trendAnalysis;
-    const smoothingPercentage = 2 / 100;
+    const smoothingPercentage = 3 / 100;
     const lowPriceAverage = (sevenDayLowPrice + thirtyDayLowPrice + sixtyDayLowPrice + ninetyDayLowPrice + oneTwentyDayLowPrice) / 5;
     const highPriceAverage = (sevenDayHighPrice + thirtyDayHighPrice + sixtyDayHighPrice + ninetyDayHighPrice + oneTwentyDayHighPrice) / 5;
     const lowPriceAverageWithSmoothing = lowPriceAverage + (lowPriceAverage * smoothingPercentage);
