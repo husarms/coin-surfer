@@ -1,4 +1,4 @@
-import { Fill, OrderSide, PaginatedData } from "coinbase-pro-node";
+import { Fill, FillTradeType, LiquidityIndicatorTypes, OrderSide, PaginatedData } from "coinbase-advanced-node";
 import SurfParameters from "../interfaces/surf-parameters";
 import SurfState from "../interfaces/surf-state";
 import TrendAnalysis from "../interfaces/trend-analysis";
@@ -14,6 +14,7 @@ const surfParameters : SurfParameters = {
     notificationsEnabled: true,
     webSocketFeedEnabled: true,
     isLocal: true,
+    tradesEnabled: false
 }
 
 const trendAnalysis: TrendAnalysis = {
@@ -36,34 +37,36 @@ const trendAnalysis: TrendAnalysis = {
 
 const fills : PaginatedData<Fill> = {
     data: [{
-        created_at: '',
-        fee: '',
-        liquidity: null,
+        commission: '',
+        entry_id: '',
+        liquidity_indicator: LiquidityIndicatorTypes.UNKNOWN_LIQUIDITY_INDICATOR,
+        trade_time: '',
+        sequence_timestamp: '',
+        size_in_quote: false,
+        user_id: '',
+        trade_type: FillTradeType.FILL,
         order_id: '',
         price: '',
         product_id: '',
-        profile_id: '',
-        settled: true,
         side: OrderSide.BUY,
         size: '',
-        trade_id: 0,
-        usd_volume: '',
-        user_id: '',
+        trade_id: '',
     },
     {
-        created_at: '',
-        fee: '',
-        liquidity: null,
+        commission: '',
+        entry_id: '',
+        liquidity_indicator: LiquidityIndicatorTypes.UNKNOWN_LIQUIDITY_INDICATOR,
+        trade_time: '',
+        sequence_timestamp: '',
+        size_in_quote: false,
+        user_id: '',
+        trade_type: FillTradeType.FILL,
         order_id: '',
         price: '',
         product_id: '',
-        profile_id: '',
-        settled: true,
         side: OrderSide.SELL,
         size: '',
-        trade_id: 0,
-        usd_volume: '',
-        user_id: '',
+        trade_id: '',
     }],
     pagination: {
         after: '',

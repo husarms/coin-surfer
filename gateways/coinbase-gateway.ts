@@ -1,48 +1,46 @@
 import {
     Account,
     Candle,
-    CoinbasePro,
+    CandleGranularity,
+    Coinbase,
+    CreateOrderResponse,
     Fill,
-    Order,
     OrderSide,
-    OrderType,
     PaginatedData,
+    Product,
     ProductStats,
-    ProductTicker,
     WebSocketChannelName,
     WebSocketEvent,
     WebSocketTickerMessage,
-} from "coinbase-pro-node";
+} from "coinbase-advanced-node";
+import * as crypto from "crypto";
 import Configuration from "../config";
+import { json } from "stream/consumers";
 
 const authorization = {
-    apiKey: Configuration.Coinbase.key,
-    apiSecret: Configuration.Coinbase.secret,
-    passphrase: Configuration.Coinbase.passphrase,
-    // The Sandbox is for testing only and offers a subset of the products/assets:
-    // https://docs.pro.coinbase.com/#sandbox
-    useSandbox: false,
+    apiKey: Configuration.CoinbaseAdvanced.key,
+    apiSecret: Configuration.CoinbaseAdvanced.secret,
 };
 
-const coinbaseClient = new CoinbasePro(authorization);
+const coinbaseClient = new Coinbase(authorization);
 
 export function listenToTickerFeed(
     product_id: string,
     callback: (tickerMessage: WebSocketTickerMessage) => void
 ) {
     const channel = {
-        name: WebSocketChannelName.TICKER,
+        channel: WebSocketChannelName.TICKER,
         product_ids: [product_id],
     };
 
     // Wait for open WebSocket to send messages
-    coinbaseClient.ws.on(WebSocketEvent.ON_OPEN, () => {
+    coinbaseClient.ws.on(WebSocketEvent.ON_OPEN, async () => {
         // Subscribe to WebSocket channel
-        coinbaseClient.ws.subscribe([channel]);
+        await coinbaseClient.ws.subscribe([channel]);
     });
 
     // Listen to WebSocket channel updates
-    coinbaseClient.ws.on(WebSocketEvent.ON_MESSAGE_TICKER, (tickerMessage) => {
+    coinbaseClient.ws.on(WebSocketEvent.ON_MESSAGE_TICKER, async (tickerMessage) => {
         callback(tickerMessage);
     });
 
@@ -50,10 +48,10 @@ export function listenToTickerFeed(
     coinbaseClient.ws.connect({ debug: false });
 }
 
-export async function getProductTicker(product_id: string): Promise<ProductTicker | void> {
+export async function getProduct(product_id: string): Promise<Product | void> {
     return coinbaseClient.rest.product
-        .getProductTicker(product_id)
-        .then((data: ProductTicker) => {
+        .getProduct(product_id)
+        .then((data: Product) => {
             return data;
         })
         .catch((error) => {
@@ -73,10 +71,13 @@ export async function getProduct24HrStats(product: string): Promise<ProductStats
 }
 
 export async function getProductCandles(
-    product: string, granularity: 60 | 300 | 900 | 3600 | 21600 | 86400 = 86400, start: Date, end: Date)
-    : Promise<Candle[] | void> {
+    product: string, 
+    granularity: CandleGranularity = CandleGranularity.ONE_DAY, 
+    start: Date, 
+    end: Date
+): Promise<Candle[] | void> {
     return coinbaseClient.rest.product
-        .getCandles(product, { granularity, start: start.toUTCString(), end: end.toUTCString() })
+        .getCandles(product, { granularity: granularity, start: start.toUTCString(), end: end.toUTCString() })
         .then((data: Candle[]) => {
             return data;
         })
@@ -85,10 +86,10 @@ export async function getProductCandles(
         });
 }
 
-export async function getAccounts(): Promise<Account[] | void> {
+export async function getAccounts(): Promise<PaginatedData<Account> | void> {
     return coinbaseClient.rest.account
         .listAccounts()
-        .then((data: Account[]) => {
+        .then((data: PaginatedData<Account>) => {
             return data;
         })
         .catch((error) => {
@@ -108,19 +109,21 @@ export async function getFills(productId: string): Promise<PaginatedData<Fill> |
 }
 
 export async function marketBuy(
-    funds: string,
     size: string,
     product_id: string
-): Promise<Order | void> {
+): Promise<CreateOrderResponse | void> {
     return coinbaseClient.rest.order
         .placeOrder({
-            side: OrderSide.BUY,
-            type: OrderType.MARKET,
-            funds,
-            size,
+            client_order_id: crypto.randomUUID(),
             product_id,
+            side: OrderSide.BUY,
+            order_configuration: {
+                market_market_ioc: {
+                    quote_size: size
+                }
+            }
         })
-        .then((data: Order) => {
+        .then((data: CreateOrderResponse) => {
             return data;
         })
         .catch((error) => {
@@ -128,15 +131,22 @@ export async function marketBuy(
         });
 }
 
-export async function marketSell(size: string, product_id: string): Promise<Order | void> {
+export async function marketSell(
+    size: string, 
+    product_id: string
+): Promise<CreateOrderResponse | void> {
     return coinbaseClient.rest.order
         .placeOrder({
-            side: OrderSide.SELL,
-            type: OrderType.MARKET,
-            size,
+            client_order_id: crypto.randomUUID(),
             product_id,
+            side: OrderSide.SELL,
+            order_configuration: {
+                market_market_ioc: {
+                    base_size: size
+                }
+            }
         })
-        .then((data: Order) => {
+        .then((data: CreateOrderResponse) => {
             return data;
         })
         .catch((error) => {

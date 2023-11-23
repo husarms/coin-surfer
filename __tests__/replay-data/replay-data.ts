@@ -1,4 +1,4 @@
-import { Fill, PaginatedData } from "coinbase-pro-node";
+import { Fill, PaginatedData } from "coinbase-advanced-node";
 import TrendAnalysis from "../../interfaces/trend-analysis";
 
 export default interface ReplayData {

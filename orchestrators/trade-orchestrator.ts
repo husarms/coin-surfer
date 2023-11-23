@@ -1,12 +1,12 @@
 import {
     Candle,
+    CandleGranularity,
+    CreateOrderResponse,
     Fill,
-    Order,
     PaginatedData,
-    PendingOrder,
+    Product,
     ProductStats,
-    ProductTicker,
-} from "coinbase-pro-node";
+} from "coinbase-advanced-node";
 import * as CoinbaseGateway from "../gateways/coinbase-gateway";
 import * as formatters from "../utils/formatters";
 import TrendAnalysis from "../interfaces/trend-analysis";
@@ -80,9 +80,10 @@ export async function getAccountBalances(fiatCurrency: string, cryptoCurrency: s
 async function getAccountBalance(currency: string): Promise<number> {
     var accounts = await CoinbaseGateway.getAccounts();
     if (accounts) {
-        var account = accounts.find((a) => a.currency === currency);
+        accounts.data.find
+        var account = accounts.data.find((a) => a.currency === currency);
         var balance = formatters.roundDownToFourDecimals(
-            parseFloat(account.balance)
+            parseFloat(account.available_balance.value)
         );
         if (balance > 1) {
             return formatters.roundDownToTwoDecimals(balance);
@@ -116,7 +117,7 @@ async function getOneTwentyDayCandles(
     const now = new Date();
     const oneTwentyDaysAgo = new Date(now);
     oneTwentyDaysAgo.setDate(oneTwentyDaysAgo.getDate() - 120);
-    const lastThirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, 86400, oneTwentyDaysAgo, now)) as Candle[];
+    const lastThirtyDayCandles = (await CoinbaseGateway.getProductCandles(productId, CandleGranularity.ONE_DAY, oneTwentyDaysAgo, now)) as Candle[];
     return lastThirtyDayCandles;
 }
 
@@ -145,7 +146,7 @@ export async function getTrendAnalysis(
     let sevenDayHighPrice = 0;
     let sevenDayRunningAverage = 0;
     for (const [index, value] of oneTwentyDayCandles.entries()) {
-        const average = (value.close + value.open) / 2;
+        const average = (parseFloat(value.close.toString()) + parseFloat(value.open.toString())) / 2;
         if (index < (oneTwentyDayCandles.length - 90)) { //90-120
             if (value.low < oneTwentyDayLowPrice) oneTwentyDayLowPrice = value.low;
             if (value.high > oneTwentyDayHighPrice) oneTwentyDayHighPrice = value.high;
@@ -179,52 +180,49 @@ export async function getTrendAnalysis(
     }
     return {
         oneTwentyDayAverage,
-        oneTwentyDayLowPrice,
-        oneTwentyDayHighPrice,
+        oneTwentyDayLowPrice: parseFloat(oneTwentyDayLowPrice.toString()),
+        oneTwentyDayHighPrice: parseFloat(oneTwentyDayHighPrice.toString()),
         ninetyDayAverage,
-        ninetyDayLowPrice,
-        ninetyDayHighPrice,
+        ninetyDayLowPrice: parseFloat(ninetyDayLowPrice.toString()),
+        ninetyDayHighPrice: parseFloat(ninetyDayHighPrice.toString()),
         sixtyDayAverage,
-        sixtyDayLowPrice,
-        sixtyDayHighPrice,
+        sixtyDayLowPrice: parseFloat(sixtyDayLowPrice.toString()),
+        sixtyDayHighPrice: parseFloat(sixtyDayHighPrice.toString()),
         thirtyDayAverage,
-        thirtyDayLowPrice,
-        thirtyDayHighPrice,
+        thirtyDayLowPrice: parseFloat(thirtyDayLowPrice.toString()),
+        thirtyDayHighPrice: parseFloat(thirtyDayHighPrice.toString()),
         sevenDayAverage,
-        sevenDayLowPrice,
-        sevenDayHighPrice,
+        sevenDayLowPrice: parseFloat(sevenDayLowPrice.toString()),
+        sevenDayHighPrice: parseFloat(sevenDayHighPrice.toString()),
     };
 }
 
 export async function getProductPrice(
     productId: string,
 ): Promise<number> {
-    const productTicker = (await CoinbaseGateway.getProductTicker(
-        productId
-    )) as ProductTicker;
-    return parseFloat(productTicker.price);
+    const product = await CoinbaseGateway.getProduct(productId) as Product;
+    return parseFloat(product.price);
 }
 
 async function marketSell(
     size: string,
     productId: string,
-): Promise<void | Order> {
+): Promise<void | CreateOrderResponse> {
     return await CoinbaseGateway.marketSell(size, productId);
 }
 
 async function marketBuy(
-    price: string,
     size: string,
     productId: string,
-): Promise<void | Order> {
-    return await CoinbaseGateway.marketBuy(price, size, productId);
+): Promise<void | CreateOrderResponse> {
+    return await CoinbaseGateway.marketBuy(size, productId);
 }
 
 export async function sellAtMarketValue(
     productId: string,
     size: string,
 ): Promise<number> {
-    await marketSell(size, productId) as PendingOrder;
+    await marketSell(size, productId);
     return parseFloat(size);
 }
 
@@ -235,10 +233,6 @@ export async function buyAtMarketValue(
     productId: string,
 ): Promise<number> {
     const size = getBuySize(fiatBalance, budget, price);
-    await marketBuy(
-        fiatBalance.toString(),
-        size.toString(),
-        productId
-    ) as PendingOrder;
+    await marketBuy(size.toString(), productId);
     return size;
 }
