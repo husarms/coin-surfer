@@ -1,9 +1,4 @@
 export default {
-    Coinbase: {
-        key: process.env.COINBASE_API_KEY,
-        secret: process.env.COINBASE_API_SECRET,
-        passphrase: process.env.COINBASE_API_PASSPHRASE,
-    },
     CoinbaseAdvanced: {
         key: process.env.COINBASE_ADVANCED_API_KEY,
         secret: process.env.COINBASE_ADVANCED_API_SECRET,
