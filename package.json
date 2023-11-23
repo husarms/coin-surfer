@@ -38,8 +38,5 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "engines": {
-        "node": ">=16.13.0 < 17.0",
-        "npm": ">=8.1.0"
-    }
+    "engines": {}
 }
