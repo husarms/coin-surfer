@@ -6,6 +6,7 @@ import * as WebServer from "./servers/web";
 import { clearInterval } from "timers";
 
 const isLocal = process.env.ENVIRONMENT === 'development';
+const tradesEnabled = false;
 
 const parameters: SurfParameters[] = [
     {
@@ -14,7 +15,7 @@ const parameters: SurfParameters[] = [
         buyThresholdPercentage: 5,
         sellThresholdPercentage: 5,
         budget: 50000,
-        tradesEnabled: true,
+        tradesEnabled,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
         isLocal,
@@ -25,7 +26,7 @@ const parameters: SurfParameters[] = [
         buyThresholdPercentage: 6,
         sellThresholdPercentage: 6,
         budget: 50000,
-        tradesEnabled: true,
+        tradesEnabled,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
         isLocal,
@@ -36,7 +37,7 @@ const parameters: SurfParameters[] = [
         buyThresholdPercentage: 7,
         sellThresholdPercentage: 7,
         budget: 50000,
-        tradesEnabled: true,
+        tradesEnabled,
         notificationsEnabled: true,
         webSocketFeedEnabled: true,
         isLocal,

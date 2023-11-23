@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as util from 'util';
 import { parse } from 'csv-parse';
 import ReplayData from './replay-data';
-import { OrderSide } from 'coinbase-pro-node';
+import { FillTradeType, LiquidityIndicatorTypes, OrderSide } from 'coinbase-advanced-node';
 
 const dataDirectory = './__tests__/replay-data/data';
 const readDirectoryAsync = util.promisify(fs.readdir);
@@ -36,34 +36,36 @@ function fileRowToReplayData(row: any): ReplayData {
         budget: parseFloat(row[8]),
         fills: {
             data: [{
-                created_at: '',
-                fee: '',
-                liquidity: null,
-                order_id: '',
-                price: row[7],
-                product_id: '',
-                profile_id: '',
-                settled: true,
-                side: OrderSide.BUY,
-                size: '',
-                trade_id: 0,
-                usd_volume: '',
+                commission: '',
+                entry_id: '',
+                liquidity_indicator: LiquidityIndicatorTypes.UNKNOWN_LIQUIDITY_INDICATOR,
+                trade_time: '',
+                sequence_timestamp: '',
+                size_in_quote: false,
                 user_id: '',
-            },
-            {
-                created_at: '',
-                fee: '',
-                liquidity: null,
+                trade_type: FillTradeType.FILL,
                 order_id: '',
                 price: '',
                 product_id: '',
-                profile_id: '',
-                settled: true,
+                side: OrderSide.BUY,
+                size: '',
+                trade_id: '',
+            },
+            {
+                commission: '',
+                entry_id: '',
+                liquidity_indicator: LiquidityIndicatorTypes.UNKNOWN_LIQUIDITY_INDICATOR,
+                trade_time: '',
+                sequence_timestamp: '',
+                size_in_quote: false,
+                user_id: '',
+                trade_type: FillTradeType.FILL,
+                order_id: '',
+                price: '',
+                product_id: '',
                 side: OrderSide.SELL,
                 size: '',
-                trade_id: 0,
-                usd_volume: '',
-                user_id: '',
+                trade_id: '',
             }],
             pagination: {
                 after: '',

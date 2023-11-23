@@ -8,6 +8,7 @@ import * as Formatters from "../../utils/formatters";
 import Prices from "../../interfaces/prices";
 import SurfState from "../../interfaces/surf-state";
 import TrendAnalysis from "../../interfaces/trend-analysis";
+import { OrderSide } from "coinbase-advanced-node";
 
 export function uploadLogs(logger: Logger) {
     LogOrchestrator.uploadLogFiles(logger);
@@ -87,7 +88,7 @@ export function getDataMessage(state: SurfState): string {
 }
 
 function formatPrices(prices: number[]): string {
-    const formattedPrices = prices.map(price => price.toFixed(2));
+    const formattedPrices = prices.map(price => Number(price).toFixed(2));
     return formattedPrices.join(", ");
 }
 
@@ -163,16 +164,16 @@ export async function getTrendAnalysis(productId: string): Promise<TrendAnalysis
 
 export async function getLastFills(productId: string): Promise<{ lastBuyFill: Fill, lastSellFill: Fill }> {
     const fills = await TradeOrchestrator.getFills(productId);
-    const buyFill = fills.data.find((f) => f.side === "buy");
-    const sellFill = fills.data.find((f) => f.side === "sell");
+    const buyFill = fills.data.find((f) => f.side === OrderSide.BUY);
+    const sellFill = fills.data.find((f) => f.side === OrderSide.SELL);
     const lastBuyFill: Fill = {
         action: Actions.Buy,
-        date: buyFill ? new Date(buyFill.created_at) : undefined,
+        date: buyFill ? new Date(buyFill.trade_time) : undefined,
         price: buyFill ? parseFloat(buyFill.price) : undefined,
     };
     const lastSellFill: Fill = {
         action: Actions.Sell,
-        date: sellFill ? new Date(sellFill.created_at) : undefined,
+        date: sellFill ? new Date(sellFill.trade_time) : undefined,
         price: sellFill ? parseFloat(sellFill.price) : undefined,
     };
     return { lastBuyFill, lastSellFill };
