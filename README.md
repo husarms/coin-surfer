@@ -72,7 +72,7 @@ When a web socket feed is enabled (see [Setup](#setup)) - the app emits it's cur
 The included [Visualization App](https://github.com/husarms/coin-surfer/tree/master/web) is driven off this feed.
 
 # Setup
-1. Requires a [Coinbase Pro](https://pro.coinbase.com) account and access to the [Coinbase Pro Api](https://docs.pro.coinbase.com/)
+1. Requires a [Coinbase](https://coinbase.com) account and access to the [Coinbase Advanced Api](https://docs.cloud.coinbase.com/advanced-trade-api)
 2. Optionally - a [SendGrid](https://sendgrid.com) account to send buy / sell notifications
 3. Create a ```.env``` file under the root directory with the following environment variables
 ```
