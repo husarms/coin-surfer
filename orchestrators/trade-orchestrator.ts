@@ -65,10 +65,9 @@ export async function getBuySellThresholds(
 export function getBuySize(
     fiatBalance: number,
     budget: number,
-    productPrice: number
 ): number {
     const amount = fiatBalance > budget ? budget : fiatBalance;
-    return formatters.roundDownToFourDecimals(amount / productPrice);
+    return formatters.roundDownToFourDecimals(amount);
 }
 
 export async function getAccountBalances(fiatCurrency: string, cryptoCurrency: string): Promise<{ fiatBalance: number, cryptoBalance: number }> {
@@ -229,10 +228,9 @@ export async function sellAtMarketValue(
 export async function buyAtMarketValue(
     fiatBalance: number,
     budget: number,
-    price: number,
     productId: string,
 ): Promise<number> {
-    const size = getBuySize(fiatBalance, budget, price);
+    const size = getBuySize(fiatBalance, budget);
     await marketBuy(size.toString(), productId);
     return size;
 }

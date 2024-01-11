@@ -120,7 +120,7 @@ export async function sendSellNotification(state: SurfState, size: string) {
 }
 
 export async function buy(state: SurfState): Promise<any> {
-    const { parameters, fiatBalance, price, productId } = state;
+    const { parameters, fiatBalance, productId } = state;
     const { budget } = parameters;
     if (fiatBalance < 1) {
         console.log(`Skipping buy. Balance ${fiatBalance} < 1`);
@@ -129,7 +129,6 @@ export async function buy(state: SurfState): Promise<any> {
     const orderSize = await TradeOrchestrator.buyAtMarketValue(
         fiatBalance,
         budget,
-        price,
         productId
     );
     console.log(`Buy complete. Size = ${orderSize}`);
