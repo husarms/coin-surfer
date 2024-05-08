@@ -145,9 +145,9 @@ export async function getTrendAnalysis(
     let sevenDayHighPrice = 0;
     let sevenDayRunningAverage = 0;
     for (const [index, value] of oneTwentyDayCandles.entries()) {
-        const average = (parseFloat(value.close.toString()) + parseFloat(value.open.toString())) / 2;
         const valueLow = parseFloat(value.low.toString());
         const valueHigh = parseFloat(value.high.toString());
+        const average = (valueLow + valueHigh) / 2;
         if (index < (oneTwentyDayCandles.length - 90)) { //90-120
             if (valueLow < oneTwentyDayLowPrice) oneTwentyDayLowPrice = valueLow;
             if (valueHigh > oneTwentyDayHighPrice) oneTwentyDayHighPrice = valueHigh;
@@ -181,20 +181,20 @@ export async function getTrendAnalysis(
     }
     return {
         oneTwentyDayAverage,
-        oneTwentyDayLowPrice: parseFloat(oneTwentyDayLowPrice.toString()),
-        oneTwentyDayHighPrice: parseFloat(oneTwentyDayHighPrice.toString()),
+        oneTwentyDayLowPrice,
+        oneTwentyDayHighPrice,
         ninetyDayAverage,
-        ninetyDayLowPrice: parseFloat(ninetyDayLowPrice.toString()),
-        ninetyDayHighPrice: parseFloat(ninetyDayHighPrice.toString()),
+        ninetyDayLowPrice,
+        ninetyDayHighPrice,
         sixtyDayAverage,
-        sixtyDayLowPrice: parseFloat(sixtyDayLowPrice.toString()),
-        sixtyDayHighPrice: parseFloat(sixtyDayHighPrice.toString()),
+        sixtyDayLowPrice,
+        sixtyDayHighPrice,
         thirtyDayAverage,
-        thirtyDayLowPrice: parseFloat(thirtyDayLowPrice.toString()),
-        thirtyDayHighPrice: parseFloat(thirtyDayHighPrice.toString()),
+        thirtyDayLowPrice,
+        thirtyDayHighPrice,
         sevenDayAverage,
-        sevenDayLowPrice: parseFloat(sevenDayLowPrice.toString()),
-        sevenDayHighPrice: parseFloat(sevenDayHighPrice.toString()),
+        sevenDayLowPrice,
+        sevenDayHighPrice,
     };
 }
 
