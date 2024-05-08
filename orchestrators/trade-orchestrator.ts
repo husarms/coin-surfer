@@ -146,33 +146,35 @@ export async function getTrendAnalysis(
     let sevenDayRunningAverage = 0;
     for (const [index, value] of oneTwentyDayCandles.entries()) {
         const average = (parseFloat(value.close.toString()) + parseFloat(value.open.toString())) / 2;
+        const valueLow = parseFloat(value.low.toString());
+        const valueHigh = parseFloat(value.high.toString());
         if (index < (oneTwentyDayCandles.length - 90)) { //90-120
-            if (value.low < oneTwentyDayLowPrice) oneTwentyDayLowPrice = value.low;
-            if (value.high > oneTwentyDayHighPrice) oneTwentyDayHighPrice = value.high;
+            if (valueLow < oneTwentyDayLowPrice) oneTwentyDayLowPrice = valueLow;
+            if (valueHigh > oneTwentyDayHighPrice) oneTwentyDayHighPrice = valueHigh;
             oneTwentyDayRunningAverage += average;
             oneTwentyDayAverage = oneTwentyDayRunningAverage / (index + 1);
         }
         if (index < (oneTwentyDayCandles.length - 60) && index >= (oneTwentyDayCandles.length - 90)) { //60-90
-            if (value.low < ninetyDayLowPrice) ninetyDayLowPrice = value.low;
-            if (value.high > ninetyDayHighPrice) ninetyDayHighPrice = value.high;
+            if (valueLow < ninetyDayLowPrice) ninetyDayLowPrice = valueLow;
+            if (valueHigh > ninetyDayHighPrice) ninetyDayHighPrice = valueHigh;
             ninetyDayRunningAverage += average;
             ninetyDayAverage = ninetyDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 90));
         }
         if (index < (oneTwentyDayCandles.length - 30) && index >= (oneTwentyDayCandles.length - 60)) { //30-60
-            if (value.low < sixtyDayLowPrice) sixtyDayLowPrice = value.low;
-            if (value.high > sixtyDayHighPrice) sixtyDayHighPrice = value.high;
+            if (valueLow < sixtyDayLowPrice) sixtyDayLowPrice = valueLow;
+            if (valueHigh > sixtyDayHighPrice) sixtyDayHighPrice = valueHigh;
             sixtyDayRunningAverage += average;
             sixtyDayAverage = sixtyDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 60));
         }
         if (index < (oneTwentyDayCandles.length - 7) && index >= (oneTwentyDayCandles.length - 30)) { //7-30
-            if (value.low < thirtyDayLowPrice) thirtyDayLowPrice = value.low;
-            if (value.high > thirtyDayHighPrice) thirtyDayHighPrice = value.high;
+            if (valueLow < thirtyDayLowPrice) thirtyDayLowPrice = valueLow;
+            if (valueHigh > thirtyDayHighPrice) thirtyDayHighPrice = valueHigh;
             thirtyDayRunningAverage += average;
             thirtyDayAverage = thirtyDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 30));
         }
         if (index >= (oneTwentyDayCandles.length - 7)) { //0-7
-            if (value.low < sevenDayLowPrice) sevenDayLowPrice = value.low;
-            if (value.high > sevenDayHighPrice) sevenDayHighPrice = value.high;
+            if (valueLow < sevenDayLowPrice) sevenDayLowPrice = valueLow;
+            if (valueHigh > sevenDayHighPrice) sevenDayHighPrice = valueHigh;
             sevenDayRunningAverage += average;
             sevenDayAverage = sevenDayRunningAverage / ((index + 1) - (oneTwentyDayCandles.length - 7));
         }
