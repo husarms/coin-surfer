@@ -15,11 +15,10 @@ import {
 } from "coinbase-advanced-node";
 import * as crypto from "crypto";
 import Configuration from "../config";
-import { json } from "stream/consumers";
 
 const authorization = {
-    apiKey: Configuration.CoinbaseAdvanced.key,
-    apiSecret: Configuration.CoinbaseAdvanced.secret,
+    cloudApiKeyName: Configuration.CoinbaseCDP.keyName,
+    cloudApiSecret: Configuration.CoinbaseCDP.privateKey,
 };
 
 const coinbaseClient = new Coinbase(authorization);
