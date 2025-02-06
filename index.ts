@@ -6,7 +6,7 @@ import * as WebServer from "./servers/web";
 import { clearInterval } from "timers";
 
 const isLocal = process.env.ENVIRONMENT === 'development';
-const tradesEnabled = true;
+const tradesEnabled = false;
 
 const parameters: SurfParameters[] = [
     {
